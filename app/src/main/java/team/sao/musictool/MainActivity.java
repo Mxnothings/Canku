@@ -1,12 +1,19 @@
 package team.sao.musictool;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 import team.sao.musictool.adapter.MyFragmentPagerAdapter;
 import team.sao.musictool.annotation.ViewID;
@@ -36,6 +43,8 @@ public class MainActivity extends FragmentActivity {
     private TextView tv_music;
     @ViewID(R.id.tv_dis)
     private TextView tv_dis;
+    @ViewID(R.id.toolbar)
+    private Toolbar toolbar;
 
 
     private List<View> views;
@@ -46,6 +55,14 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initWindows();
+//        if(Build.VERSION.SDK_INT >= 21) {
+//            Window window = getWindow();
+//            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+//            window.setStatusBarColor(Color.TRANSPARENT);
+//        }
+
         inject(this, this);
         initData();
         initViews();
@@ -55,12 +72,6 @@ public class MainActivity extends FragmentActivity {
 
     private void initData() {
         views = new ArrayList<>();
-
-        /**设置viewPager的view*/
-//        LayoutInflater inflater = getLayoutInflater();
-//        views.add(inflater.inflate(R.layout.fragment_mine, null, false));
-//        views.add(inflater.inflate(R.layout.fragment_music, null, false));
-//        views.add(inflater.inflate(R.layout.fragment_dis, null, false));
 
         fragments = new ArrayList<>();
         fragments.add(new MineFragment());
@@ -109,5 +120,59 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
+
+    /**
+     * 沉浸式状态栏
+     */
+    private void initWindows() {
+        Window window = getWindow();
+        int color = getResources().getColor(R.color.colorPrimary);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+                    | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            //设置状态栏颜色
+            window.setStatusBarColor(color);
+            //设置导航栏颜色
+            window.setNavigationBarColor(color);
+            ViewGroup contentView = ((ViewGroup) findViewById(android.R.id.content));
+            View childAt = contentView.getChildAt(0);
+            if (childAt != null) {
+                childAt.setFitsSystemWindows(true);
+            }
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            //透明状态栏
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //透明导航栏
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            //设置contentview为fitsSystemWindows
+            ViewGroup contentView = (ViewGroup) findViewById(android.R.id.content);
+            View childAt = contentView.getChildAt(0);
+            if (childAt != null) {
+                childAt.setFitsSystemWindows(true);
+            }
+            //给statusbar着色
+            View view = new View(this);
+            view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getStatusBarHeight(this)));
+            view.setBackgroundColor(color);
+            contentView.addView(view);
+        }
+    }
+
+
+    /**
+     * 获取状态栏高度
+     *
+     * @param context context
+     * @return 状态栏高度
+     */
+    private static int getStatusBarHeight(Context context) {
+        // 获得状态栏高度
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        return context.getResources().getDimensionPixelSize(resourceId);
+    }
 
 }
