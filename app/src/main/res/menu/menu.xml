@@ -1,22 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single"
-           android:id="@+id/nav_item1">
+           android:id="@+id/group_1">
         <item
                 android:icon="@drawable/setting"
                 android:title="设置"/>
-
-    </group>
-    <group android:checkableBehavior="single"
-           android:id="@+id/nav_item2">
         <item
                 android:icon="@drawable/about"
                 android:title="关于"/>
-    </group>
-    <group android:checkableBehavior="single"
-           android:id="@+id/nav_item3">
         <item
                 android:icon="@drawable/exit"
                 android:title="退出"/>
+
     </group>
 </menu>

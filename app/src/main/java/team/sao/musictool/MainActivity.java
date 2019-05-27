@@ -22,6 +22,7 @@ import team.sao.musictool.annotation.ViewID;
 import team.sao.musictool.fragment.MineFragment;
 import team.sao.musictool.fragment.MusicFragment;
 import team.sao.musictool.fragment.SearchFragment;
+import team.sao.musictool.util.ViewUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,14 +64,8 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initWindows();
-//        if(Build.VERSION.SDK_INT >= 21) {
-//            Window window = getWindow();
-//            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-//            window.setStatusBarColor(Color.TRANSPARENT);
-//        }
-
+        //设置沉浸式状态栏
+        ViewUtil.initWindows(this, getResources().getColor(R.color.colorPrimary));
         inject(this, this);
         initData();
         initViews();
@@ -84,7 +79,7 @@ public class MainActivity extends FragmentActivity {
         fragments = new ArrayList<>();
         fragments.add(new MineFragment());
         fragments.add(new MusicFragment());
-        fragments.add(new SearchFragment());
+        fragments.add(new SearchFragment(this));
 
         items = new HashMap<>();
         items.put(0, tv_mine);
@@ -108,6 +103,7 @@ public class MainActivity extends FragmentActivity {
 
             @Override
             public void onPageSelected(int i) {
+                //设置字体大小
                 items.get(lastTextViewIndex).setTextSize(TypedValue.COMPLEX_UNIT_DIP, commonTextSize);
                 items.get((lastTextViewIndex = i)).setTextSize(TypedValue.COMPLEX_UNIT_DIP, largerTextSize);
             }
@@ -157,73 +153,4 @@ public class MainActivity extends FragmentActivity {
         });
 
     }
-
-
-    /**
-     * 沉浸式状态栏
-     */
-    private void initWindows() {
-        Window window = getWindow();
-        int color = getResources().getColor(R.color.colorPrimary);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-                    | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            //设置状态栏颜色
-            window.setStatusBarColor(color);
-            //设置导航栏颜色
-            window.setNavigationBarColor(color);
-            ViewGroup contentView = ((ViewGroup) findViewById(android.R.id.content));
-            View childAt = contentView.getChildAt(0);
-            if (childAt != null) {
-                childAt.setFitsSystemWindows(true);
-            }
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            //透明状态栏
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            //透明导航栏
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            //设置contentview为fitsSystemWindows
-            ViewGroup contentView = (ViewGroup) findViewById(android.R.id.content);
-            View childAt = contentView.getChildAt(0);
-            if (childAt != null) {
-                childAt.setFitsSystemWindows(true);
-            }
-            //给statusbar着色
-            View view = new View(this);
-            view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getStatusBarHeight(this)));
-            view.setBackgroundColor(color);
-            contentView.addView(view);
-        }
-    }
-
-
-    /**
-     * 获取状态栏高度
-     *
-     * @param context context
-     * @return 状态栏高度
-     */
-    private static int getStatusBarHeight(Context context) {
-        // 获得状态栏高度
-        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        return context.getResources().getDimensionPixelSize(resourceId);
-    }
-
-    private class DrawerMenuToggle extends ActionBarDrawerToggle {
-
-        public DrawerMenuToggle(Activity activity, DrawerLayout drawerLayout, int openDrawerContentDescRes, int closeDrawerContentDescRes) {
-            super(activity, drawerLayout, openDrawerContentDescRes, closeDrawerContentDescRes);
-        }
-
-        public DrawerMenuToggle(Activity activity, DrawerLayout drawerLayout, Toolbar toolbar, int openDrawerContentDescRes, int closeDrawerContentDescRes) {
-            super(activity, drawerLayout, toolbar, openDrawerContentDescRes, closeDrawerContentDescRes);
-        }
-
-    }
-
-
 }

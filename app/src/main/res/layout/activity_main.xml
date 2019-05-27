@@ -45,7 +45,7 @@
                             android:id="@+id/tv_mine"/>
                     <TextView
                             android:textColor="@android:color/white"
-                            android:text="@string/main_activity_toolbar_item1"
+                            android:text="@string/main_activity_toolbar_item2"
                             tools:text="@string/main_activity_toolbar_item2"
                             android:layout_width="80dp"
                             android:layout_height="match_parent"
@@ -64,7 +64,7 @@
                         android:src="@drawable/plus"
                         android:layout_marginEnd="0dp"
                         android:padding="12dp"
-                        android:layout_width="43dp"
+                         android:layout_width="43dp"
                         android:layout_height="match_parent"
                         android:layout_alignParentEnd="true"
                         android:id="@+id/toolbar_menu" android:layout_marginTop="0dp"

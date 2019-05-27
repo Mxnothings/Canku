@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+                                             android:layout_height="80dp" android:orientation="horizontal">
+    <LinearLayout android:layout_width="297dp"
+                  android:layout_height="match_parent"
+                  android:gravity="center_vertical"
+                  android:orientation="vertical" android:id="@+id/linearLayout2"
+                  app:layout_constraintStart_toStartOf="parent"
+                  android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
+                  app:layout_constraintTop_toTopOf="parent">
+
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="40dp"
+                  android:paddingLeft="20dp"
+                  android:paddingBottom="3dp"
+                  android:gravity="bottom"
+                  android:id="@+id/tv_song_name"
+                  android:textSize="18sp"
+                  android:textColor="@color/color_songlist_item_songname"
+                  android:text="我们的恋爱是对生命的严重浪费"/>
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:gravity="center_vertical"
+                      android:paddingBottom="10dp"
+                      android:orientation="horizontal">
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="match_parent"
+                      android:gravity="top"
+                      android:id="@+id/tv_singer_album"
+                      android:textSize="12sp"
+                      android:text="许嵩-自定义"
+                      android:paddingLeft="20dp"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="match_parent"
+                      android:gravity="top"
+                      android:layout_marginLeft="15dp"
+                      android:id="@+id/tv_time"
+                      android:text="04:21"
+                      android:textSize="12sp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout android:layout_width="100dp"
+                  android:layout_height="match_parent"
+                  android:gravity="center_vertical"
+                  app:layout_constraintEnd_toEndOf="parent"
+                  android:layout_marginEnd="15dp" android:layout_marginBottom="8dp"
+                  app:layout_constraintBottom_toBottomOf="parent" android:layout_marginTop="8dp"
+                  app:layout_constraintTop_toTopOf="parent">
+        <ImageView android:layout_width="@dimen/songlist_item_icon_width"
+                   android:layout_height="@dimen/songlist_item_icon_height"
+                   android:id="@+id/ic_play"
+                   android:src="@drawable/play"/>
+        <ImageView android:layout_width="@dimen/songlist_item_icon_width"
+                   android:layout_height="@dimen/songlist_item_icon_height"
+                   android:id="@+id/ic_like"
+                   android:src="@drawable/like_empty"/>
+        <ImageView android:layout_width="@dimen/songlist_item_icon_width"
+                   android:layout_height="@dimen/songlist_item_icon_height"
+                   android:id="@+id/ic_download"
+                   android:src="@drawable/download"/>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>
