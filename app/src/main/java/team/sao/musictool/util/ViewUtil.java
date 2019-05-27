@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import team.sao.musictool.R;
 
 /**
@@ -57,6 +58,16 @@ public class ViewUtil {
             view.setBackgroundColor(color);
             contentView.addView(view);
         }
+    }
+
+    /**
+     * 隐藏屏幕键盘
+     * @param context
+     * @param view
+     */
+    public static void hideKeyboard(Context context, View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
 

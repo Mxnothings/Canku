@@ -1,12 +1,15 @@
 package team.sao.musictool.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import team.sao.musictool.R;
 import team.sao.musictool.adapter.SongListViewAdapter;
@@ -36,6 +39,8 @@ public class SearchActivity extends Activity {
     private int musicType;
     private List<Song> songs;
 
+    private ProgressDialog alert;
+
     @ViewID(R.id.keyword_input)
     private EditText keywordInput;
     @ViewID(R.id.icon_back)
@@ -54,6 +59,8 @@ public class SearchActivity extends Activity {
         inject(this, this);
         setSearchTypeInfo();
         initAction();
+
+        alert = createProgressDialog();
 
         songs = new ArrayList<>();
         songlist.setAdapter(new SongListViewAdapter(this, songs));
@@ -77,7 +84,7 @@ public class SearchActivity extends Activity {
     }
 
     /**
-     *
+     * 初始化事件绑定
      */
     private void initAction() {
         icon_back.setOnClickListener(new View.OnClickListener() {
@@ -87,11 +94,15 @@ public class SearchActivity extends Activity {
             }
         });
 
+        //设置搜索
         keywordInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    ViewUtil.hideKeyboard(SearchActivity.this, keywordInput);
                     String keyword = keywordInput.getText().toString();
+                    songs.clear();
+                    alert.show();
                     search(keyword, songs);
                     return true;
                 }
@@ -101,15 +112,19 @@ public class SearchActivity extends Activity {
 
     }
 
-    private void search(final String keyword, final List<Song> songs1) {
-
-        final List<Song> data = new ArrayList<>();
+    /**
+     * 搜索
+     * @param keyword
+     * @param songs
+     */
+    private void search(final String keyword, final List<Song> songs) {
 
         final Handler handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 if (msg.what == 1) {
-                    songs1.addAll(data);
+                    ((BaseAdapter) songlist.getAdapter()).notifyDataSetChanged();
+                    alert.hide();
                 }
                 super.handleMessage(msg);
             }
@@ -119,15 +134,23 @@ public class SearchActivity extends Activity {
             @Override
             public void run() {
                 try {
-                    data.addAll(QQMusicUtil.getSongsByKeyword(keyword, 1, PAGE_SIZE));
+                    songs.addAll(QQMusicUtil.getSongsByKeyword(keyword, 1, PAGE_SIZE));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
                     Message message = new Message();
                     message.what = 1;
                     handler.sendMessage(message);
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
             }
         }).start();
+    }
+
+    private ProgressDialog createProgressDialog() {
+        ProgressDialog progressDialog = new ProgressDialog(SearchActivity.this);
+        progressDialog.setMessage("搜索中");
+        progressDialog.setCancelable(false);
+        return progressDialog;
     }
 
 

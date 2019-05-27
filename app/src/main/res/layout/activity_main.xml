@@ -76,10 +76,39 @@
         <android.support.v4.view.ViewPager
                 android:id="@+id/view_pager"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 tools:layout_editor_absoluteY="43dp" tools:ignore="MissingConstraints">
 
         </android.support.v4.view.ViewPager>
+<!--        <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:gravity="center_vertical"-->
+<!--                android:orientation="horizontal"-->
+<!--        >-->
+<!--            <LinearLayout android:layout_width="match_parent"-->
+<!--                          android:layout_height="match_parent"-->
+<!--                          android:gravity="center_vertical"-->
+<!--                          android:paddingLeft="10dp"-->
+<!--                          android:orientation="horizontal" android:id="@+id/linearLayout3">-->
+<!--                <ImageView android:layout_width="50dp"-->
+<!--                           android:src="@drawable/album_img"-->
+<!--                           android:layout_height="50dp"/>-->
+<!--                <TextView android:layout_width="239dp"-->
+<!--                          android:layout_height="50dp"/>-->
+<!--            </LinearLayout>-->
+
+<!--            <ImageView android:layout_width="50dp"-->
+<!--                       android:src="@drawable/play"-->
+<!--                       android:layout_height="50dp"-->
+<!--                       android:id="@+id/imageView"/>-->
+<!--            <ImageView android:layout_width="30dp"-->
+<!--                       android:layout_height="30dp"-->
+<!--                       android:src="@drawable/nextsong"-->
+<!--                       app:layout_constraintEnd_toEndOf="@+id/linearLayout3"-->
+<!--                       android:id="@+id/imageView2"/>-->
+
+<!--        </LinearLayout>-->
     </LinearLayout>
     <android.support.design.widget.NavigationView
             android:id="@+id/menu"
