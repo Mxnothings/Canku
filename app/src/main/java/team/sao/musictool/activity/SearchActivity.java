@@ -16,6 +16,7 @@ import team.sao.musictool.adapter.SongListViewAdapter;
 import team.sao.musictool.annotation.ViewID;
 import team.sao.musictool.config.MusicType;
 import team.sao.musictool.entity.Song;
+import team.sao.musictool.util.NetEaseMusicUtil;
 import team.sao.musictool.util.QQMusicUtil;
 import team.sao.musictool.util.ViewUtil;
 
@@ -134,7 +135,11 @@ public class SearchActivity extends Activity {
             @Override
             public void run() {
                 try {
-                    songs.addAll(QQMusicUtil.getSongsByKeyword(keyword, 1, PAGE_SIZE));
+                    if (musicType == MusicType.QQ_MUSIC) {
+                        songs.addAll(QQMusicUtil.getSongsByKeyword(keyword, 1, PAGE_SIZE));
+                    } else if (musicType == MusicType.NETEASE_MUSIC) {
+                        songs.addAll(NetEaseMusicUtil.getSongsByKeyword(keyword, 1, PAGE_SIZE));
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {

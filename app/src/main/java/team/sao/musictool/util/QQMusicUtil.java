@@ -21,7 +21,7 @@ import java.util.List;
  *****/
 public class QQMusicUtil {
 
-    public static final String SONG_SEARCH_URL = "https://c.y.qq.com/soso/fcgi-bin/client_search_cp?ct=24&qqmusic_ver=1298&new_json=1&remoteplace=txt.yqq.center&t=0&aggr=1&cr=1&catZhida=1&lossless=0&flag_qc=0&p=#{page}&n=#{num}&w=#{keyword}&g_tk=5381&jsonpCallback=MusicJsonCallback7765912334450861&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0";
+    public static final String SONG_SEARCH_URL = "https://c.y.qq.com/soso/fcgi-bin/client_search_cp?ct=24&qqmusic_ver=1298&new_json=1&remoteplace=txt.yqq.center&t=0&aggr=1&cr=1&catZhida=1&lossless=0&flag_qc=0&p=#{pagenum}&n=#{pagesize}&w=#{keyword}&g_tk=5381&jsonpCallback=MusicJsonCallback7765912334450861&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0";
     public static final String DOWNLOAD_BASE_URL = "http://isure.stream.qqmusic.qq.com/";
     public static final String SONG_INFO_URL = "https://u.y.qq.com/cgi-bin/musicu.fcg?callback=getplaysongvkey7724607038771364&g_tk=5381&jsonpCallback=getplaysongvkey7724607038771364&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&data={\"req\":{\"module\":\"CDN.SrfCdnDispatchServer\",\"method\":\"GetCdnDispatch\",\"param\":{\"guid\":\"6647183392\",\"calltype\":0,\"userip\":\"\"}},\"req_0\":{\"module\":\"vkey.GetVkeyServer\",\"method\":\"CgiGetVkey\",\"param\":{\"guid\":\"6647183392\",\"songmid\":[\"#{songmid}\"],\"songtype\":[0],\"uin\":\"0\",\"loginflag\":1,\"platform\":\"20\"}},\"comm\":{\"uin\":0,\"format\":\"json\",\"ct\":20,\"cv\":0}}";
     public static final String ALBUM_IMG_URL = "http://imgcache.qq.com/music/photo/album_300/#{albumid%100}/300_albumpic_#{albumid}_0.jpg";
@@ -44,15 +44,15 @@ public class QQMusicUtil {
         for (Object o : songsinfo) {
             JSONObject songinfo = (JSONObject) o;
             try {
-                String songmid = songinfo.getString("mid");
-                String purl = getPurl(songmid);
+                String songid = songinfo.getString("mid");
+                String purl = getPurl(songid);
                 String name = songinfo.getString("name");
                 String singer_name = songinfo.getJSONArray("singer").getJSONObject(0).getString("name");
                 Integer album_id = songinfo.getJSONObject("album").getInteger("id");
                 String album_name = songinfo.getJSONObject("album").getString("name");
                 String album_subtitle = songinfo.getJSONObject("album").getString("subtitle");
                 String time = songinfo.getString("interval");
-                Song song = new Song(MusicType.QQ_MUSIC, name, songmid, purl, singer_name, album_id, album_name, album_subtitle, time);
+                Song song = new Song(MusicType.QQ_MUSIC, name, songid, purl.matches("^\\s*$") ? purl : DOWNLOAD_BASE_URL + purl, singer_name, album_id, album_name, album_subtitle, time);
                 songslist.add(song);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -118,7 +118,7 @@ public class QQMusicUtil {
      * @return
      */
     public static String getSongSearchUrl(String keyword, int pagenum, int pagesize) {
-        return SONG_SEARCH_URL.replaceAll("#\\{keyword\\}", keyword).replaceAll("#\\{page\\}", Integer.toString(pagenum)).replaceAll("#\\{num\\}", Integer.toString(pagesize));
+        return SONG_SEARCH_URL.replaceAll("#\\{keyword\\}", keyword).replaceAll("#\\{pagenum\\}", Integer.toString(pagenum)).replaceAll("#\\{pagesize\\}", Integer.toString(pagesize));
     }
 
     /**
