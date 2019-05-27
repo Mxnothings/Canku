@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+              android:orientation="vertical" android:gravity="center"
+              android:layout_height="match_parent">
+
+<!--    <LinearLayout android:layout_width="match_parent"-->
+<!--                  android:orientation="horizontal"-->
+<!--                  android:layout_height="40dp"-->
+<!--                  android:layout_marginStart="8dp"-->
+<!--                  app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="8dp"-->
+<!--                  app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"-->
+<!--                  android:layout_marginEnd="8dp"-->
+
+<!--                  android:id="@+id/linearLayout">-->
+<!--        <EditText-->
+<!--                android:id="@+id/keyword_input"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:textSize="14sp"-->
+<!--                android:paddingLeft="40px"-->
+<!--                android:paddingRight="40px"-->
+<!--                android:background="@drawable/dis_text_keyword"-->
+<!--                android:hint="请输入搜索关键词"-->
+<!--        />-->
+<!--    </LinearLayout>-->
+
+    <LinearLayout android:layout_width="135dp"
+                  android:layout_height="141dp">
+        <ImageView android:layout_width="match_parent"
+                   android:src="@drawable/qqmusic"
+                   android:layout_height="match_parent"/>
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="135dp"
+                  android:layout_height="141dp">
+        <ImageView android:layout_width="match_parent"
+                   android:src="@drawable/netease"
+                   android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

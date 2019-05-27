@@ -22,8 +22,8 @@ import static team.sao.musictool.annotation.AnnotationProcesser.*;
  **/
 public class SearchFragment extends Fragment {
 
-    @ViewID(R.id.keyword_input)
-    private EditText keywordInput;
+//    @ViewID(R.id.keyword_input)
+//    private EditText keywordInput;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,11 +33,11 @@ public class SearchFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_dis, container, false);
+        View view = inflater.inflate(R.layout.fragment_search, container, false);
         inject(this, view);
-        Drawable drawable = getResources().getDrawable(R.drawable.search);
-        drawable.setBounds(0, 0, keywordInput.getHeight(), keywordInput.getHeight());
-        keywordInput.setCompoundDrawablesRelative(drawable, null, null, null);
+//        Drawable drawable = getResources().getDrawable(R.drawable.search);
+//        drawable.setBounds(0, 0, keywordInput.getHeight(), keywordInput.getHeight());
+//        keywordInput.setCompoundDrawablesRelative(drawable, null, null, null);
         return view;
     }
 }

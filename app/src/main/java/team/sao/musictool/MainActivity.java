@@ -1,19 +1,21 @@
 package team.sao.musictool;
 
+import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.*;
+import android.widget.ImageView;
 import android.widget.TextView;
 import team.sao.musictool.adapter.MyFragmentPagerAdapter;
 import team.sao.musictool.annotation.ViewID;
@@ -45,6 +47,12 @@ public class MainActivity extends FragmentActivity {
     private TextView tv_dis;
     @ViewID(R.id.toolbar)
     private Toolbar toolbar;
+    @ViewID(R.id.drawer_menu)
+    private DrawerLayout drawer_menu;
+    @ViewID(R.id.menu)
+    private NavigationView menu;
+    @ViewID(R.id.icon_menu)
+    private ImageView icon_menu;
 
 
     private List<View> views;
@@ -118,6 +126,36 @@ public class MainActivity extends FragmentActivity {
                 }
             });
         }
+
+        drawer_menu.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View view, float v) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View view) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View view) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int i) {
+
+            }
+        });
+
+        icon_menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawer_menu.openDrawer(Gravity.LEFT);
+            }
+        });
+
     }
 
 
@@ -174,5 +212,18 @@ public class MainActivity extends FragmentActivity {
         int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
         return context.getResources().getDimensionPixelSize(resourceId);
     }
+
+    private class DrawerMenuToggle extends ActionBarDrawerToggle {
+
+        public DrawerMenuToggle(Activity activity, DrawerLayout drawerLayout, int openDrawerContentDescRes, int closeDrawerContentDescRes) {
+            super(activity, drawerLayout, openDrawerContentDescRes, closeDrawerContentDescRes);
+        }
+
+        public DrawerMenuToggle(Activity activity, DrawerLayout drawerLayout, Toolbar toolbar, int openDrawerContentDescRes, int closeDrawerContentDescRes) {
+            super(activity, drawerLayout, toolbar, openDrawerContentDescRes, closeDrawerContentDescRes);
+        }
+
+    }
+
 
 }
