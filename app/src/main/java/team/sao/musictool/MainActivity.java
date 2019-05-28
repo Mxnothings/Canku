@@ -1,8 +1,5 @@
 package team.sao.musictool;
 
-import android.app.Activity;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -11,15 +8,19 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
-import android.view.*;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import team.sao.musictool.adapter.MyFragmentPagerAdapter;
 import team.sao.musictool.annotation.ViewID;
-import team.sao.musictool.fragment.MineFragment;
+import team.sao.musictool.entity.ListMenuItem;
+import team.sao.musictool.fragment.ListMenu;
 import team.sao.musictool.fragment.MusicFragment;
 import team.sao.musictool.fragment.SearchFragment;
 import team.sao.musictool.util.ViewUtil;
@@ -77,7 +78,19 @@ public class MainActivity extends FragmentActivity {
         views = new ArrayList<>();
 
         fragments = new ArrayList<>();
-        fragments.add(new MineFragment());
+        ListMenu listMenu = new ListMenu();
+        listMenu.setOnMenuItemClicked(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(MainActivity.this, position + "", Toast.LENGTH_SHORT).show();
+            }
+        });
+        listMenu.addListMenuItem(new ListMenuItem(R.drawable.local_music, "本地音乐", "0", R.drawable.enter_black));
+        listMenu.addListMenuItem(new ListMenuItem(R.drawable.recent_music, "最近音乐", "0", R.drawable.enter_black));
+        listMenu.addListMenuItem(new ListMenuItem(R.drawable.favor_music, "收藏音乐", "0", R.drawable.enter_black));
+
+
+        fragments.add(listMenu);
         fragments.add(new MusicFragment());
         fragments.add(new SearchFragment(this));
 
