@@ -2,8 +2,13 @@ package team.sao.musictool.annotation;
 
 import android.app.Activity;
 import android.view.View;
+import team.sao.musictool.adapter.BaseListMenuAdapter;
+import team.sao.musictool.adapter.SearchListMenuAdapter;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * \* Author: MrWangx
@@ -13,9 +18,9 @@ import java.lang.reflect.Field;
  **/
 public class AnnotationProcesser {
 
-    public static void inject(Object injectTo, Object source) {
+    public static void inject(Object injectTo, Class superEnd, Object source) {
         if (source instanceof View) {
-            Field[] fields = injectTo.getClass().getDeclaredFields();
+            List<Field> fields = getAllDeclaredFields(injectTo, superEnd);
             for (Field f : fields) {
                 if (f.isAnnotationPresent(ViewID.class)) {
                     ViewID viewId = f.getAnnotation(ViewID.class);
@@ -28,7 +33,7 @@ public class AnnotationProcesser {
                 }
             }
         } else if (source instanceof Activity) {
-            Field[] fields = injectTo.getClass().getDeclaredFields();
+            List<Field> fields = getAllDeclaredFields(injectTo, superEnd);
             for (Field f : fields) {
                 if (f.isAnnotationPresent(ViewID.class)) {
                     ViewID viewId = f.getAnnotation(ViewID.class);
@@ -43,4 +48,31 @@ public class AnnotationProcesser {
         }
     }
 
+    /**
+     * 获取到superEnd为父类的所有域
+     * @param obj
+     * @param superEnd
+     * @return
+     */
+    public static List<Field> getAllDeclaredFields(Object obj, Class superEnd) {
+        System.out.println(obj.getClass() + "," + superEnd);
+        ArrayList<Field> fields = new ArrayList<>();
+        Class clazz = obj.getClass();
+        while (true) {
+            if (clazz == null) {
+                break;
+            } else {
+                if (clazz == superEnd) {
+                    fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
+                    break;
+                } else {
+                    fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
+                    clazz = clazz.getSuperclass();
+                }
+            }
+
+        }
+        return fields;
+    }
 }
+

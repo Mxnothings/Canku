@@ -70,7 +70,7 @@ public class SongListViewAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         final Song song = songs.get(position);
         convertView = inflater.inflate(R.layout.songlist_item, null);
-        inject(this, convertView);
+        inject(this, SongListViewAdapter.class, convertView);
 
         songName.setText(song.getName());
         singerAlbum.setText(song.getSinger() + "-" + song.getAlbumname());

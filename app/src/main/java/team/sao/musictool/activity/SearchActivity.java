@@ -57,7 +57,7 @@ public class SearchActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         ViewUtil.initWindows(this, getResources().getColor(R.color.colorPrimary));
-        inject(this, this);
+        inject(this, SearchActivity.class, this);
         setSearchTypeInfo();
         initAction();
 
@@ -115,6 +115,7 @@ public class SearchActivity extends Activity {
 
     /**
      * 搜索
+     *
      * @param keyword
      * @param songs
      */
@@ -147,7 +148,7 @@ public class SearchActivity extends Activity {
                     e.printStackTrace();
                 } finally {
                     Message message = new Message();
-                    if (songs1 == null){
+                    if (songs1 == null) {
                         message.what = -1;
                     } else {
                         message.what = 1;

@@ -53,7 +53,7 @@ public class MineFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.list_menu, container, false);
-        inject(this, view);
+        inject(this, MineFragment.class, view);
 
 //        list_menu.setAdapter(new ListMenuAdapter(menuItems, getContext()));
 

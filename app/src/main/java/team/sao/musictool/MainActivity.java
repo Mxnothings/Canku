@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -17,12 +16,13 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import team.sao.musictool.adapter.BaseListMenuAdapter;
 import team.sao.musictool.adapter.MyFragmentPagerAdapter;
+import team.sao.musictool.adapter.SearchListMenuAdapter;
 import team.sao.musictool.annotation.ViewID;
 import team.sao.musictool.entity.ListMenuItem;
 import team.sao.musictool.fragment.ListMenu;
 import team.sao.musictool.fragment.MusicFragment;
-import team.sao.musictool.fragment.SearchFragment;
 import team.sao.musictool.util.ViewUtil;
 
 import java.util.ArrayList;
@@ -67,7 +67,7 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         //设置沉浸式状态栏
         ViewUtil.initWindows(this, getResources().getColor(R.color.colorPrimary));
-        inject(this, this);
+        inject(this, MainActivity.class, this);
         initData();
         initViews();
 
@@ -78,21 +78,26 @@ public class MainActivity extends FragmentActivity {
         views = new ArrayList<>();
 
         fragments = new ArrayList<>();
-        ListMenu listMenu = new ListMenu();
-        listMenu.setOnMenuItemClicked(new AdapterView.OnItemClickListener() {
+
+        ListMenu mine = new ListMenu();
+        mine.setOnMenuItemClicked(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(MainActivity.this, position + "", Toast.LENGTH_SHORT).show();
             }
         });
-        listMenu.addListMenuItem(new ListMenuItem(R.drawable.local_music, "本地音乐", "0", R.drawable.enter_black));
-        listMenu.addListMenuItem(new ListMenuItem(R.drawable.recent_music, "最近音乐", "0", R.drawable.enter_black));
-        listMenu.addListMenuItem(new ListMenuItem(R.drawable.favor_music, "收藏音乐", "0", R.drawable.enter_black));
+        mine.addListMenuItem(new ListMenuItem(R.drawable.local_music, "本地音乐", "0", R.drawable.enter_black));
+        mine.addListMenuItem(new ListMenuItem(R.drawable.recent_music, "最近音乐", "0", R.drawable.enter_black));
+        mine.addListMenuItem(new ListMenuItem(R.drawable.favor_music, "收藏音乐", "0", R.drawable.enter_black));
+        fragments.add(mine);
 
-
-        fragments.add(listMenu);
         fragments.add(new MusicFragment());
-        fragments.add(new SearchFragment(this));
+
+        ListMenu search = new ListMenu();
+        search.addListMenuItem(new ListMenuItem(R.drawable.qqmusic_logo, "QQ音乐", "", R.drawable.enter_black));
+        search.addListMenuItem(new ListMenuItem(R.drawable.netease_cloud_music_logo, "网易云音乐", "", R.drawable.enter_black));
+        search.setListMenuAdapter(new SearchListMenuAdapter());
+        fragments.add(search);
 
         items = new HashMap<>();
         items.put(0, tv_mine);

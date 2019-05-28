@@ -7,15 +7,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import team.sao.musictool.R;
 import team.sao.musictool.annotation.ViewID;
 import team.sao.musictool.entity.ListMenuItem;
-import team.sao.musictool.fragment.ListMenu;
 
 import java.util.List;
 
-import static team.sao.musictool.annotation.AnnotationProcesser.*;
+import static team.sao.musictool.annotation.AnnotationProcesser.inject;
 
 /**
  * \* Author: MrWangx
@@ -23,27 +21,24 @@ import static team.sao.musictool.annotation.AnnotationProcesser.*;
  * \* Time: 21:15
  * \* Description:
  **/
-public class ListMenuAdapter extends BaseAdapter {
+public class BaseListMenuAdapter extends BaseAdapter {
 
     public static final int LIST_MENU_VIEW_ITEM_RESOURCE = R.layout.list_menu_item;
 
     @ViewID(R.id.list_menu_item_icon_main)
-    private ImageView icon_main;
+    protected ImageView icon_main;
     @ViewID(R.id.list_menu_item_name)
-    private TextView name;
+    protected TextView name;
     @ViewID(R.id.list_menu_item_tip)
-    private TextView tip;
+    protected TextView tip;
     @ViewID(R.id.list_menu_item_icon_enter)
-    private ImageView icon_enter;
+    protected ImageView icon_enter;
 
-    private LayoutInflater inflater;
-    private List<ListMenuItem> menuItems;
-    private Context context;
+    protected LayoutInflater inflater;
+    protected List<ListMenuItem> menuItems;
+    protected Context context;
 
-    public ListMenuAdapter(List<ListMenuItem> menuItems, Context context) {
-        this.menuItems = menuItems;
-        this.context = context;
-        this.inflater = LayoutInflater.from(context);
+    public BaseListMenuAdapter() {
     }
 
     @Override
@@ -64,14 +59,24 @@ public class ListMenuAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = inflater.inflate(LIST_MENU_VIEW_ITEM_RESOURCE, null);
-        inject(this, view);
-        ListMenuItem item = menuItems.get(position);
+        inject(this, BaseListMenuAdapter.class, view);
 
+        ListMenuItem item = menuItems.get(position);
         icon_main.setImageResource(item.getIcon_main_resource());
         name.setText(item.getName());
         tip.setText(item.getTip());
         icon_enter.setImageResource(item.getIcon_enter_resource());
-
         return view;
+    }
+
+    public BaseListMenuAdapter setContext(Context context) {
+        this.context = context;
+        this.inflater = LayoutInflater.from(context);
+        return this;
+    }
+
+    public BaseListMenuAdapter setMenuItems(List<ListMenuItem> menuItems) {
+        this.menuItems = menuItems;
+        return this;
     }
 }

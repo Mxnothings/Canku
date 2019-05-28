@@ -1,6 +1,5 @@
 package team.sao.musictool.fragment;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import team.sao.musictool.R;
-import team.sao.musictool.adapter.ListMenuAdapter;
+import team.sao.musictool.adapter.BaseListMenuAdapter;
 import team.sao.musictool.annotation.ViewID;
 import team.sao.musictool.entity.ListMenuItem;
 
@@ -32,10 +31,9 @@ public class ListMenu extends Fragment {
     private ListView list_menu;
 
     private List<ListMenuItem> menuItems;
-    private ListMenuAdapter listMenuAdapter;
+    private BaseListMenuAdapter listMenuAdapter;
     private AdapterView.OnItemClickListener onItemClickListener;
 
-    @SuppressLint("ValidFragment")
     public ListMenu() {
         this.menuItems = new ArrayList<>();
     }
@@ -49,8 +47,8 @@ public class ListMenu extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.list_menu, container, false);
-        inject(this, view);
-        list_menu.setAdapter(listMenuAdapter = new ListMenuAdapter(menuItems, getContext()));
+        inject(this, ListMenu.class, view);
+        list_menu.setAdapter(listMenuAdapter == null ? initAdapter(listMenuAdapter = new BaseListMenuAdapter()) : initAdapter(listMenuAdapter));
         list_menu.setOnItemClickListener(onItemClickListener);
         return view;
     }
@@ -66,11 +64,22 @@ public class ListMenu extends Fragment {
             this.onItemClickListener = onItemClickListener;
     }
 
+    public void setListMenuAdapter(BaseListMenuAdapter listMenuAdapter) {
+        if (list_menu != null)
+            list_menu.setOnItemClickListener(onItemClickListener);
+        else
+            this.listMenuAdapter = listMenuAdapter;
+    }
+
+    private BaseListMenuAdapter initAdapter(BaseListMenuAdapter adapter) {
+        return adapter.setMenuItems(menuItems).setContext(getContext());
+    }
+
     public List<ListMenuItem> getMenuItems() {
         return menuItems;
     }
 
-    public ListMenuAdapter getListMenuAdapter() {
+    public BaseListMenuAdapter getListMenuAdapter() {
         return listMenuAdapter;
     }
 }
