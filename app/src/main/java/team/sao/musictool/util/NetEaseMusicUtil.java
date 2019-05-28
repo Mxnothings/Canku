@@ -22,7 +22,10 @@ import java.util.List;
 public class NetEaseMusicUtil {
 
     public static void main(String[] args) throws IOException {
-        System.out.println(getSongsByKeyword("园游会", 1, 20).get(0).getDownloadUrl());
+//        System.out.println(getSongsJsonBykeyword("园游会", 1, 20));
+//        System.out.println(getSongSearchUrl("园游会", 1, 20));
+//        getSongsByKeyword("园游会", 1, 20);
+        System.out.println(Jsoup.connect("https://api.imjad.cn/cloudmusic/?type=search&s=园游会&limit=20&offset=0").method(Connection.Method.GET).ignoreContentType(true).execute().body());
     }
 
     public static final String API_URL = "https://api.imjad.cn/cloudmusic/";
@@ -42,7 +45,12 @@ public class NetEaseMusicUtil {
     public static List<Song> getSongsByKeyword(String keyword, int pagenum, int pagesize) throws IOException {
         List<Song> songslist = new ArrayList<>();
         //获取歌歌曲信息表的jsonarray
-        JSONArray songsinfo = getSongsJsonBykeyword(keyword, pagenum, pagesize).getJSONObject("result").getJSONArray("songs");
+        JSONArray songsinfo = null;
+        try {
+            songsinfo = getSongsJsonBykeyword(keyword, pagenum, pagesize).getJSONObject("result").getJSONArray("songs");
+        } catch (Exception e) {
+            return null;
+        }
         for (Object o : songsinfo) {
             JSONObject songinfo = (JSONObject) o;
             String songid = songinfo.getString("id");
@@ -50,7 +58,7 @@ public class NetEaseMusicUtil {
             String singer_name = songinfo.getJSONArray("ar").getJSONObject(0).getString("name");
             Integer album_id = songinfo.getJSONObject("al").getInteger("id");
             String album_name = songinfo.getJSONObject("al").getString("name");
-            Song song = new Song(MusicType.NETEASE_MUSIC, name, songid, null, singer_name, album_id, album_name, null, "暂无");
+            Song song = new Song(MusicType.NETEASE_MUSIC, name, songid, null, singer_name, album_id, album_name, null, null);
             songslist.add(song);
         }
         return songslist;

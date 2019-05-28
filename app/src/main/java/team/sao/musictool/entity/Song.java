@@ -22,7 +22,8 @@ public class Song {
     private String subtitle;    //专辑副标题
     private String time;        //时长
 
-    public Song() {}
+    public Song() {
+    }
 
     public Song(int musicType, String name, String songid, String downloadUrl, String singer, Integer albumid, String albumname, String subtitle, String time) {
         this.musicType = musicType;
@@ -57,10 +58,10 @@ public class Song {
                 int t = Integer.parseInt(time);
                 return String.format("%02d:%02d", t / 60, t % 60);
             } catch (Exception e) {
-                return time;
+                return "暂无";
             }
-        }
-        return time;
+        } else
+            return "暂无";
     }
 
     public int getMusicType() {

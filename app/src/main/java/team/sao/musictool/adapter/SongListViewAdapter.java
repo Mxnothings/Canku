@@ -84,16 +84,19 @@ public class SongListViewAdapter extends BaseAdapter {
                     public void run() {
                         MediaPlayer mediaPlayer = new MediaPlayer();
                         try {
-                            Log.i("downloadUtl", song.getDownloadUrl());
-                            mediaPlayer.setDataSource(context, Uri.parse(song.getDownloadUrl()));
-                            mediaPlayer.prepare();
-                            mediaPlayer.start();
+                            if (song.getDownloadUrl().matches("^\\s*$")) {
+                                Toast.makeText(context, "歌曲不可播放", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Log.i("downloadUtl", song.getDownloadUrl());
+                                mediaPlayer.setDataSource(context, Uri.parse(song.getDownloadUrl()));
+                                mediaPlayer.prepare();
+                                mediaPlayer.start();
+                            }
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     }
                 }).start();
-                Toast.makeText(context, "你要播放" + song.getName(), Toast.LENGTH_SHORT).show();
             }
         });
 

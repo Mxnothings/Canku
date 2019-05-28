@@ -125,8 +125,10 @@ public class SearchActivity extends Activity {
             public void handleMessage(Message msg) {
                 if (msg.what == 1) {
                     ((BaseAdapter) songlist.getAdapter()).notifyDataSetChanged();
-                    alert.hide();
+                } else if (msg.what == -1) {
+                    Toast.makeText(SearchActivity.this, "暂无数据", Toast.LENGTH_SHORT).show();
                 }
+                alert.hide();
                 super.handleMessage(msg);
             }
         };
@@ -134,17 +136,23 @@ public class SearchActivity extends Activity {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                List<Song> songs1 = null;
                 try {
                     if (musicType == MusicType.QQ_MUSIC) {
-                        songs.addAll(QQMusicUtil.getSongsByKeyword(keyword, 1, PAGE_SIZE));
+                        songs1 = QQMusicUtil.getSongsByKeyword(keyword, 1, PAGE_SIZE);
                     } else if (musicType == MusicType.NETEASE_MUSIC) {
-                        songs.addAll(NetEaseMusicUtil.getSongsByKeyword(keyword, 1, PAGE_SIZE));
+                        songs1 = NetEaseMusicUtil.getSongsByKeyword(keyword, 1, PAGE_SIZE);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
                     Message message = new Message();
-                    message.what = 1;
+                    if (songs1 == null){
+                        message.what = -1;
+                    } else {
+                        message.what = 1;
+                        songs.addAll(songs1);
+                    }
                     handler.sendMessage(message);
                 }
             }

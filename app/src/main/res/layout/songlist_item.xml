@@ -17,7 +17,7 @@
                   android:paddingBottom="3dp"
                   android:gravity="bottom"
                   android:id="@+id/tv_song_name"
-                  android:textSize="18sp"
+                  android:textSize="@dimen/songlist_item_name_textsize"
                   android:textColor="@color/color_songlist_item_songname"
                   android:text="我们的恋爱是对生命的严重浪费"/>
         <LinearLayout android:layout_width="match_parent"
@@ -30,7 +30,7 @@
                       android:layout_height="match_parent"
                       android:gravity="top"
                       android:id="@+id/tv_singer_album"
-                      android:textSize="12sp"
+                      android:textSize="@dimen/songlist_item_info_textsize"
                       android:text="许嵩-自定义"
                       android:paddingLeft="20dp"/>
             <TextView android:layout_width="wrap_content"
@@ -39,7 +39,7 @@
                       android:layout_marginLeft="15dp"
                       android:id="@+id/tv_time"
                       android:text="04:21"
-                      android:textSize="12sp"/>
+                      android:textSize="@dimen/songlist_item_info_textsize"/>
         </LinearLayout>
 
     </LinearLayout>
