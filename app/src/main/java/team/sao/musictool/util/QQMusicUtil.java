@@ -1,5 +1,6 @@
 package team.sao.musictool.util;
 
+import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -39,7 +40,13 @@ public class QQMusicUtil {
     public static List<Song> getSongsByKeyword(String keyword, int pagenum, int pagesize) throws IOException {
         List<Song> songslist = new ArrayList<>();
         //获取歌歌曲信息表的jsonarray
-        JSONArray songsinfo = getSongsJsonBykeyword(keyword, pagenum, pagesize).getJSONObject("data").getJSONObject("song").getJSONArray("list");
+        JSONArray songsinfo = null;
+        try {
+            songsinfo = getSongsJsonBykeyword(keyword, pagenum, pagesize).getJSONObject("data").getJSONObject("song").getJSONArray("list");
+        } catch (Exception e) {
+            Log.i("QQMusicTool_getSongs", e.toString());
+            return null;
+        }
         //遍历返回的歌曲信息
         for (Object o : songsinfo) {
             JSONObject songinfo = (JSONObject) o;
