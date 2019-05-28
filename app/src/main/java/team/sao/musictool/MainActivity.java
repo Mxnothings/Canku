@@ -1,5 +1,6 @@
 package team.sao.musictool;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -16,10 +17,12 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import team.sao.musictool.activity.SearchActivity;
 import team.sao.musictool.adapter.BaseListMenuAdapter;
 import team.sao.musictool.adapter.MyFragmentPagerAdapter;
 import team.sao.musictool.adapter.SearchListMenuAdapter;
 import team.sao.musictool.annotation.ViewID;
+import team.sao.musictool.config.MusicType;
 import team.sao.musictool.entity.ListMenuItem;
 import team.sao.musictool.fragment.ListMenu;
 import team.sao.musictool.fragment.MusicFragment;
@@ -94,6 +97,20 @@ public class MainActivity extends FragmentActivity {
         fragments.add(new MusicFragment());
 
         ListMenu search = new ListMenu();
+        search.setOnMenuItemClicked(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                    intent.putExtra("musicType", MusicType.QQ_MUSIC);
+                    startActivity(intent);
+                } else if (position == 1) {
+                    Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                    intent.putExtra("musicType", MusicType.NETEASE_MUSIC);
+                    startActivity(intent);
+                }
+            }
+        });
         search.addListMenuItem(new ListMenuItem(R.drawable.qqmusic_logo, "QQ音乐", "", R.drawable.enter_black));
         search.addListMenuItem(new ListMenuItem(R.drawable.netease_cloud_music_logo, "网易云音乐", "", R.drawable.enter_black));
         search.setListMenuAdapter(new SearchListMenuAdapter());

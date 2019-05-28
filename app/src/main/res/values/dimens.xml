@@ -9,6 +9,6 @@
     <dimen name="songlist_item_info_textsize">10sp</dimen>
 
     <!--    list menu item    -->
-    <dimen name="list_menu_item_height">55dp</dimen>
+    <dimen name="list_menu_item_height">65dp</dimen>
 
 </resources>

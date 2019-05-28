@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import team.sao.musictool.R;
 import team.sao.musictool.annotation.ViewID;
@@ -25,6 +26,8 @@ public class BaseListMenuAdapter extends BaseAdapter {
 
     public static final int LIST_MENU_VIEW_ITEM_RESOURCE = R.layout.list_menu_item;
 
+    @ViewID(R.id.list_menu_item_root)
+    protected LinearLayout root;
     @ViewID(R.id.list_menu_item_icon_main)
     protected ImageView icon_main;
     @ViewID(R.id.list_menu_item_name)
