@@ -12,13 +12,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import team.sao.musictool.activity.SearchActivity;
-import team.sao.musictool.adapter.BaseListMenuAdapter;
 import team.sao.musictool.adapter.MyFragmentPagerAdapter;
 import team.sao.musictool.adapter.SearchListMenuAdapter;
 import team.sao.musictool.annotation.ViewID;
@@ -184,6 +184,14 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 drawer_menu.openDrawer(Gravity.LEFT);
+            }
+        });
+
+        menu.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                Toast.makeText(MainActivity.this, menuItem.getTitle(), Toast.LENGTH_SHORT).show();
+                return false;
             }
         });
 

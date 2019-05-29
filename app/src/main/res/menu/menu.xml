@@ -11,6 +11,5 @@
         <item
                 android:icon="@drawable/exit"
                 android:title="退出"/>
-
     </group>
 </menu>

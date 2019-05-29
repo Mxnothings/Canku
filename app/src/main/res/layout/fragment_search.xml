@@ -21,7 +21,7 @@
 <!--                android:textSize="14sp"-->
 <!--                android:paddingLeft="40px"-->
 <!--                android:paddingRight="40px"-->
-<!--                android:background="@drawable/dis_text_keyword"-->
+<!--                android:background="@drawable/search_text_keyword"-->
 <!--                android:hint="请输入搜索关键词"-->
 <!--        />-->
 <!--    </LinearLayout>-->

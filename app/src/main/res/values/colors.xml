@@ -5,4 +5,6 @@
     <color name="colorAccent">#31C27C</color>
     <color name="colorPrimaryLighter">#3FF39B</color>
     <color name="color_songlist_item_songname">#444444</color>
+    <color name="color_activity_main_player_top_border">#F0F0F0</color>
+    <color name="color_activity_main_text"></color>
 </resources>
