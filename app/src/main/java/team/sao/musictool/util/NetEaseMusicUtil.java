@@ -1,6 +1,5 @@
 package team.sao.musictool.util;
 
-import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -25,12 +24,10 @@ public class NetEaseMusicUtil {
 //        System.out.println(getSongsJsonBykeyword("园游会", 1, 20));
 //        System.out.println(getSongSearchUrl("园游会", 1, 20));
 //        getSongsByKeyword("园游会", 1, 20);
-        System.out.println(Jsoup.connect("https://api.imjad.cn/cloudmusic/?type=search&s=园游会&limit=20&offset=0").method(Connection.Method.GET).ignoreContentType(true).execute().body());
     }
 
-    public static final String API_URL = "https://api.imjad.cn/cloudmusic/";
-    public static final String SONG_SEARCH_URL = API_URL + "?type=search&s=#{keyword}&limit=#{end}&offset=#{begin}";
-    public static final String SONG_PLAY_BASE_URL = API_URL + "?type=song&id=#{songid}&search_type=1";
+    public static final String API_URL = "https://api.itooi.cn/music/netease/search";
+    public static final String SONG_SEARCH_URL = API_URL + "?key=579621905&type=search&s=#{keyword}&limit=#{end}&offset=#{begin}";
 
 
     /**
@@ -47,7 +44,7 @@ public class NetEaseMusicUtil {
         //获取歌歌曲信息表的jsonarray
         JSONArray songsinfo = null;
         try {
-            songsinfo = getSongsJsonBykeyword(keyword, pagenum, pagesize).getJSONObject("result").getJSONArray("songs");
+            songsinfo = getSongsJsonBykeyword(keyword, pagenum, pagesize).getJSONArray("data");
         } catch (Exception e) {
             return null;
         }
@@ -55,24 +52,14 @@ public class NetEaseMusicUtil {
             JSONObject songinfo = (JSONObject) o;
             String songid = songinfo.getString("id");
             String name = songinfo.getString("name");
-            String singer_name = songinfo.getJSONArray("ar").getJSONObject(0).getString("name");
-            Integer album_id = songinfo.getJSONObject("al").getInteger("id");
-            String album_name = songinfo.getJSONObject("al").getString("name");
-            Song song = new Song(MusicType.NETEASE_MUSIC, name, songid, null, singer_name, album_id, album_name, null, null);
+            String singer_name = songinfo.getString("singer");
+            String downloadUrl = songinfo.getString("url");
+            String imgurl = songinfo.getString("pic");
+            String time = songinfo.getString("time");
+            Song song = new Song(MusicType.NETEASE_MUSIC, name, songid, downloadUrl, singer_name, null, "暂无信息", imgurl, null, time);
             songslist.add(song);
         }
         return songslist;
-    }
-
-    public static String getSongPlayUrl(String songid) {
-        try {
-            return JSON.parseObject
-                    (Jsoup.connect(SONG_PLAY_BASE_URL.replaceAll("#\\{songid\\}", songid)).method(Connection.Method.GET).ignoreContentType(true).execute().body())
-                    .getJSONArray("data").getJSONObject(0).getString("url");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     /**

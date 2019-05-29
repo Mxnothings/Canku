@@ -2,7 +2,7 @@ package team.sao.musictool.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import team.sao.musictool.config.MusicType;
-import team.sao.musictool.util.NetEaseMusicUtil;
+import team.sao.musictool.util.QQMusicUtil;
 
 /****
  * @author:MrWangx
@@ -19,13 +19,14 @@ public class Song {
     private String singer;      //歌手
     private Integer albumid;     //专辑id
     private String albumname;   //专辑名
+    private String imgurl;
     private String subtitle;    //专辑副标题
     private String time;        //时长
 
     public Song() {
     }
 
-    public Song(int musicType, String name, String songid, String downloadUrl, String singer, Integer albumid, String albumname, String subtitle, String time) {
+    public Song(int musicType, String name, String songid, String downloadUrl, String singer, Integer albumid, String albumname, String imgurl, String subtitle, String time) {
         this.musicType = musicType;
         this.name = name;
         this.songid = songid;
@@ -33,6 +34,7 @@ public class Song {
         this.singer = singer;
         this.albumid = albumid;
         this.albumname = albumname;
+        this.imgurl = imgurl;
         this.subtitle = subtitle;
         this.time = time;
     }
@@ -89,11 +91,6 @@ public class Song {
     }
 
     public String getDownloadUrl() {
-        if (musicType == MusicType.QQ_MUSIC) {
-            return downloadUrl;
-        } else if (musicType == MusicType.NETEASE_MUSIC) {
-            return (downloadUrl == null ? downloadUrl = NetEaseMusicUtil.getSongPlayUrl(songid) : downloadUrl);
-        }
         return downloadUrl;
     }
 
@@ -119,6 +116,19 @@ public class Song {
 
     public String getAlbumname() {
         return albumname;
+    }
+
+    public String getImgurl() {
+        if (musicType == MusicType.QQ_MUSIC) {
+            return imgurl == null ? imgurl = QQMusicUtil.getAlbumImgUrl(albumid) : imgurl;
+        } else if (musicType == MusicType.NETEASE_MUSIC) {
+            return imgurl;
+        }
+        return imgurl;
+    }
+
+    public void setImgurl(String imgurl) {
+        this.imgurl = imgurl;
     }
 
     public void setAlbumname(String albumname) {
