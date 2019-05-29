@@ -5,15 +5,18 @@
                                              android:layout_height="wrap_content">
     <LinearLayout android:id="@+id/list_menu_item_root"
                   android:layout_width="match_parent"
+                  android:paddingLeft="10dp"
+                  android:paddingRight="10dp"
                   android:layout_height="@dimen/list_menu_item_height">
         <ImageView
                 android:id="@+id/list_menu_item_icon_main"
                 android:padding="12dp"
                 android:layout_width="55dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/local_music" />
+                android:src="@drawable/local_music_green" />
         <TextView
                 android:id="@+id/list_menu_item_name"
+                android:textColor="@color/color_text"
                 android:layout_width="0dp"
                 android:textSize="14sp"
                 android:gravity="center_vertical"
@@ -28,10 +31,11 @@
                 android:padding="4dp"
                 android:gravity="center"
                 android:textSize="14sp"
+                android:textColor="@color/color_text_lighter"
                 android:text="0"/>
 
         <ImageView
-                android:layout_width="50dp"
+                android:layout_width="45dp"
                 android:layout_height="match_parent"
                 android:id="@+id/list_menu_item_icon_enter"
                 android:padding="12dp"

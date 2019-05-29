@@ -26,7 +26,7 @@ import team.sao.musictool.config.MusicType;
 import team.sao.musictool.entity.ListMenuItem;
 import team.sao.musictool.fragment.ListMenu;
 import team.sao.musictool.fragment.MusicFragment;
-import team.sao.musictool.util.ViewUtil;
+import team.sao.musictool.util.StatusBarUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +39,8 @@ public class MainActivity extends FragmentActivity {
 
     private int lastTextViewIndex = 0;
     private static int commonTextSize = 14;
-    private static int largerTextSize = 20;
+    private static int largerTextSize = 22;
+
     private Map<Integer, TextView> items;
 
     @ViewID(R.id.view_pager)
@@ -69,7 +70,7 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //设置沉浸式状态栏
-        ViewUtil.initWindows(this, getResources().getColor(R.color.colorPrimary));
+        StatusBarUtil.setStatusBarMode(this, true, R.color.colorPrimary);
         inject(this, MainActivity.class, this);
         initData();
         initViews();
@@ -89,9 +90,9 @@ public class MainActivity extends FragmentActivity {
                 Toast.makeText(MainActivity.this, position + "", Toast.LENGTH_SHORT).show();
             }
         });
-        mine.addListMenuItem(new ListMenuItem(R.drawable.local_music, "本地音乐", "0", R.drawable.enter_black));
+        mine.addListMenuItem(new ListMenuItem(R.drawable.local_music_green, "本地音乐", "0", R.drawable.enter_black));
         mine.addListMenuItem(new ListMenuItem(R.drawable.recent_music, "最近音乐", "0", R.drawable.enter_black));
-        mine.addListMenuItem(new ListMenuItem(R.drawable.favor_music, "收藏音乐", "0", R.drawable.enter_black));
+        mine.addListMenuItem(new ListMenuItem(R.drawable.like_fill_green, "收藏音乐", "0", R.drawable.enter_black));
         fragments.add(mine);
 
         fragments.add(new MusicFragment());
@@ -123,7 +124,8 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void initViews() {
-        items.get(lastTextViewIndex).setTextSize(TypedValue.COMPLEX_UNIT_DIP, largerTextSize);
+        items.get(lastTextViewIndex).setTextSize(TypedValue.COMPLEX_UNIT_SP, largerTextSize);
+        items.get(lastTextViewIndex).setTextColor(getResources().getColor(R.color.color_text));
 
         fragmentManager = getSupportFragmentManager();
         /**设置适配器*/
@@ -138,9 +140,11 @@ public class MainActivity extends FragmentActivity {
 
             @Override
             public void onPageSelected(int i) {
-                //设置字体大小
-                items.get(lastTextViewIndex).setTextSize(TypedValue.COMPLEX_UNIT_DIP, commonTextSize);
-                items.get((lastTextViewIndex = i)).setTextSize(TypedValue.COMPLEX_UNIT_DIP, largerTextSize);
+                //设置字体大小和颜色
+                items.get(lastTextViewIndex).setTextSize(TypedValue.COMPLEX_UNIT_SP, commonTextSize);
+                items.get(lastTextViewIndex).setTextColor(getResources().getColor(R.color.color_text_lighter));
+                items.get((lastTextViewIndex = i)).setTextSize(TypedValue.COMPLEX_UNIT_SP, largerTextSize);
+                items.get(lastTextViewIndex).setTextColor(getResources().getColor(R.color.color_text));
             }
 
             @Override

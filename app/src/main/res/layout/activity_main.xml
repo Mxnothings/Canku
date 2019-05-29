@@ -6,8 +6,7 @@
         android:id="@+id/drawer_menu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:fitsSystemWindows="true"
+        android:background="@color/colorPrimary"
         tools:context=".MainActivity">
 
     <LinearLayout android:layout_width="match_parent"
@@ -25,9 +24,9 @@
                     android:layout_height="match_parent">
                 <ImageView
                         android:id="@+id/icon_menu"
-                        android:layout_width="30dp"
+                        android:layout_width="20dp"
                         android:layout_height="match_parent"
-                        android:src="@drawable/menu_white"
+                        android:src="@drawable/menu_black"
                         android:padding="2dp"/>
                 <LinearLayout
                         android:layout_width="match_parent"
@@ -36,7 +35,8 @@
                         android:orientation="horizontal" android:layout_marginEnd="-1dp"
                         android:layout_alignEnd="@+id/toolbar_menu">
                     <TextView
-                            android:textColor="@android:color/white"
+                            android:textColor="@color/color_text_lighter"
+                            android:textSize="@dimen/activity_main_toolbar_textsize"
                             android:text="@string/main_activity_toolbar_item1"
                             tools:text="@string/main_activity_toolbar_item1"
                             android:layout_width="80dp"
@@ -44,7 +44,8 @@
                             android:gravity="center"
                             android:id="@+id/tv_mine"/>
                     <TextView
-                            android:textColor="@android:color/white"
+                            android:textColor="@color/color_text_lighter"
+                            android:textSize="@dimen/activity_main_toolbar_textsize"
                             android:text="@string/main_activity_toolbar_item2"
                             tools:text="@string/main_activity_toolbar_item2"
                             android:layout_width="80dp"
@@ -52,7 +53,8 @@
                             android:gravity="center"
                             android:id="@+id/tv_music"/>
                     <TextView
-                            android:textColor="@android:color/white"
+                            android:textColor="@color/color_text_lighter"
+                            android:textSize="@dimen/activity_main_toolbar_textsize"
                             android:text="@string/main_activity_toolbar_item3"
                             tools:text="@string/main_activity_toolbar_item3"
                             android:layout_width="80dp"
@@ -61,7 +63,7 @@
                             android:id="@+id/tv_dis"/>
                 </LinearLayout>
                 <ImageView
-                        android:src="@drawable/plus"
+                        android:src="@drawable/plus_white"
                         android:layout_marginEnd="0dp"
                         android:padding="12dp"
                          android:layout_width="43dp"
@@ -105,11 +107,11 @@
                 <ImageView android:layout_width="45dp"
                            android:layout_marginRight="5dp"
                            android:layout_height="45dp"
-                           android:src="@drawable/play"
+                           android:src="@drawable/play_black"
                            android:layout_gravity="center_vertical"/>
                 <ImageView android:layout_width="35dp"
                            android:layout_height="35dp"
-                           android:src="@drawable/nextsong"
+                           android:src="@drawable/nextsong_black"
                            android:layout_gravity="center_vertical"/>
 
             </LinearLayout>

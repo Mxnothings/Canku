@@ -2,14 +2,12 @@ package team.sao.musictool.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import team.sao.musictool.R;
 import team.sao.musictool.adapter.SongListViewAdapter;
@@ -18,6 +16,7 @@ import team.sao.musictool.config.MusicType;
 import team.sao.musictool.entity.Song;
 import team.sao.musictool.util.NetEaseMusicUtil;
 import team.sao.musictool.util.QQMusicUtil;
+import team.sao.musictool.util.StatusBarUtil;
 import team.sao.musictool.util.ViewUtil;
 
 import java.io.IOException;
@@ -56,7 +55,7 @@ public class SearchActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        ViewUtil.initWindows(this, getResources().getColor(R.color.colorPrimary));
+        StatusBarUtil.setStatusBarMode(this, true, R.color.colorPrimary);
         inject(this, SearchActivity.class, this);
         setSearchTypeInfo();
         initAction();

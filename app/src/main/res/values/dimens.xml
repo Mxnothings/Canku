@@ -3,6 +3,7 @@
 
     <!-- activity_main    -->
     <dimen name="activity_main_player_height">60dp</dimen>
+    <dimen name="activity_main_toolbar_textsize">14sp</dimen>
 
 
     <dimen name="fragment_mine_linear_height">55dp</dimen>

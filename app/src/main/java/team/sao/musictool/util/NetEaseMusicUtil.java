@@ -27,7 +27,7 @@ public class NetEaseMusicUtil {
     }
 
     public static final String API_URL = "https://api.itooi.cn/music/netease/search";
-    public static final String SONG_SEARCH_URL = API_URL + "?key=579621905&type=search&s=#{keyword}&limit=#{end}&offset=#{begin}";
+    public static final String SONG_SEARCH_URL = API_URL + "?key=579621905&type=search_green&s=#{keyword}&limit=#{end}&offset=#{begin}";
 
 
     /**

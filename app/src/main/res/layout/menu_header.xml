@@ -15,12 +15,14 @@
                       android:layout_alignParentBottom="true" android:layout_marginBottom="29dp"
                       android:layout_alignParentStart="true" android:layout_marginStart="18dp">
             <TextView
+                    android:textColor="@color/color_text"
                     android:textSize="25sp"
                     android:text="MusicTool"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             <TextView
                     android:textSize="14sp"
+                    android:textColor="@color/color_text_lighter"
                     android:text="听你想听的歌,做你想做的事情"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -28,7 +30,7 @@
         </LinearLayout>
         <ImageView android:layout_width="50dp"
                    android:layout_height="50dp"
-                   android:src="@drawable/title"
+                   android:src="@drawable/app_logo"
                    android:layout_alignParentEnd="true" android:layout_marginEnd="36dp"
                    android:layout_alignParentBottom="true" android:layout_marginBottom="54dp"
                    android:layout_marginTop="46dp" android:layout_alignParentTop="true"/>
