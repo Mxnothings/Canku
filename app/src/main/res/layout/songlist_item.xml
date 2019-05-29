@@ -55,14 +55,14 @@
         <ImageView android:layout_width="@dimen/songlist_item_icon_width"
                    android:layout_height="@dimen/songlist_item_icon_height"
                    android:id="@+id/ic_play"
-                   android:src="@drawable/play_green"/>
+                   android:src="@drawable/play_red"/>
         <ImageView android:layout_width="@dimen/songlist_item_icon_width"
                    android:layout_height="@dimen/songlist_item_icon_height"
                    android:id="@+id/ic_like"
-                   android:src="@drawable/like_empty_green"/>
+                   android:src="@drawable/like_empty_red"/>
         <ImageView android:layout_width="@dimen/songlist_item_icon_width"
                    android:layout_height="@dimen/songlist_item_icon_height"
                    android:id="@+id/ic_download"
-                   android:src="@drawable/download_green"/>
+                   android:src="@drawable/download_red"/>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

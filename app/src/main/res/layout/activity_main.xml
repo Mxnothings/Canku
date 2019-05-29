@@ -24,10 +24,10 @@
                     android:layout_height="match_parent">
                 <ImageView
                         android:id="@+id/icon_menu"
-                        android:layout_width="20dp"
+                        android:layout_width="30dp"
                         android:layout_height="match_parent"
-                        android:src="@drawable/menu_black"
-                        android:padding="2dp"/>
+                        android:src="@drawable/menu_red"
+                        android:padding="10px"/>
                 <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -63,10 +63,10 @@
                             android:id="@+id/tv_dis"/>
                 </LinearLayout>
                 <ImageView
-                        android:src="@drawable/plus_white"
+                        android:src="@drawable/music_logo_red"
                         android:layout_marginEnd="0dp"
-                        android:padding="12dp"
-                         android:layout_width="43dp"
+                        android:padding="8dp"
+                         android:layout_width="40dp"
                         android:layout_height="match_parent"
                         android:layout_alignParentEnd="true"
                         android:id="@+id/toolbar_menu" android:layout_marginTop="0dp"
@@ -107,11 +107,11 @@
                 <ImageView android:layout_width="45dp"
                            android:layout_marginRight="5dp"
                            android:layout_height="45dp"
-                           android:src="@drawable/play_black"
+                           android:src="@drawable/play_red"
                            android:layout_gravity="center_vertical"/>
                 <ImageView android:layout_width="35dp"
                            android:layout_height="35dp"
-                           android:src="@drawable/nextsong_black"
+                           android:src="@drawable/nextsong_red"
                            android:layout_gravity="center_vertical"/>
 
             </LinearLayout>

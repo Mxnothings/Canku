@@ -90,9 +90,9 @@ public class MainActivity extends FragmentActivity {
                 Toast.makeText(MainActivity.this, position + "", Toast.LENGTH_SHORT).show();
             }
         });
-        mine.addListMenuItem(new ListMenuItem(R.drawable.local_music_green, "本地音乐", "0", R.drawable.enter_black));
-        mine.addListMenuItem(new ListMenuItem(R.drawable.recent_music, "最近音乐", "0", R.drawable.enter_black));
-        mine.addListMenuItem(new ListMenuItem(R.drawable.like_fill_green, "收藏音乐", "0", R.drawable.enter_black));
+        mine.addListMenuItem(new ListMenuItem(R.drawable.local_music_red, "本地音乐", "0", R.drawable.enter_black));
+        mine.addListMenuItem(new ListMenuItem(R.drawable.recent_play_red, "最近播放", "0", R.drawable.enter_black));
+        mine.addListMenuItem(new ListMenuItem(R.drawable.my_favor_red, "我的收藏", "0", R.drawable.enter_black));
         fragments.add(mine);
 
         fragments.add(new MusicFragment());
