@@ -11,7 +11,6 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:id="@+id/toolbar"
-            android:background="@color/colorPrimary"
             android:gravity="center">
         <LinearLayout android:layout_width="match_parent"
                       android:layout_height="match_parent">
@@ -28,11 +27,10 @@
                     android:orientation="horizontal" android:layout_marginEnd="-1dp"
                     android:layout_alignEnd="@+id/toolbar_menu">
                 <TextView
-                        android:textColor="@color/color_text"
                         android:id="@+id/activity_search_title"
                         android:text="QQ音乐搜索"
                         android:layout_marginLeft="20dp"
-                        android:layout_width="104dp"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical" android:textSize="16sp"/>
             </LinearLayout>
@@ -63,7 +61,6 @@
     </LinearLayout>
     <ListView android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:divider="@android:color/white"
               android:dividerHeight="0dp"
               android:id="@+id/activity_songlist"/>
 </LinearLayout>

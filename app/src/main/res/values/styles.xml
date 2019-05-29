@@ -6,7 +6,9 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/color_text</item>
         <item name="colorAccent">@color/color_text</item>
+        <item name="android:windowBackground">@color/colorPrimary</item>
         <item name="android:fitsSystemWindows">true</item>
+        <item name="android:textColor">@color/color_text</item>
     </style>
 
 </resources>
