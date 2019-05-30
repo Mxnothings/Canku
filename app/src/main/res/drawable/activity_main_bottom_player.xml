@@ -9,7 +9,7 @@
     <item
             android:top="1dp">
         <shape>
-            <solid android:color="@color/colorPrimary"/>
+            <solid android:color="@color/color_primary_background"/>
         </shape>
     </item>
 </layer-list>

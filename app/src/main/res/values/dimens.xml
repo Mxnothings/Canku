@@ -2,11 +2,7 @@
 <resources>
 
     <!-- activity_main    -->
-    <dimen name="activity_main_player_height">60dp</dimen>
     <dimen name="activity_main_toolbar_textsize">14sp</dimen>
-
-
-    <dimen name="fragment_mine_linear_height">55dp</dimen>
 
     <!--songlist item-->
     <dimen name="songlist_item_icon_height">20dp</dimen>
@@ -16,5 +12,8 @@
 
     <!--    list menu item    -->
     <dimen name="list_menu_item_height">65dp</dimen>
+
+    <!--  playbar   -->
+    <dimen name="fragment_playbar_height">60dp</dimen>
 
 </resources>

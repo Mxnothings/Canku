@@ -55,7 +55,7 @@ public class SearchActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        StatusBarUtil.setStatusBarMode(this, true, R.color.colorPrimary);
+        StatusBarUtil.setStatusBarMode(this, true, R.color.color_primary_background);
         inject(this, SearchActivity.class, this);
         setSearchTypeInfo();
         initAction();

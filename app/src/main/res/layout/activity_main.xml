@@ -33,7 +33,7 @@
                         android:orientation="horizontal" android:layout_marginEnd="-1dp"
                         android:layout_alignEnd="@+id/toolbar_menu">
                     <TextView
-                            android:textColor="@color/color_text_lighter"
+                            android:textColor="@color/color_primary_text_lighter"
                             android:textSize="@dimen/activity_main_toolbar_textsize"
                             android:text="@string/main_activity_toolbar_item1"
                             tools:text="@string/main_activity_toolbar_item1"
@@ -42,7 +42,7 @@
                             android:gravity="center"
                             android:id="@+id/tv_mine"/>
                     <TextView
-                            android:textColor="@color/color_text_lighter"
+                            android:textColor="@color/color_primary_text_lighter"
                             android:textSize="@dimen/activity_main_toolbar_textsize"
                             android:text="@string/main_activity_toolbar_item2"
                             tools:text="@string/main_activity_toolbar_item2"
@@ -51,7 +51,7 @@
                             android:gravity="center"
                             android:id="@+id/tv_music"/>
                     <TextView
-                            android:textColor="@color/color_text_lighter"
+                            android:textColor="@color/color_primary_text_lighter"
                             android:textSize="@dimen/activity_main_toolbar_textsize"
                             android:text="@string/main_activity_toolbar_item3"
                             tools:text="@string/main_activity_toolbar_item3"
@@ -64,7 +64,7 @@
                         android:src="@drawable/music_logo_red"
                         android:layout_marginEnd="0dp"
                         android:padding="8dp"
-                         android:layout_width="40dp"
+                        android:layout_width="40dp"
                         android:layout_height="match_parent"
                         android:layout_alignParentEnd="true"
                         android:id="@+id/toolbar_menu" android:layout_marginTop="0dp"
@@ -80,40 +80,10 @@
                 android:layout_weight="1"
                 tools:layout_editor_absoluteY="43dp" tools:ignore="MissingConstraints">
         </android.support.v4.view.ViewPager>
-        <LinearLayout android:layout_width="match_parent"
-                      android:layout_height="@dimen/activity_main_player_height"
-                      android:background="@drawable/activity_main_bottom_player"
-                      android:gravity="center_vertical"
-                      android:paddingLeft="10dp"
-                      android:paddingRight="10dp"
-                      android:orientation="horizontal">
-            <ImageView android:layout_width="50dp"
-                       android:layout_height="50dp"
-                       android:src="@drawable/album_img"
-            />
-            <LinearLayout android:layout_width="247dp"
-                          android:layout_height="match_parent"
-                          android:layout_weight="1">
-
-            </LinearLayout>
-
-            <LinearLayout android:layout_width="99dp"
-                          android:layout_height="match_parent"
-                          android:orientation="horizontal"
-                          android:gravity="right"
-                          android:padding="5dp">
-                <ImageView android:layout_width="45dp"
-                           android:layout_marginRight="5dp"
-                           android:layout_height="45dp"
-                           android:src="@drawable/play_red"
-                           android:layout_gravity="center_vertical"/>
-                <ImageView android:layout_width="35dp"
-                           android:layout_height="35dp"
-                           android:src="@drawable/nextsong_red"
-                           android:layout_gravity="center_vertical"/>
-
-            </LinearLayout>
-        </LinearLayout>
+        <fragment android:layout_width="match_parent"
+                  android:layout_height="@dimen/fragment_playbar_height"
+                  android:name="team.sao.musictool.fragment.PlayBarFragment"
+                  android:id="@+id/playbar" />
 
 
     </LinearLayout>
