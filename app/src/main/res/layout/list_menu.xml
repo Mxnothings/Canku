@@ -10,7 +10,7 @@
 
     <ListView android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:divider="@color/color_primary_background"
+              android:divider="@color/color_netease_white"
               android:id="@+id/list_menu"
               android:dividerHeight="0dp"/>
 

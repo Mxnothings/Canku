@@ -31,7 +31,7 @@
                   android:id="@+id/playbar_singer"
                   android:paddingLeft="10dp"
                   android:textSize="10dp"
-                  android:textColor="@color/color_primary_text_lighter"
+                  android:textColor="@color/color_netease_text_lighter"
                   android:text="周杰伦"
                   android:gravity="top"/>
 

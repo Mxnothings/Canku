@@ -70,7 +70,7 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //设置沉浸式状态栏
-        StatusBarUtil.setStatusBarMode(this, true, R.color.color_primary_background);
+        StatusBarUtil.setStatusBarMode(this, true, R.color.color_netease_white);
         inject(this, MainActivity.class, this);
         initDataAndView();
         initActions();
@@ -132,7 +132,7 @@ public class MainActivity extends FragmentActivity {
 
     private void initActions() {
         items.get(lastTextViewIndex).setTextSize(TypedValue.COMPLEX_UNIT_SP, largerTextSize);
-        items.get(lastTextViewIndex).setTextColor(getResources().getColor(R.color.color_primary_text));
+        items.get(lastTextViewIndex).setTextColor(getResources().getColor(R.color.color_netease_text));
 
 
         /**添加滑动监听*/
@@ -146,9 +146,9 @@ public class MainActivity extends FragmentActivity {
             public void onPageSelected(int i) {
                 //设置字体大小和颜色
                 items.get(lastTextViewIndex).setTextSize(TypedValue.COMPLEX_UNIT_SP, commonTextSize);
-                items.get(lastTextViewIndex).setTextColor(getResources().getColor(R.color.color_primary_text_lighter));
+                items.get(lastTextViewIndex).setTextColor(getResources().getColor(R.color.color_netease_text_lighter));
                 items.get((lastTextViewIndex = i)).setTextSize(TypedValue.COMPLEX_UNIT_SP, largerTextSize);
-                items.get(lastTextViewIndex).setTextColor(getResources().getColor(R.color.color_primary_text));
+                items.get(lastTextViewIndex).setTextColor(getResources().getColor(R.color.color_netease_text));
             }
 
             @Override

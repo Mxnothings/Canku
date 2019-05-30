@@ -33,7 +33,7 @@
                         android:orientation="horizontal" android:layout_marginEnd="-1dp"
                         android:layout_alignEnd="@+id/toolbar_menu">
                     <TextView
-                            android:textColor="@color/color_primary_text_lighter"
+                            android:textColor="@color/color_netease_text_lighter"
                             android:textSize="@dimen/activity_main_toolbar_textsize"
                             android:text="@string/main_activity_toolbar_item1"
                             tools:text="@string/main_activity_toolbar_item1"
@@ -42,7 +42,7 @@
                             android:gravity="center"
                             android:id="@+id/tv_mine"/>
                     <TextView
-                            android:textColor="@color/color_primary_text_lighter"
+                            android:textColor="@color/color_netease_text_lighter"
                             android:textSize="@dimen/activity_main_toolbar_textsize"
                             android:text="@string/main_activity_toolbar_item2"
                             tools:text="@string/main_activity_toolbar_item2"
@@ -51,7 +51,7 @@
                             android:gravity="center"
                             android:id="@+id/tv_music"/>
                     <TextView
-                            android:textColor="@color/color_primary_text_lighter"
+                            android:textColor="@color/color_netease_text_lighter"
                             android:textSize="@dimen/activity_main_toolbar_textsize"
                             android:text="@string/main_activity_toolbar_item3"
                             tools:text="@string/main_activity_toolbar_item3"

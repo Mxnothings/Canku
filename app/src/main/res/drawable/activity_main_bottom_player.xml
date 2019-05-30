@@ -3,13 +3,13 @@
        android:shape="rectangle">
     <item>
         <shape>
-            <solid android:color="@color/color_activity_main_player_top_border"/>
+            <solid android:color="@color/color_playbar_top_border"/>
         </shape>
     </item>
     <item
             android:top="1dp">
         <shape>
-            <solid android:color="@color/color_primary_background"/>
+            <solid android:color="@color/color_netease_white"/>
         </shape>
     </item>
 </layer-list>
