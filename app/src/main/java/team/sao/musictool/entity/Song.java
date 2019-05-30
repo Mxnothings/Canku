@@ -14,7 +14,6 @@ public class Song {
     private int musicType;      //音乐类型
     private String name;        //歌名
     private String songid;     //歌曲mid
-    @JSONField(serialize = false)
     private String downloadUrl;        //下载的相对地址
     private String singer;      //歌手
     private Integer albumid;     //专辑id

@@ -13,6 +13,8 @@ public class ListMenuItem {
     private String tip;
     private int icon_enter_resource;
 
+    public ListMenuItem() {}
+
     public ListMenuItem(int icon_main_resource, String name, String tip, int icon_enter_resource) {
         this.icon_main_resource = icon_main_resource;
         this.name = name;

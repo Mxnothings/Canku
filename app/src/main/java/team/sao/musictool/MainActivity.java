@@ -26,6 +26,7 @@ import team.sao.musictool.config.MusicType;
 import team.sao.musictool.entity.ListMenuItem;
 import team.sao.musictool.fragment.ListMenu;
 import team.sao.musictool.fragment.MusicFragment;
+import team.sao.musictool.service.MusicPlayerService;
 import team.sao.musictool.util.StatusBarUtil;
 
 import java.util.ArrayList;
@@ -74,7 +75,6 @@ public class MainActivity extends FragmentActivity {
         inject(this, MainActivity.class, this);
         initDataAndView();
         initActions();
-
     }
 
 
@@ -105,11 +105,11 @@ public class MainActivity extends FragmentActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
                     Intent intent = new Intent(MainActivity.this, SearchActivity.class);
-                    intent.putExtra("musicType", MusicType.QQ_MUSIC);
+                    intent.putExtra(MusicType.NAME, MusicType.QQ_MUSIC);
                     startActivity(intent);
                 } else if (position == 1) {
                     Intent intent = new Intent(MainActivity.this, SearchActivity.class);
-                    intent.putExtra("musicType", MusicType.NETEASE_MUSIC);
+                    intent.putExtra(MusicType.NAME, MusicType.NETEASE_MUSIC);
                     startActivity(intent);
                 }
             }
@@ -128,6 +128,10 @@ public class MainActivity extends FragmentActivity {
         items.put(0, tv_mine);
         items.put(1, tv_music);
         items.put(2, tv_dis);
+
+        //开启service
+        Intent intent = new Intent(this, MusicPlayerService.class);
+        startService(intent);
     }
 
     private void initActions() {

@@ -2,13 +2,16 @@ package team.sao.musictool.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
+import team.sao.musictool.MainActivity;
 import team.sao.musictool.R;
 import team.sao.musictool.adapter.SongListViewAdapter;
 import team.sao.musictool.annotation.ViewID;
@@ -65,7 +68,6 @@ public class SearchActivity extends Activity {
         songs = new ArrayList<>();
         songlist.setAdapter(new SongListViewAdapter(this, songs));
 
-
     }
 
 
@@ -73,7 +75,7 @@ public class SearchActivity extends Activity {
      *
      */
     private void setSearchTypeInfo() {
-        musicType = getIntent().getIntExtra("musicType", MusicType.QQ_MUSIC);
+        musicType = getIntent().getIntExtra(MusicType.NAME, MusicType.QQ_MUSIC);
         String titleString = null;
         if (musicType == MusicType.QQ_MUSIC) {
             titleString = "QQ音乐搜索";

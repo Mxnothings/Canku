@@ -8,6 +8,8 @@ package team.sao.musictool.config;
  **/
 public class MusicType {
 
+    public static final String NAME = "musictype";
+
     public static final int QQ_MUSIC = 0;
 
     public static final int NETEASE_MUSIC = 1;

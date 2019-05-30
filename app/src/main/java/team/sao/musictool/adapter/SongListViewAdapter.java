@@ -1,21 +1,20 @@
 package team.sao.musictool.adapter;
 
 import android.content.Context;
-import android.media.MediaPlayer;
-import android.net.Uri;
-import android.util.Log;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import team.sao.musictool.R;
 import team.sao.musictool.annotation.ViewID;
+import team.sao.musictool.config.PlayerInfo;
 import team.sao.musictool.entity.Song;
+import team.sao.musictool.receiver.MusicPlayReceiver;
+import team.sao.musictool.util.JSONUtil;
 
-import java.io.IOException;
 import java.util.List;
 
 import static team.sao.musictool.annotation.AnnotationProcesser.*;
@@ -79,24 +78,30 @@ public class SongListViewAdapter extends BaseAdapter {
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        MediaPlayer mediaPlayer = new MediaPlayer();
-                        try {
-                            if (song.getDownloadUrl().matches("^\\s*$")) {
-                                Toast.makeText(context, "歌曲不可播放", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Log.i("downloadUtl", song.getDownloadUrl());
-                                mediaPlayer.setDataSource(context, Uri.parse(song.getDownloadUrl()));
-                                mediaPlayer.prepare();
-                                mediaPlayer.start();
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        MediaPlayer mediaPlayer = new MediaPlayer();
+//                        try {
+//                            if (song.getDownloadUrl().matches("^\\s*$")) {
+//                                Toast.makeText(context, "歌曲不可播放", Toast.LENGTH_SHORT).show();
+//                            } else {
+//                                Log.i("downloadUtl", song.getDownloadUrl());
+//                                mediaPlayer.setDataSource(context, Uri.parse(song.getDownloadUrl()));
+//                                mediaPlayer.prepare();
+//                                mediaPlayer.start();
+//                            }
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }).start();
+                Intent intent = new Intent();
+                String song_string = JSONUtil.toJSONString(song);
+                intent.putExtra(PlayerInfo.OPERATE, PlayerInfo.OP_PLAY);
+                intent.putExtra(PlayerInfo.SONG, song_string);
+                intent.setAction(MusicPlayReceiver.ACTION);
+                context.sendBroadcast(intent);
             }
         });
 
