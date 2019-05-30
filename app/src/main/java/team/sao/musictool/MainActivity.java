@@ -72,17 +72,17 @@ public class MainActivity extends FragmentActivity {
         //设置沉浸式状态栏
         StatusBarUtil.setStatusBarMode(this, true, R.color.color_primary_background);
         inject(this, MainActivity.class, this);
-        initData();
-        initViews();
+        initDataAndView();
+        initActions();
 
     }
 
 
-    private void initData() {
+    private void initDataAndView() {
         views = new ArrayList<>();
-
         fragments = new ArrayList<>();
 
+        /**我的*/
         ListMenu mine = new ListMenu();
         mine.setOnMenuItemClicked(new AdapterView.OnItemClickListener() {
             @Override
@@ -95,8 +95,10 @@ public class MainActivity extends FragmentActivity {
         mine.addListMenuItem(new ListMenuItem(R.drawable.my_favor_red, "我的收藏", "0", R.drawable.enter_black));
         fragments.add(mine);
 
+        /**音乐*/
         fragments.add(new MusicFragment());
 
+        /**搜索*/
         ListMenu search = new ListMenu();
         search.setOnMenuItemClicked(new AdapterView.OnItemClickListener() {
             @Override
@@ -117,19 +119,21 @@ public class MainActivity extends FragmentActivity {
         search.setListMenuAdapter(new SearchListMenuAdapter());
         fragments.add(search);
 
+        /**设置viewpager适配器*/
+        fragmentManager = getSupportFragmentManager();
+        viewPager.setAdapter(new MyFragmentPagerAdapter(fragmentManager, fragments));
+
+        /**toolbar items*/
         items = new HashMap<>();
         items.put(0, tv_mine);
         items.put(1, tv_music);
         items.put(2, tv_dis);
     }
 
-    private void initViews() {
+    private void initActions() {
         items.get(lastTextViewIndex).setTextSize(TypedValue.COMPLEX_UNIT_SP, largerTextSize);
         items.get(lastTextViewIndex).setTextColor(getResources().getColor(R.color.color_primary_text));
 
-        fragmentManager = getSupportFragmentManager();
-        /**设置适配器*/
-        viewPager.setAdapter(new MyFragmentPagerAdapter(fragmentManager, fragments));
 
         /**添加滑动监听*/
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -184,6 +188,7 @@ public class MainActivity extends FragmentActivity {
             }
         });
 
+        /**设置点击menu图标打开侧边栏*/
         icon_menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,6 +196,7 @@ public class MainActivity extends FragmentActivity {
             }
         });
 
+        /***/
         menu.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
