@@ -31,7 +31,7 @@ public class MusicPlayReceiver extends BroadcastReceiver {
     private MediaPlayer mediaPlayer;
     private Context mContext;
     private Song crtSong;
-    private int status = -1;
+    private int status = STATUS_NOTINIT;
 
     public MusicPlayReceiver(Context mContext) {
         this.mContext = mContext;
@@ -52,19 +52,19 @@ public class MusicPlayReceiver extends BroadcastReceiver {
                 if (mediaPlayer != null && mediaPlayer.isPlaying()) {
                     mediaPlayer.pause();
                     ib.action(PlayBarFragment.ACTION).extra(STATUS, STATUS_PAUSE).send(mContext);
-                    status = 0;
+                    status = STATUS_PAUSE;
                 }
                 break;
             case OP_RESUME:         //恢复播放
                 if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
                     mediaPlayer.start();
                     ib.action(PlayBarFragment.ACTION).extra(STATUS, STATUS_PLAYING).send(mContext);
-                    status = 1;
+                    status = STATUS_PLAYING;
                 }
                 break;
             case OP_SEND_PLAYBAR_UPDATE_UI:
                 Log.i("OP_SNED_PLAYER_UPDATE", "onReceive: 接收到发送更新playbarUI[status" + status + crtSong);
-                if (!(status == -1 || crtSong == null)) {
+                if (!(status == STATUS_NOTINIT || crtSong == null)) {
                     sendPlaybarUpdateUI();
                 }
                 break;
@@ -83,6 +83,7 @@ public class MusicPlayReceiver extends BroadcastReceiver {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
                 Log.i("播放错误", "播放" + song + "错误");
+                new IntentBuilder().action(PlayBarFragment.ACTION).extra(STATUS, STATUS_PAUSE).send(mContext);
                 return true;
             }
         });
@@ -90,13 +91,15 @@ public class MusicPlayReceiver extends BroadcastReceiver {
             @Override
             public void run() {
                 try {
+                    status = STATUS_LOADING;
                     mediaPlayer.setDataSource(context, Uri.parse(song.getDownloadUrl()));
                     mediaPlayer.prepare();
                     mediaPlayer.start();
                     new IntentBuilder().action(PlayBarFragment.ACTION).extra(STATUS, STATUS_PLAYING).send(mContext);
-                    status = 1;
+                    status = STATUS_PLAYING;
                 } catch (IOException e) {
                     e.printStackTrace();
+                    new IntentBuilder().action(PlayBarFragment.ACTION).extra(STATUS, STATUS_PAUSE).send(mContext);
                 }
             }
         }).start();

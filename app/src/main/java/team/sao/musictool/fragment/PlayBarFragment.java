@@ -90,24 +90,27 @@ public class PlayBarFragment extends Fragment {
         play_pause.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                boolean flag = false;
                 int action = event.getAction();
                 if (action == MotionEvent.ACTION_DOWN) {
                     play_pause.setAlpha(0.5f);
-                    return true;
+                    flag = true;
                 } else if (action == MotionEvent.ACTION_UP) {
-                    IntentBuilder ib = new IntentBuilder();
-                    switch (playBarReceiver.status) {
-                        case STATUS_PAUSE:
-                            ib.action(MusicPlayReceiver.ACTION).extra(OPERATE, OP_RESUME).send(mActivity);
-                            break;
-                        case STATUS_PLAYING:
-                            ib.action(MusicPlayReceiver.ACTION).extra(OPERATE, OP_PAUSE).send(mActivity);
-                            break;
+                    if (playBarReceiver.status != STATUS_NOTINIT) {
+                        IntentBuilder ib = new IntentBuilder();
+                        switch (playBarReceiver.status) {
+                            case STATUS_PAUSE:
+                                ib.action(MusicPlayReceiver.ACTION).extra(OPERATE, OP_RESUME).send(mActivity);
+                                break;
+                            case STATUS_PLAYING:
+                                ib.action(MusicPlayReceiver.ACTION).extra(OPERATE, OP_PAUSE).send(mActivity);
+                                break;
+                        }
+                        flag = true;
                     }
                     play_pause.setAlpha(1f);
-                    return true;
                 }
-                return false;
+                return flag;
             }
         });
         nextsong.setOnTouchListener(new View.OnTouchListener() {
@@ -149,14 +152,13 @@ public class PlayBarFragment extends Fragment {
 
     public class PlayBarReceiver extends BroadcastReceiver {
 
-        int status;
+        int status = STATUS_NOTINIT;
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            int status = intent.getIntExtra(PlayerInfo.STATUS, -1);
+            int status = intent.getIntExtra(PlayerInfo.STATUS, STATUS_NOTINIT);
             int opt = intent.getIntExtra(PlayerInfo.OPERATE, -1);
-            this.status = status == -1 ? this.status : status;
-
+            this.status = status;
             switch (status) {
                 case -1:
                     break;

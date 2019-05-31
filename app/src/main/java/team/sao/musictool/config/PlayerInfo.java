@@ -24,7 +24,9 @@ public class PlayerInfo {
     //播放状态
     public static final String STATUS = "STATUS";
 
+    public static final int STATUS_NOTINIT = -1;
     public static final int STATUS_PAUSE = 0;
     public static final int STATUS_PLAYING = 1;
+    public static final int STATUS_LOADING = 2;
 
 }
