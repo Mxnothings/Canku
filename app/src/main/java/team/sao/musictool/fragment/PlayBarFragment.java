@@ -27,11 +27,7 @@ import team.sao.musictool.entity.Song;
 import team.sao.musictool.receiver.MusicPlayReceiver;
 import team.sao.musictool.util.JSONUtil;
 
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import static team.sao.musictool.annotation.AnnotationProcesser.*;
+import static team.sao.musictool.annotation.AnnotationProcesser.inject;
 import static team.sao.musictool.config.PlayerInfo.SONG;
 
 /**
@@ -129,9 +125,11 @@ public class PlayBarFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             int status = intent.getIntExtra(PlayerInfo.STATUS, -1);
             int opt = intent.getIntExtra(PlayerInfo.OPERATE, -1);
-            this.status = status;
+            this.status = status == -1 ? this.status : status;
 
             switch (status) {
+                case -1:
+                    break;
                 case PlayerInfo.STATUS_PAUSE: //接受到暂停
                     play.setImageResource(R.drawable.play_red);
                     break;

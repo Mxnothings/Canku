@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.Toast;
 import team.sao.musictool.config.PlayerInfo;
 import team.sao.musictool.entity.Song;
@@ -43,7 +44,6 @@ public class MusicPlayReceiver extends BroadcastReceiver {
                 intent1.setAction(PlayBarFragment.ACTION);
                 intent1.putExtra(OPERATE, OP_UPDATE_UI);
                 intent1.putExtra(SONG, intent.getStringExtra(SONG));
-                intent1.putExtra(STATUS, STATUS_PLAYING);
                 mContext.sendBroadcast(intent1);
                 break;
             case OP_PAUSE:         //暂停播放
@@ -67,6 +67,8 @@ public class MusicPlayReceiver extends BroadcastReceiver {
         }
     }
 
+
+    //播放音乐
     private void playMusic(final Context context, final Song song) {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.release();
@@ -76,7 +78,7 @@ public class MusicPlayReceiver extends BroadcastReceiver {
         mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
-                Toast.makeText(context, "播放错误", Toast.LENGTH_SHORT).show();
+                Log.i("播放错误", "播放" + song + "错误");
                 return true;
             }
         });
@@ -87,6 +89,10 @@ public class MusicPlayReceiver extends BroadcastReceiver {
                     mediaPlayer.setDataSource(context, Uri.parse(song.getDownloadUrl()));
                     mediaPlayer.prepare();
                     mediaPlayer.start();
+                    Intent intent = new Intent();
+                    intent.setAction(PlayBarFragment.ACTION);
+                    intent.putExtra(STATUS, STATUS_PLAYING);
+                    mContext.sendBroadcast(intent);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -80,9 +80,8 @@
                 android:layout_weight="1"
                 tools:layout_editor_absoluteY="43dp" tools:ignore="MissingConstraints">
         </android.support.v4.view.ViewPager>
-        <fragment android:layout_width="match_parent"
+        <FrameLayout android:layout_width="match_parent"
                   android:layout_height="@dimen/fragment_playbar_height"
-                  android:name="team.sao.musictool.fragment.PlayBarFragment"
                   android:id="@+id/playbar" />
 
 

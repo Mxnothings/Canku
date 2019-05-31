@@ -7,6 +7,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
@@ -26,6 +27,7 @@ import team.sao.musictool.config.MusicType;
 import team.sao.musictool.entity.ListMenuItem;
 import team.sao.musictool.fragment.ListMenu;
 import team.sao.musictool.fragment.MusicFragment;
+import team.sao.musictool.fragment.PlayBarFragment;
 import team.sao.musictool.service.MusicPlayerService;
 import team.sao.musictool.util.StatusBarUtil;
 
@@ -63,7 +65,8 @@ public class MainActivity extends FragmentActivity {
 
 
     private List<View> views;
-    private List<Fragment> fragments;
+    private List<Fragment> pagerFragments;
+    private PlayBarFragment playBar;
     private FragmentManager fragmentManager;
 
     @Override
@@ -80,7 +83,7 @@ public class MainActivity extends FragmentActivity {
 
     private void initDataAndView() {
         views = new ArrayList<>();
-        fragments = new ArrayList<>();
+        pagerFragments = new ArrayList<>();
 
         /**我的*/
         ListMenu mine = new ListMenu();
@@ -93,10 +96,10 @@ public class MainActivity extends FragmentActivity {
         mine.addListMenuItem(new ListMenuItem(R.drawable.local_music_red, "本地音乐", "0", R.drawable.enter_black));
         mine.addListMenuItem(new ListMenuItem(R.drawable.recent_play_red, "最近播放", "0", R.drawable.enter_black));
         mine.addListMenuItem(new ListMenuItem(R.drawable.my_favor_red, "我的收藏", "0", R.drawable.enter_black));
-        fragments.add(mine);
+        pagerFragments.add(mine);
 
         /**音乐*/
-        fragments.add(new MusicFragment());
+        pagerFragments.add(new MusicFragment());
 
         /**搜索*/
         ListMenu search = new ListMenu();
@@ -114,14 +117,19 @@ public class MainActivity extends FragmentActivity {
                 }
             }
         });
+
         search.addListMenuItem(new ListMenuItem(R.drawable.qqmusic_logo, "QQ音乐", "", R.drawable.enter_black));
         search.addListMenuItem(new ListMenuItem(R.drawable.netease_cloud_music_logo, "网易云音乐", "", R.drawable.enter_black));
         search.setListMenuAdapter(new SearchListMenuAdapter());
-        fragments.add(search);
+        pagerFragments.add(search);
 
         /**设置viewpager适配器*/
         fragmentManager = getSupportFragmentManager();
-        viewPager.setAdapter(new MyFragmentPagerAdapter(fragmentManager, fragments));
+        viewPager.setAdapter(new MyFragmentPagerAdapter(fragmentManager, pagerFragments));
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        playBar = new PlayBarFragment();
+        transaction.replace(R.id.playbar, playBar).commit();
 
         /**toolbar items*/
         items = new HashMap<>();
