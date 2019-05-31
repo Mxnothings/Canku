@@ -19,7 +19,7 @@
                       android:layout_height="match_parent">
 
             <ImageView
-                    android:id="@+id/icon_back"
+                    android:id="@+id/ic_back"
                     android:layout_width="40dp"
                     android:layout_height="match_parent"
                     android:src="@drawable/back_white"
@@ -32,7 +32,7 @@
                 <TextView android:layout_width="match_parent"
                           android:layout_height="0dp"
                           android:layout_weight="1"
-                          android:id="@+id/playbar_songname"
+                          android:id="@+id/songname"
                           android:paddingLeft="10dp"
                           android:text="园游会"
                           android:textColor="@color/color_netease_white"
@@ -41,7 +41,7 @@
                 <TextView android:layout_width="match_parent"
                           android:layout_height="0dp"
                           android:layout_weight="1"
-                          android:id="@+id/playbar_singer"
+                          android:id="@+id/singer"
                           android:paddingLeft="10dp"
                           android:textSize="10dp"
                           android:textColor="@color/color_netease_white"
@@ -57,6 +57,7 @@
                   android:orientation="vertical">
         <ImageView android:layout_width="match_parent"
                    android:padding="60dp"
+                   android:id="@+id/album_img"
                    android:src="@drawable/album_img"
                    android:layout_height="0dp"
                    android:layout_weight="1"/>
@@ -65,13 +66,16 @@
                       android:gravity="center">
             <ImageView android:layout_width="70dp"
                        android:padding="15dp"
+                       android:id="@+id/ic_like"
                        android:layout_height="match_parent"
                        android:src="@drawable/like_empty_white"/>
             <ImageView android:layout_width="70dp"
                        android:padding="15dp"
+                       android:id="@+id/ic_download"
                        android:layout_height="match_parent"
                        android:src="@drawable/download_white"/>
             <ImageView android:layout_width="70dp"
+                       android:id="@+id/ic_more"
                        android:padding="15dp"
                        android:layout_height="match_parent"
                        android:src="@drawable/more"/>
@@ -83,6 +87,7 @@
 
             <SeekBar android:layout_width="match_parent"
                      android:layout_weight="1"
+                     android:id="@+id/seek_progress"
                      android:layout_height="0dp"/>
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="0dp"
@@ -91,12 +96,14 @@
                           android:paddingRight="10dp">
                 <TextView android:layout_width="0dp"
                           android:layout_weight="1"
+                          android:id="@+id/crttime"
                           android:gravity="top"
                           android:text="00:00"
                           android:textColor="@color/color_netease_white"
                           android:layout_height="match_parent"/>
                 <TextView android:layout_width="0dp"
                           android:layout_weight="1"
+                          android:id="@+id/total_time"
                           android:gravity="right"
                           android:text="04:22"
                           android:textColor="@color/color_netease_white"
@@ -110,13 +117,16 @@
                   android:layout_height="100dp">
         <ImageView android:layout_width="80dp"
                    android:padding="8dp"
+                   android:id="@+id/ic_presong"
                    android:layout_height="60dp"
                    android:src="@drawable/presong_white"/>
         <ImageView android:layout_width="80dp"
                    android:layout_height="60dp"
+                   android:id="@+id/ic_play_pause"
                    android:src="@drawable/play_white"/>
         <ImageView android:layout_width="80dp"
                    android:padding="8dp"
+                   android:id="@+id/ic_nextsong"
                    android:layout_height="60dp"
                    android:src="@drawable/nextsong_white"/>
     </LinearLayout>

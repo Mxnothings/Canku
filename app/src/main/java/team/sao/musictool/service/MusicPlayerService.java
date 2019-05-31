@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
 import android.widget.Toast;
+import team.sao.musictool.entity.Song;
 import team.sao.musictool.receiver.MusicPlayReceiver;
 
 /**
@@ -48,5 +49,11 @@ public class MusicPlayerService extends Service {
             unregisterReceiver(musicPlayReceiver);
         }
     }
+
+    public Song getCrtPlaySong() {
+       return musicPlayReceiver.getCrtSong();
+    }
+
+
 
 }

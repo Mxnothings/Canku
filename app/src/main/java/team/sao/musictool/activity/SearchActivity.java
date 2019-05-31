@@ -3,9 +3,12 @@ package team.sao.musictool.activity;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -16,11 +19,11 @@ import team.sao.musictool.R;
 import team.sao.musictool.adapter.SongListViewAdapter;
 import team.sao.musictool.annotation.ViewID;
 import team.sao.musictool.config.MusicType;
+import team.sao.musictool.config.PlayerInfo;
 import team.sao.musictool.entity.Song;
-import team.sao.musictool.util.NetEaseMusicUtil;
-import team.sao.musictool.util.QQMusicUtil;
-import team.sao.musictool.util.StatusBarUtil;
-import team.sao.musictool.util.ViewUtil;
+import team.sao.musictool.fragment.PlayBarFragment;
+import team.sao.musictool.receiver.MusicPlayReceiver;
+import team.sao.musictool.util.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,7 +37,7 @@ import static team.sao.musictool.annotation.AnnotationProcesser.inject;
  * \* Time: 14:53
  * \* Description:
  **/
-public class SearchActivity extends Activity {
+public class SearchActivity extends FragmentActivity {
 
     private static final int PAGE_SIZE = 20;
     private static final int MAX_PAGE_NUM = 20;
@@ -62,12 +65,7 @@ public class SearchActivity extends Activity {
         inject(this, SearchActivity.class, this);
         setSearchTypeInfo();
         initAction();
-
-        alert = createProgressDialog();
-
-        songs = new ArrayList<>();
-        songlist.setAdapter(new SongListViewAdapter(this, songs));
-
+        initDataAndView();
     }
 
 
@@ -83,6 +81,15 @@ public class SearchActivity extends Activity {
             titleString = "网易云音乐搜索";
         }
         title.setText(titleString);
+    }
+
+    private void initDataAndView() {
+        alert = createProgressDialog();
+        songs = new ArrayList<>();
+        songlist.setAdapter(new SongListViewAdapter(this, songs));
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.playbar, new PlayBarFragment()).commit();
     }
 
     /**
@@ -109,6 +116,18 @@ public class SearchActivity extends Activity {
                     return true;
                 }
                 return false;
+            }
+        });
+
+        songlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent();
+                String song_string = JSONUtil.toJSONString(songs.get(position));
+                intent.putExtra(PlayerInfo.OPERATE, PlayerInfo.OP_PLAY);
+                intent.putExtra(PlayerInfo.SONG, song_string);
+                intent.setAction(MusicPlayReceiver.ACTION);
+                sendBroadcast(intent);
             }
         });
 

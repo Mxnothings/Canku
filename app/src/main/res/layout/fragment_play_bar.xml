@@ -10,9 +10,9 @@
     <ImageView android:layout_width="50dp"
                android:layout_height="50dp"
                android:id="@+id/playbar_img"
-               android:src="@drawable/album_img"
+               android:src="@drawable/music_logo_red"
     />
-    <LinearLayout android:layout_width="247dp"
+    <LinearLayout android:layout_width="0dp"
                   android:orientation="vertical"
                   android:layout_height="match_parent"
                   android:layout_weight="1">
@@ -22,7 +22,7 @@
                   android:layout_weight="1"
                   android:id="@+id/playbar_songname"
                   android:paddingLeft="10dp"
-                  android:text="园游会"
+                  android:text=""
                   android:gravity="bottom"/>
 
         <TextView android:layout_width="match_parent"
@@ -32,7 +32,7 @@
                   android:paddingLeft="10dp"
                   android:textSize="10dp"
                   android:textColor="@color/color_netease_text_lighter"
-                  android:text="周杰伦"
+                  android:text=""
                   android:gravity="top"/>
 
     </LinearLayout>
@@ -40,12 +40,11 @@
     <LinearLayout android:layout_width="99dp"
                   android:layout_height="match_parent"
                   android:orientation="horizontal"
-                  android:gravity="right"
-                  android:padding="5dp">
+                  android:gravity="right">
         <ImageView android:layout_width="45dp"
                    android:layout_marginRight="5dp"
                    android:layout_height="45dp"
-                   android:id="@+id/playbar_play"
+                   android:id="@+id/playbar_play_pause"
                    android:src="@drawable/play_red"
                    android:layout_gravity="center_vertical"/>
         <ImageView android:layout_width="35dp"

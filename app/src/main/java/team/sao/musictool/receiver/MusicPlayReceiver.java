@@ -7,9 +7,11 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
+import com.alibaba.fastjson.JSON;
 import team.sao.musictool.config.PlayerInfo;
 import team.sao.musictool.entity.Song;
 import team.sao.musictool.fragment.PlayBarFragment;
+import team.sao.musictool.util.IntentBuilder;
 import team.sao.musictool.util.JSONUtil;
 
 import java.io.IOException;
@@ -28,6 +30,8 @@ public class MusicPlayReceiver extends BroadcastReceiver {
 
     private MediaPlayer mediaPlayer;
     private Context mContext;
+    private Song crtSong;
+    private int status = -1;
 
     public MusicPlayReceiver(Context mContext) {
         this.mContext = mContext;
@@ -36,32 +40,32 @@ public class MusicPlayReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         int operate = intent.getIntExtra(OPERATE, -1);
+        IntentBuilder ib = new IntentBuilder();
         switch (operate) {
             case OP_PLAY:          //播放音乐
                 Song song = (Song) JSONUtil.parseJSONToObject(intent.getStringExtra(SONG), Song.class);
+                crtSong = song;
                 playMusic(context, song);
-                Intent intent1 = new Intent();
-                intent1.setAction(PlayBarFragment.ACTION);
-                intent1.putExtra(OPERATE, OP_UPDATE_UI);
-                intent1.putExtra(SONG, intent.getStringExtra(SONG));
-                mContext.sendBroadcast(intent1);
+                ib.action(PlayBarFragment.ACTION).extra(OPERATE, OP_UPDATE_UI).extra(SONG, intent.getStringExtra(SONG)).send(mContext);
                 break;
             case OP_PAUSE:         //暂停播放
                 if (mediaPlayer != null && mediaPlayer.isPlaying()) {
                     mediaPlayer.pause();
-                    Intent intent2 = new Intent();
-                    intent2.setAction(PlayBarFragment.ACTION);
-                    intent2.putExtra(STATUS, STATUS_PAUSE);
-                    mContext.sendBroadcast(intent2);
+                    ib.action(PlayBarFragment.ACTION).extra(STATUS, STATUS_PAUSE).send(mContext);
+                    status = 0;
                 }
                 break;
             case OP_RESUME:         //恢复播放
                 if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
                     mediaPlayer.start();
-                    Intent intent3 = new Intent();
-                    intent3.setAction(PlayBarFragment.ACTION);
-                    intent3.putExtra(STATUS, STATUS_PLAYING);
-                    mContext.sendBroadcast(intent3);
+                    ib.action(PlayBarFragment.ACTION).extra(STATUS, STATUS_PLAYING).send(mContext);
+                    status = 1;
+                }
+                break;
+            case OP_SEND_PLAYBAR_UPDATE_UI:
+                Log.i("OP_SNED_PLAYER_UPDATE", "onReceive: 接收到发送更新playbarUI[status" + status + crtSong);
+                if (!(status == -1 || crtSong == null)) {
+                    sendPlaybarUpdateUI();
                 }
                 break;
         }
@@ -89,10 +93,8 @@ public class MusicPlayReceiver extends BroadcastReceiver {
                     mediaPlayer.setDataSource(context, Uri.parse(song.getDownloadUrl()));
                     mediaPlayer.prepare();
                     mediaPlayer.start();
-                    Intent intent = new Intent();
-                    intent.setAction(PlayBarFragment.ACTION);
-                    intent.putExtra(STATUS, STATUS_PLAYING);
-                    mContext.sendBroadcast(intent);
+                    new IntentBuilder().action(PlayBarFragment.ACTION).extra(STATUS, STATUS_PLAYING).send(mContext);
+                    status = 1;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -100,4 +102,16 @@ public class MusicPlayReceiver extends BroadcastReceiver {
         }).start();
     }
 
+    private void sendPlaybarUpdateUI() {
+        mContext.sendBroadcast(new IntentBuilder().action(PlayBarFragment.ACTION)
+                .extra(OPERATE, OP_UPDATE_UI)
+                .extra(SONG, JSONUtil.toJSONString(crtSong))
+                .extra(STATUS, status)
+                .build());
+    }
+
+
+    public Song getCrtSong() {
+        return crtSong;
+    }
 }

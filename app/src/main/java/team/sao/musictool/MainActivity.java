@@ -24,11 +24,14 @@ import team.sao.musictool.adapter.MyFragmentPagerAdapter;
 import team.sao.musictool.adapter.SearchListMenuAdapter;
 import team.sao.musictool.annotation.ViewID;
 import team.sao.musictool.config.MusicType;
+import team.sao.musictool.config.PlayerInfo;
 import team.sao.musictool.entity.ListMenuItem;
 import team.sao.musictool.fragment.ListMenu;
 import team.sao.musictool.fragment.MusicFragment;
 import team.sao.musictool.fragment.PlayBarFragment;
+import team.sao.musictool.receiver.MusicPlayReceiver;
 import team.sao.musictool.service.MusicPlayerService;
+import team.sao.musictool.util.IntentBuilder;
 import team.sao.musictool.util.StatusBarUtil;
 
 import java.util.ArrayList;
@@ -107,13 +110,9 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-                    Intent intent = new Intent(MainActivity.this, SearchActivity.class);
-                    intent.putExtra(MusicType.NAME, MusicType.QQ_MUSIC);
-                    startActivity(intent);
+                    startActivity(new IntentBuilder().clazz(MainActivity.this, SearchActivity.class).extra(MusicType.NAME, MusicType.QQ_MUSIC).build());
                 } else if (position == 1) {
-                    Intent intent = new Intent(MainActivity.this, SearchActivity.class);
-                    intent.putExtra(MusicType.NAME, MusicType.NETEASE_MUSIC);
-                    startActivity(intent);
+                    startActivity(new IntentBuilder().clazz(MainActivity.this, SearchActivity.class).extra(MusicType.NAME, MusicType.NETEASE_MUSIC).build());
                 }
             }
         });

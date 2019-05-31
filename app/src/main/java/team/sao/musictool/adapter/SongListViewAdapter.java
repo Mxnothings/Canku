@@ -33,10 +33,6 @@ public class SongListViewAdapter extends BaseAdapter {
     private TextView singerAlbum;
     @ViewID(R.id.tv_time)
     private TextView time;
-    @ViewID(R.id.ic_play)
-    private ImageView play;
-    @ViewID(R.id.ic_like)
-    private ImageView like;
     @ViewID(R.id.ic_download)
     private ImageView download;
 
@@ -74,36 +70,6 @@ public class SongListViewAdapter extends BaseAdapter {
         songName.setText(song.getName());
         singerAlbum.setText(song.getSinger() + "-" + song.getAlbumname());
         time.setText(song.getFormatTime());
-
-        play.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        MediaPlayer mediaPlayer = new MediaPlayer();
-//                        try {
-//                            if (song.getDownloadUrl().matches("^\\s*$")) {
-//                                Toast.makeText(context, "歌曲不可播放", Toast.LENGTH_SHORT).show();
-//                            } else {
-//                                Log.i("downloadUtl", song.getDownloadUrl());
-//                                mediaPlayer.setDataSource(context, Uri.parse(song.getDownloadUrl()));
-//                                mediaPlayer.prepare();
-//                                mediaPlayer.start();
-//                            }
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }).start();
-                Intent intent = new Intent();
-                String song_string = JSONUtil.toJSONString(song);
-                intent.putExtra(PlayerInfo.OPERATE, PlayerInfo.OP_PLAY);
-                intent.putExtra(PlayerInfo.SONG, song_string);
-                intent.setAction(MusicPlayReceiver.ACTION);
-                context.sendBroadcast(intent);
-            }
-        });
 
         return convertView;
     }

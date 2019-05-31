@@ -1,67 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                             xmlns:app="http://schemas.android.com/apk/res-auto"
-                                             xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-                                             android:layout_height="80dp" android:orientation="horizontal">
-    <LinearLayout android:layout_width="297dp"
-                  android:layout_height="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:gravity="center_vertical"
+              android:layout_height="wrap_content" android:orientation="vertical">
+    <LinearLayout android:layout_width="match_parent"
                   android:gravity="center_vertical"
-                  android:orientation="vertical" android:id="@+id/linearLayout2"
-                  app:layout_constraintStart_toStartOf="parent"
-                  android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
-                  app:layout_constraintTop_toTopOf="parent">
-
-        <TextView android:layout_width="match_parent"
-                  android:layout_height="40dp"
-                  android:paddingLeft="20dp"
-                  android:paddingBottom="3dp"
-                  android:gravity="bottom"
-                  android:id="@+id/tv_song_name"
-                  android:textSize="@dimen/songlist_item_name_textsize"
-                  android:text="我们的恋爱是对生命的严重浪费"/>
-        <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="70dp" android:orientation="horizontal">
+        <LinearLayout android:layout_width="0dp"
+                      android:layout_weight="1"
                       android:layout_height="match_parent"
                       android:gravity="center_vertical"
-                      android:paddingBottom="10dp"
-                      android:orientation="horizontal">
+                      android:orientation="vertical">
+            <TextView android:layout_width="match_parent"
+                      android:layout_height="40dp"
+                      android:paddingLeft="20dp"
+                      android:paddingBottom="3dp"
+                      android:gravity="bottom"
+                      android:id="@+id/tv_song_name"
+                      android:textSize="@dimen/songlist_item_name_textsize"
+                      android:text="我们的恋爱是对生命的严重浪费"/>
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:gravity="center_vertical"
+                          android:paddingBottom="10dp"
+                          android:orientation="horizontal">
 
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="match_parent"
-                      android:gravity="top"
-                      android:textColor="@color/color_netease_text_lighter"
-                      android:id="@+id/tv_singer_album"
-                      android:textSize="@dimen/songlist_item_info_textsize"
-                      android:text="许嵩-自定义"
-                      android:paddingLeft="20dp"/>
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="match_parent"
-                      android:gravity="top"
-                      android:textColor="@color/color_netease_text_lighter"
-                      android:layout_marginLeft="15dp"
-                      android:id="@+id/tv_time"
-                      android:text="04:21"
-                      android:textSize="@dimen/songlist_item_info_textsize"/>
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="match_parent"
+                          android:gravity="top"
+                          android:textColor="@color/color_netease_text_lighter"
+                          android:id="@+id/tv_singer_album"
+                          android:textSize="@dimen/songlist_item_info_textsize"
+                          android:text="许嵩-自定义"
+                          android:paddingLeft="20dp"/>
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="match_parent"
+                          android:gravity="top"
+                          android:textColor="@color/color_netease_text_lighter"
+                          android:layout_marginLeft="15dp"
+                          android:id="@+id/tv_time"
+                          android:text="04:21"
+                          android:textSize="@dimen/songlist_item_info_textsize"/>
+            </LinearLayout>
         </LinearLayout>
 
+        <LinearLayout android:layout_width="75dp"
+                      android:paddingRight="8dp"
+                      android:layout_height="match_parent"
+                      android:gravity="right">
+            <ImageView android:layout_width="@dimen/songlist_item_icon_width"
+                       android:layout_height="@dimen/songlist_item_icon_height"
+                       android:layout_gravity="center_vertical"
+                       android:id="@+id/ic_download"
+                       android:src="@drawable/more_v_text_lighter"/>
+        </LinearLayout>
     </LinearLayout>
-    <LinearLayout android:layout_width="100dp"
-                  android:layout_height="match_parent"
-                  android:gravity="center_vertical"
-                  app:layout_constraintEnd_toEndOf="parent"
-                  android:layout_marginEnd="15dp" android:layout_marginBottom="8dp"
-                  app:layout_constraintBottom_toBottomOf="parent" android:layout_marginTop="8dp"
-                  app:layout_constraintTop_toTopOf="parent">
-        <ImageView android:layout_width="@dimen/songlist_item_icon_width"
-                   android:layout_height="@dimen/songlist_item_icon_height"
-                   android:id="@+id/ic_play"
-                   android:src="@drawable/play_red"/>
-        <ImageView android:layout_width="@dimen/songlist_item_icon_width"
-                   android:layout_height="@dimen/songlist_item_icon_height"
-                   android:id="@+id/ic_like"
-                   android:src="@drawable/like_empty_red"/>
-        <ImageView android:layout_width="@dimen/songlist_item_icon_width"
-                   android:layout_height="@dimen/songlist_item_icon_height"
-                   android:id="@+id/ic_download"
-                   android:src="@drawable/download_red"/>
-    </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>
