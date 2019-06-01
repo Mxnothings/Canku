@@ -20,6 +20,7 @@ import team.sao.musictool.adapter.SongListViewAdapter;
 import team.sao.musictool.annotation.ViewID;
 import team.sao.musictool.config.MusicType;
 import team.sao.musictool.config.PlayerInfo;
+import team.sao.musictool.config.ReceiverAction;
 import team.sao.musictool.entity.Song;
 import team.sao.musictool.fragment.PlayBarFragment;
 import team.sao.musictool.receiver.MusicPlayReceiver;
@@ -44,6 +45,8 @@ public class SearchActivity extends FragmentActivity {
 
     private int musicType;
     private List<Song> songs;
+    private int crtindex = -1;
+    private PlayerInfo playerInfo = PlayerInfo.getInstance();
 
     private ProgressDialog alert;
 
@@ -122,12 +125,20 @@ public class SearchActivity extends FragmentActivity {
         songlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent();
-                String song_string = JSONUtil.toJSONString(songs.get(position));
-                intent.putExtra(PlayerInfo.OPERATE, PlayerInfo.OP_PLAY);
-                intent.putExtra(PlayerInfo.SONG, song_string);
-                intent.setAction(MusicPlayReceiver.ACTION);
-                sendBroadcast(intent);
+                if (playerInfo.getPlay_list() != songs) {
+                    playerInfo.setPlay_list(songs);
+                    playerInfo.setPlayingSongIndex(position);
+                    new IntentBuilder().action(ReceiverAction.MUSICPLAY_CENTER)
+                            .extra(PlayerInfo.OPERATE, PlayerInfo.OP_PLAY)
+                            .send(SearchActivity.this);
+                } else {
+                    if (!(playerInfo.getPlayingSongIndex() == position)) {
+                        playerInfo.setPlayingSongIndex(position);
+                        new IntentBuilder().action(ReceiverAction.MUSICPLAY_CENTER)
+                                .extra(PlayerInfo.OPERATE, PlayerInfo.OP_PLAY)
+                                .send(SearchActivity.this);
+                    }
+                }
             }
         });
 

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
 import android.widget.Toast;
-import team.sao.musictool.entity.Song;
 import team.sao.musictool.receiver.MusicPlayReceiver;
 
 /**
@@ -50,9 +49,6 @@ public class MusicPlayerService extends Service {
         }
     }
 
-    public Song getCrtPlaySong() {
-       return musicPlayReceiver.getCrtSong();
-    }
 
 
 

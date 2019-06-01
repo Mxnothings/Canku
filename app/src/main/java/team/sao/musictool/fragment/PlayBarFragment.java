@@ -5,29 +5,24 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 import team.sao.musictool.R;
 import team.sao.musictool.activity.MusicPlayActivity;
 import team.sao.musictool.annotation.ViewID;
 import team.sao.musictool.config.PlayerInfo;
+import team.sao.musictool.config.ReceiverAction;
 import team.sao.musictool.entity.Song;
 import team.sao.musictool.receiver.MusicPlayReceiver;
 import team.sao.musictool.util.IntentBuilder;
-import team.sao.musictool.util.JSONUtil;
 
 import static team.sao.musictool.annotation.AnnotationProcesser.inject;
 import static team.sao.musictool.config.PlayerInfo.*;
@@ -38,9 +33,9 @@ import static team.sao.musictool.config.PlayerInfo.*;
  * \* Time: 13:58
  * \* Description:
  **/
-public class PlayBarFragment extends Fragment {
+public class PlayBarFragment extends Fragment implements View.OnTouchListener {
 
-    public static final String ACTION = "team.sao.musictool.receiver.playbar";
+    public static final String ACTION = ReceiverAction.MUSICPLAY_UI;
 
     @ViewID(R.id.playbar_img)
     private ImageView img;
@@ -55,6 +50,7 @@ public class PlayBarFragment extends Fragment {
 
     private PlayBarReceiver playBarReceiver;
     private Activity mActivity;
+    private PlayerInfo playerInfo = PlayerInfo.getInstance();
 
 
     @Override
@@ -75,7 +71,7 @@ public class PlayBarFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_play_bar, null);
         inject(this, PlayBarFragment.class, view);
         initActions();
-        new IntentBuilder().action(MusicPlayReceiver.ACTION).extra(PlayerInfo.OPERATE, PlayerInfo.OP_SEND_PLAYBAR_UPDATE_UI).send(getContext());
+        new IntentBuilder().action(ReceiverAction.MUSICPLAY_CENTER).extra(OPERATE, OP_SEND_PLAYBAR_UPDATE_UI).send(getContext());
         return view;
     }
 
@@ -87,46 +83,8 @@ public class PlayBarFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        play_pause.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                boolean flag = false;
-                int action = event.getAction();
-                if (action == MotionEvent.ACTION_DOWN) {
-                    play_pause.setAlpha(0.5f);
-                    flag = true;
-                } else if (action == MotionEvent.ACTION_UP) {
-                    if (playBarReceiver.status != STATUS_NOTINIT) {
-                        IntentBuilder ib = new IntentBuilder();
-                        switch (playBarReceiver.status) {
-                            case STATUS_PAUSE:
-                                ib.action(MusicPlayReceiver.ACTION).extra(OPERATE, OP_RESUME).send(mActivity);
-                                break;
-                            case STATUS_PLAYING:
-                                ib.action(MusicPlayReceiver.ACTION).extra(OPERATE, OP_PAUSE).send(mActivity);
-                                break;
-                        }
-                        flag = true;
-                    }
-                    play_pause.setAlpha(1f);
-                }
-                return flag;
-            }
-        });
-        nextsong.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                int action = event.getAction();
-                if (action == MotionEvent.ACTION_DOWN) {
-                    nextsong.setAlpha(0.5f);
-                    return true;
-                } else if (action == MotionEvent.ACTION_UP) {
-                    nextsong.setAlpha(1f);
-                    return true;
-                }
-                return false;
-            }
-        });
+        play_pause.setOnTouchListener(this);
+        nextsong.setOnTouchListener(this);
     }
 
     @Override
@@ -149,72 +107,87 @@ public class PlayBarFragment extends Fragment {
         }
     }
 
-
-    public class PlayBarReceiver extends BroadcastReceiver {
-
-        int status = STATUS_NOTINIT;
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int status = intent.getIntExtra(PlayerInfo.STATUS, STATUS_NOTINIT);
-            int opt = intent.getIntExtra(PlayerInfo.OPERATE, -1);
-            this.status = status;
-            switch (status) {
-                case -1:
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        int action = event.getAction();
+        boolean flag = false;
+        if (action == MotionEvent.ACTION_DOWN) {
+            v.setAlpha(0.5f);
+            flag = true;
+        }  else if (action == MotionEvent.ACTION_UP) {
+            v.setAlpha(1.0f);
+            switch (v.getId()) {
+                case  R.id.playbar_nextsong:
+                    if (!playerInfo.isStatus(STATUS_NOTINIT)) {
+                        new IntentBuilder().action(ReceiverAction.MUSICPLAY_CENTER).extra(OPERATE, OP_NEXT_SONG).send(mActivity);
+                    }
                     break;
-                case STATUS_PAUSE: //接受到暂停
-                    play_pause.setImageResource(R.drawable.play_red);
-                    break;
-                case STATUS_PLAYING:  //接收到播放
-                    play_pause.setImageResource(R.drawable.pause_red);
-                    break;
-            }
-
-            switch (opt) {
-                case -1:
-                    break;
-                case PlayerInfo.OP_UPDATE_UI: //更新ui
-                    final Song song = (Song) JSONUtil.parseJSONToObject(intent.getStringExtra(SONG), Song.class);
-                    Log.i("song", song + "");
-                    if (song != null) {
-                        songname.setText(song.getName());
-                        singer.setText(song.getSinger());
-                        mActivity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                img.setImageResource(R.drawable.music_logo_red);
-                            }
-                        });
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.i("imgurl", song.getImgurl());
-                                final Bitmap bitmap = getURLimage(song.getImgurl());
-                                mActivity.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        img.setImageBitmap(bitmap);
-                                    }
-                                });
-                            }
-                        }).start();
+                case R.id.playbar_play_pause:
+                    if (!playerInfo.isStatus(STATUS_NOTINIT)) {
+                        IntentBuilder ib = new IntentBuilder();
+                        switch (playerInfo.getStatus()) {
+                            case STATUS_PAUSE:
+                                ib.action(ReceiverAction.MUSICPLAY_CENTER).extra(OPERATE, OP_RESUME).send(mActivity);
+                                break;
+                            case STATUS_PLAYING:
+                                ib.action(ReceiverAction.MUSICPLAY_CENTER).extra(OPERATE, OP_PAUSE).send(mActivity);
+                                break;
+                        }
                     }
                     break;
             }
+            flag = true;
         }
+        return flag;
     }
 
-    //加载图片
-    public Bitmap getURLimage(String url) {
-        Bitmap bmp = null;
-        try {
-            Log.i("imgurl", url);
-            Connection.Response response = Jsoup.connect(url).method(Connection.Method.GET).ignoreContentType(true).execute();
-            bmp = BitmapFactory.decodeStream(response.bodyStream());
-        } catch (Exception e) {
-            e.printStackTrace();
+
+    public class PlayBarReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int opt = intent.getIntExtra(OPERATE, -1);
+            boolean isUpdateStatus = intent.getBooleanExtra(UPDATE_STATUS, false);
+            if (isUpdateStatus) {
+                switch (playerInfo.getStatus()) {
+                    case STATUS_LOADING:
+                    case STATUS_PAUSE: //暂停
+                        play_pause.setImageResource(R.drawable.play_red);
+                        break;
+                    case STATUS_PLAYING:  //播放
+                        play_pause.setImageResource(R.drawable.pause_red);
+                        break;
+
+                }
+            }
+            if (opt != -1) {
+                switch (opt) {
+                    case OP_UPDATE_UI:
+                        Song song = playerInfo.getPlayingSong();
+                        if (song != null) {
+                            songname.setText(song.getName());
+                            singer.setText(song.getSinger());
+                            if (playerInfo.getSongImg() != null) {
+                                img.setImageBitmap(playerInfo.getSongImg());
+                            }
+                        }
+                        break;
+                    case OP_UPDATE_UI_IMG: //更新img的ui
+                        if (playerInfo.getSongImg() != null) {
+                            img.setImageBitmap(playerInfo.getSongImg());
+                        }
+                        break;
+                    case OP_UPDATE_UI_NOIMG : //更新除img的ui
+                        final Song song1 = playerInfo.getPlayingSong();
+                        if (song1 != null) {
+                            songname.setText(song1.getName());
+                            singer.setText(song1.getSinger());
+                            img.setImageResource(R.drawable.music_logo_red);
+                        }
+                        break;
+                }
+            }
         }
-        return bmp;
     }
 
 }

@@ -3,13 +3,13 @@
     <group android:checkableBehavior="single"
            android:id="@+id/group_1">
         <item
-                android:icon="@drawable/setting_green"
+                android:icon="@drawable/setting_black"
                 android:title="设置"/>
         <item
-                android:icon="@drawable/about_green"
+                android:icon="@drawable/about_black"
                 android:title="关于"/>
         <item
-                android:icon="@drawable/shutdown_green"
+                android:icon="@drawable/shutdown_black"
                 android:title="退出"/>
     </group>
 </menu>

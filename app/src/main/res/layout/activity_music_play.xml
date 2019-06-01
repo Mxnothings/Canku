@@ -34,7 +34,8 @@
                           android:layout_weight="1"
                           android:id="@+id/songname"
                           android:paddingLeft="10dp"
-                          android:text="园游会"
+                          android:text=""
+                          android:textSize="15sp"
                           android:textColor="@color/color_netease_white"
                           android:gravity="bottom"/>
 
@@ -43,9 +44,9 @@
                           android:layout_weight="1"
                           android:id="@+id/singer"
                           android:paddingLeft="10dp"
-                          android:textSize="10dp"
-                          android:textColor="@color/color_netease_white"
-                          android:text="周杰伦"
+                          android:textSize="10sp"
+                          android:textColor="@color/color_netease_text_lighter"
+                          android:text=""
                           android:gravity="top"/>
 
             </LinearLayout>
@@ -58,7 +59,7 @@
         <ImageView android:layout_width="match_parent"
                    android:padding="60dp"
                    android:id="@+id/album_img"
-                   android:src="@drawable/album_img"
+                   android:src="@drawable/ic_music_logo_white"
                    android:layout_height="0dp"
                    android:layout_weight="1"/>
         <LinearLayout android:layout_width="match_parent"
@@ -105,7 +106,7 @@
                           android:layout_weight="1"
                           android:id="@+id/total_time"
                           android:gravity="right"
-                          android:text="04:22"
+                          android:text="00:00"
                           android:textColor="@color/color_netease_white"
                           android:layout_height="match_parent"/>
             </LinearLayout>

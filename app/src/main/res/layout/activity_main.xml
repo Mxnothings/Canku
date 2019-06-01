@@ -61,7 +61,7 @@
                             android:id="@+id/tv_dis"/>
                 </LinearLayout>
                 <ImageView
-                        android:src="@drawable/music_logo_red"
+                        android:src="@drawable/ic_music_logo_red"
                         android:layout_marginEnd="0dp"
                         android:padding="8dp"
                         android:layout_width="40dp"
