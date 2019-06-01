@@ -55,8 +55,8 @@ public class NetEaseMusicUtil {
             String singer_name = songinfo.getString("singer");
             String downloadUrl = songinfo.getString("url");
             String imgurl = songinfo.getString("pic");
-            String time = songinfo.getString("time");
-            Song song = new Song(MusicType.NETEASE_MUSIC, name, songid, downloadUrl, singer_name, null, "暂无信息", imgurl, null, time);
+            Integer time = songinfo.getInteger("time");
+            Song song = new Song(MusicType.NETEASE_MUSIC, name, songid, downloadUrl, singer_name, null, "暂无信息", imgurl, null, time == null ? 0 : time);
             songslist.add(song);
         }
         return songslist;

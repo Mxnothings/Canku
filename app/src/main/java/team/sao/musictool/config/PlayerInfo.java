@@ -18,8 +18,10 @@ import java.util.List;
 public class PlayerInfo {
 
     public static final String SONG = "SONG";
-
     public static final String OPERATE = "OPTERATE";
+    public static final String STATUS = "STATUS";
+    public static final String UPDATE_STATUS = "UPDATE_STATUS";
+    public static final String POSITION= "POSITION";
 
     public static final int OP_PAUSE = 0;                       //暂停
     public static final int OP_PLAY = 1;                        //播放
@@ -29,14 +31,11 @@ public class PlayerInfo {
     public static final int OP_UPDATE_UI = 5;                   //更新ui
     public static final int OP_UPDATE_UI_NOIMG = 6;             //更新ui
     public static final int OP_UPDATE_UI_IMG = 7;               //更新ui
-    public static final int OP_SEND_PLAYBAR_UPDATE_UI = 8;      //向playbar发送更新UI信息
-    public static final int OP_SEEKTO = 9;                        //
+    public static final int OP_SEND_UPDATE_UI = 8;              //发送更新UI信息
+    public static final int OP_SEEKTO = 9;                      //
     public static final int OP_UPDATE_PROGRESS = 10;
 
     //播放状态
-    public static final String STATUS = "STATUS";
-    public static final String UPDATE_STATUS = "UPDATE_STATUS";
-
     public static final int STATUS_NOTINIT = -1;
     public static final int STATUS_PAUSE = 0;
     public static final int STATUS_PLAYING = 1;
@@ -58,6 +57,7 @@ public class PlayerInfo {
     private Bitmap songImg;
     private int playingSongIndex = -1;
     private int status = STATUS_NOTINIT;
+    private int position = 0;
     private Song playingSong;
 
     public Bitmap getSongImg() {
@@ -119,6 +119,14 @@ public class PlayerInfo {
 
     public boolean isStatus(int STATUS) {
         return this.status == STATUS;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public synchronized void setPosition(int position) {
+        this.position = position;
     }
 
     //获取图片

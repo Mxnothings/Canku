@@ -20,12 +20,12 @@ public class Song {
     private String albumname;   //专辑名
     private String imgurl;
     private String subtitle;    //专辑副标题
-    private String time;        //时长
+    private int time;        //时长
 
     public Song() {
     }
 
-    public Song(int musicType, String name, String songid, String downloadUrl, String singer, Integer albumid, String albumname, String imgurl, String subtitle, String time) {
+    public Song(int musicType, String name, String songid, String downloadUrl, String singer, Integer albumid, String albumname, String imgurl, String subtitle, int time) {
         this.musicType = musicType;
         this.name = name;
         this.songid = songid;
@@ -54,15 +54,7 @@ public class Song {
 
     @JSONField(serialize = false)
     public String getFormatTime() {
-        if (time != null) {
-            try {
-                int t = Integer.parseInt(time);
-                return String.format("%02d:%02d", t / 60, t % 60);
-            } catch (Exception e) {
-                return "暂无";
-            }
-        } else
-            return "暂无";
+        return String.format("%02d:%02d", time / 60, time % 60);
     }
 
     public int getMusicType() {
@@ -142,11 +134,11 @@ public class Song {
         this.subtitle = subtitle;
     }
 
-    public String getTime() {
+    public int getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(int time) {
         this.time = time;
     }
 }

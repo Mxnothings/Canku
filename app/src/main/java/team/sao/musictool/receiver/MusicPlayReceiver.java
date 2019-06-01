@@ -13,6 +13,8 @@ import team.sao.musictool.entity.Song;
 import team.sao.musictool.util.IntentBuilder;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static team.sao.musictool.config.PlayerInfo.*;
 
@@ -29,8 +31,11 @@ public class MusicPlayReceiver extends BroadcastReceiver {
     private MediaPlayer mediaPlayer;
     private Context mContext;
     private PlayerInfo playerInfo = PlayerInfo.getInstance();
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
 
-    public MusicPlayReceiver(Context mContext) {
+    private volatile boolean s = true;
+
+    public MusicPlayReceiver(final Context mContext) {
         this.mContext = mContext;
     }
 
@@ -41,34 +46,24 @@ public class MusicPlayReceiver extends BroadcastReceiver {
         switch (operate) {
             case OP_PLAY:          //播放音乐
                 playMusic(context, playerInfo.getPlayingSong());
-                ib.action(ReceiverAction.MUSICPLAY_UI).extra(OPERATE, OP_UPDATE_UI_NOIMG).extra(UPDATE_STATUS, true).send(mContext); //更新ui noimg
                 break;
             case OP_PAUSE:         //暂停播放
-                if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-                    mediaPlayer.pause();
-                    playerInfo.setStatus(STATUS_PAUSE);
-                    ib.action(ReceiverAction.MUSICPLAY_UI).extra(UPDATE_STATUS, true).send(mContext);
-                }
+                pause();
                 break;
             case OP_RESUME:         //恢复播放
-                if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
-                    mediaPlayer.start();
-                    playerInfo.setStatus(STATUS_PLAYING);
-                    ib.action(ReceiverAction.MUSICPLAY_UI).extra(UPDATE_STATUS, true).send(mContext);
-                }
+                resume();
                 break;
             case OP_NEXT_SONG:      //下一首
-                playMusic(context, playerInfo.nextSong());
-                ib.action(ReceiverAction.MUSICPLAY_UI).extra(OPERATE, OP_UPDATE_UI_NOIMG).extra(UPDATE_STATUS, true).send(mContext); //更新ui noimg
+                nextSong();
                 break;
             case OP_PRE_SONG:       //上一首
-                playMusic(context, playerInfo.preSong());
-                ib.action(ReceiverAction.MUSICPLAY_UI).extra(OPERATE, OP_UPDATE_UI_NOIMG).extra(UPDATE_STATUS, true).send(mContext); //更新ui noimg
+                preSong();
                 break;
-            case OP_SEND_PLAYBAR_UPDATE_UI: //给playbar发送更新ui广播
-                if (!(playerInfo.getStatus() == STATUS_NOTINIT || playerInfo.getPlayingSong() == null)) {
-                    sendUpdateUI();
-                }
+            case OP_SEND_UPDATE_UI: //发送更新ui广播
+                sendUpdateUI();
+                break;
+            case OP_SEEKTO:
+                seekTo(intent.getIntExtra(POSITION, 0));
                 break;
         }
     }
@@ -78,8 +73,10 @@ public class MusicPlayReceiver extends BroadcastReceiver {
     private void playMusic(final Context context, final Song song) {
         if (song != null) {
             if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                s = false;
                 mediaPlayer.release();
                 mediaPlayer = null;
+                s = true;
             }
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
@@ -91,6 +88,21 @@ public class MusicPlayReceiver extends BroadcastReceiver {
                     return true;
                 }
             });
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() { //设置音乐播放完
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    nextSong();
+                }
+            });
+            mediaPlayer.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() {
+                @Override
+                public void onSeekComplete(MediaPlayer mp) {
+                    if (playerInfo.getStatus() == STATUS_PLAYING) {
+                        mp.start();
+                    }
+                }
+            });
+            new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(OPERATE, OP_UPDATE_UI_NOIMG).extra(UPDATE_STATUS, true).send(mContext); //更新ui noimg
             new Thread(new Runnable() {
                 @Override
                 public void run() { //获取图片
@@ -108,7 +120,10 @@ public class MusicPlayReceiver extends BroadcastReceiver {
                         mediaPlayer.prepare();
                         mediaPlayer.start();
                         playerInfo.setStatus(STATUS_PLAYING);
+                        playerInfo.setPosition(0);
+                        playerInfo.getPlayingSong().setTime(mediaPlayer.getDuration() / 1000);
                         new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(UPDATE_STATUS, true).send(mContext);
+                        startUpdateProgres();
                     } catch (IOException e) {
                         e.printStackTrace();
                         playerInfo.setStatus(STATUS_PAUSE);
@@ -119,11 +134,70 @@ public class MusicPlayReceiver extends BroadcastReceiver {
         }
     }
 
+    private void nextSong() {
+        playMusic(mContext, playerInfo.nextSong());
+        new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(OPERATE, OP_UPDATE_UI_NOIMG).extra(UPDATE_STATUS, true).send(mContext); //更新ui noimg
+    }
+
+    private void preSong() {
+        playMusic(mContext, playerInfo.preSong());
+        new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(OPERATE, OP_UPDATE_UI_NOIMG).extra(UPDATE_STATUS, true).send(mContext); //更新ui noimg
+    }
+
+    private void pause() {
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+            playerInfo.setStatus(STATUS_PAUSE);
+            new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(UPDATE_STATUS, true).send(mContext);
+        }
+    }
+
+    private void resume() {
+        if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
+            mediaPlayer.start();
+            playerInfo.setStatus(STATUS_PLAYING);
+            new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(UPDATE_STATUS, true).send(mContext);
+        }
+    }
+
+    private void seekTo(int position) {
+        if (mediaPlayer != null) {
+            Log.i("seek", "接收到seek" + position);
+            mediaPlayer.seekTo(position);
+        }
+    }
+
+    private void startUpdateProgres() {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                while (s) {
+                    try {
+                        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                            int position = mediaPlayer.getCurrentPosition() / 1000;
+                            playerInfo.setPosition(position);
+                            new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(OPERATE, OP_UPDATE_PROGRESS).extra(POSITION, position).send(mContext);
+                        }
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    } catch (IllegalArgumentException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
     private void sendUpdateUI() {
-        mContext.sendBroadcast(new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI)
-                .extra(UPDATE_STATUS, true)
-                .extra(OPERATE, OP_UPDATE_UI)
-                .build());
+        if (!(playerInfo.getStatus() == STATUS_NOTINIT || playerInfo.getPlayingSong() == null)) {
+            new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI)
+                    .extra(UPDATE_STATUS, true)
+                    .extra(OPERATE, OP_UPDATE_UI)
+                    .send(mContext);
+        }
     }
 
 }

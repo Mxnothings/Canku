@@ -15,13 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import team.sao.musictool.MainActivity;
 import team.sao.musictool.R;
 import team.sao.musictool.activity.MusicPlayActivity;
 import team.sao.musictool.annotation.ViewID;
 import team.sao.musictool.config.PlayerInfo;
 import team.sao.musictool.config.ReceiverAction;
 import team.sao.musictool.entity.Song;
-import team.sao.musictool.receiver.MusicPlayReceiver;
 import team.sao.musictool.util.IntentBuilder;
 
 import static team.sao.musictool.annotation.AnnotationProcesser.inject;
@@ -71,7 +71,7 @@ public class PlayBarFragment extends Fragment implements View.OnTouchListener {
         View view = inflater.inflate(R.layout.fragment_play_bar, null);
         inject(this, PlayBarFragment.class, view);
         initActions();
-        new IntentBuilder().action(ReceiverAction.MUSICPLAY_CENTER).extra(OPERATE, OP_SEND_PLAYBAR_UPDATE_UI).send(getContext());
+        new IntentBuilder().action(ReceiverAction.MUSICPLAY_CENTER).extra(OPERATE, OP_SEND_UPDATE_UI).send(getContext());
         return view;
     }
 
@@ -163,15 +163,17 @@ public class PlayBarFragment extends Fragment implements View.OnTouchListener {
             if (opt != -1) {
                 switch (opt) {
                     case OP_UPDATE_UI:
-                        Song song = playerInfo.getPlayingSong();
-                        if (song != null) {
-                            songname.setText(song.getName());
-                            singer.setText(song.getSinger());
-                            if (playerInfo.getSongImg() != null) {
-                                img.setImageBitmap(playerInfo.getSongImg());
+                        if (!(getContext() instanceof MainActivity)) {
+                            Song song = playerInfo.getPlayingSong();
+                            if (song != null) {
+                                songname.setText(song.getName());
+                                singer.setText(song.getSinger());
+                                if (playerInfo.getSongImg() != null) {
+                                    img.setImageBitmap(playerInfo.getSongImg());
+                                }
                             }
+                            break;
                         }
-                        break;
                     case OP_UPDATE_UI_IMG: //更新img的ui
                         if (playerInfo.getSongImg() != null) {
                             img.setImageBitmap(playerInfo.getSongImg());

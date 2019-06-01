@@ -58,8 +58,8 @@ public class QQMusicUtil {
                 Integer album_id = songinfo.getJSONObject("album").getInteger("id");
                 String album_name = songinfo.getJSONObject("album").getString("name");
                 String album_subtitle = songinfo.getJSONObject("album").getString("subtitle");
-                String time = songinfo.getString("interval");
-                Song song = new Song(MusicType.QQ_MUSIC, name, songid, purl.matches("^\\s*$") ? purl : DOWNLOAD_BASE_URL + purl, singer_name, album_id, album_name, null, album_subtitle, time);
+                Integer time = songinfo.getInteger("interval");
+                Song song = new Song(MusicType.QQ_MUSIC, name, songid, purl.matches("^\\s*$") ? purl : DOWNLOAD_BASE_URL + purl, singer_name, album_id, album_name, null, album_subtitle, time == null ? 0 : time);
                 songslist.add(song);
             } catch (IOException e) {
                 e.printStackTrace();

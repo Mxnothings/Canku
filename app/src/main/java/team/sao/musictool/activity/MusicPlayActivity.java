@@ -64,6 +64,7 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
 
     private PlayerInfo playerInfo = PlayerInfo.getInstance();
     private MusicPlayActivityReceiver receiver;
+    private boolean isSeeking = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,7 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
         register();
         initDataAndView();
         initAction();
+        new IntentBuilder().action(ReceiverAction.MUSICPLAY_CENTER).extra(OPERATE, OP_SEND_UPDATE_UI).send(MusicPlayActivity.this); //发送请求更新ui广播
     }
 
     @Override
@@ -121,18 +123,20 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {
-                    Log.i("hello", "onProgressChanged: " + progress);
+                    crttime.setText(formatTime(progress)); //拖动进度条时间更新
                 }
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
+                isSeeking = true;
             }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
+            public void onStopTrackingTouch(SeekBar seekBar) { //发送seek
+                Log.i("Seek", "onStopTrackingTouch: seekto" + seekBar.getProgress());
+                new IntentBuilder().action(ReceiverAction.MUSICPLAY_CENTER).extra(OPERATE, OP_SEEKTO).extra(POSITION, seekBar.getProgress() * 1000).send(MusicPlayActivity.this);
+                isSeeking = false;
             }
         });
     }
@@ -188,11 +192,14 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
         }
     }
 
+    private String formatTime(int time) {
+        return String.format("%02d:%02d", time / 60, time % 60);
+    }
+
     public class MusicPlayActivityReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.i("MusicPlayActivity", "onReceive: 接受到广播");
             int opt = intent.getIntExtra(OPERATE, -1);
             boolean isUpdateStatus = intent.getBooleanExtra(UPDATE_STATUS, false);
             if (isUpdateStatus) {
@@ -218,6 +225,10 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
                             if (playerInfo.getSongImg() != null) {
                                 aimg.setImageBitmap(playerInfo.getSongImg());
                             }
+                            int position = playerInfo.getPosition();
+                            seekProgress.setProgress(position);
+                            seekProgress.setMax(song.getTime());
+                            crttime.setText(formatTime(position));
                         }
                         break;
                     case OP_UPDATE_UI_IMG: //更新img的ui
@@ -232,8 +243,18 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
                             singer.setText(song1.getSinger());
                             aimg.setImageResource(R.drawable.ic_music_logo_white);
                             totalTime.setText(song1.getFormatTime());
+                            crttime.setText(formatTime(0));
+                            seekProgress.setProgress(0);
+                            seekProgress.setMax(song1.getTime());
                         }
                         break;
+                    case OP_UPDATE_PROGRESS:
+                        if (!isSeeking) {
+                            int position = intent.getIntExtra(POSITION, 0);
+                            crttime.setText(formatTime(position));
+                            seekProgress.setProgress(position);
+                            break;
+                        }
                 }
             }
         }
