@@ -122,7 +122,7 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
         seekProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser) {
+                if (fromUser && !(playerInfo.isStatus(STATUS_LOADING) || playerInfo.isStatus(STATUS_NOTINIT))) {
                     crttime.setText(formatTime(progress)); //拖动进度条时间更新
                 }
             }
@@ -180,7 +180,7 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
     }
 
     private void register() { //注册广播
-        MusicPlayActivityReceiver receiver = new MusicPlayActivityReceiver();
+        receiver = new MusicPlayActivityReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION);
        registerReceiver(receiver, intentFilter);
@@ -210,15 +210,17 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
                         break;
                     case STATUS_PLAYING:  //播放
                         play_pause.setImageResource(R.drawable.pause_white);
+                        seekProgress.setClickable(true);
                         break;
 
                 }
             }
             if (opt != -1) {
                 switch (opt) {
-                    case OP_UPDATE_UI:
+                    case OP_UPDATE_UI: //更新所有ui
                         Song song = playerInfo.getPlayingSong();
                         if (song != null) {
+                            seekProgress.setMax(song.getTime());
                             songname.setText(song.getName());
                             singer.setText(song.getSinger());
                             totalTime.setText(song.getFormatTime());
@@ -227,7 +229,6 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
                             }
                             int position = playerInfo.getPosition();
                             seekProgress.setProgress(position);
-                            seekProgress.setMax(song.getTime());
                             crttime.setText(formatTime(position));
                         }
                         break;

@@ -116,6 +116,7 @@ public class MusicPlayReceiver extends BroadcastReceiver {
                 public void run() { //加载音乐
                     try {
                         playerInfo.setStatus(STATUS_LOADING);
+                        new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(UPDATE_STATUS, true).send(mContext);
                         mediaPlayer.setDataSource(context, Uri.parse(song.getDownloadUrl()));
                         mediaPlayer.prepare();
                         mediaPlayer.start();
@@ -164,6 +165,7 @@ public class MusicPlayReceiver extends BroadcastReceiver {
         if (mediaPlayer != null) {
             Log.i("seek", "接收到seek" + position);
             mediaPlayer.seekTo(position);
+            playerInfo.setPosition(position / 1000);
         }
     }
 
