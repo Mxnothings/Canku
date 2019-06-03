@@ -1,6 +1,7 @@
 package team.sao.musictool.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import team.sao.musictool.annotation.DBColumn;
 import team.sao.musictool.config.MusicType;
 import team.sao.musictool.util.QQMusicUtil;
 
@@ -11,6 +12,7 @@ import team.sao.musictool.util.QQMusicUtil;
  *****/
 public class Song {
 
+    @DBColumn(type = "integer")
     private int musicType;      //音乐类型
     private String name;        //歌名
     private String songid;     //歌曲mid
@@ -20,6 +22,7 @@ public class Song {
     private String albumname;   //专辑名
     private String imgurl;
     private String subtitle;    //专辑副标题
+    @DBColumn(type = "integer")
     private int time;        //时长
 
     public Song() {

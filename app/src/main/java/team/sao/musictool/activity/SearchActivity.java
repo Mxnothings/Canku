@@ -1,20 +1,15 @@
 package team.sao.musictool.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
-import team.sao.musictool.MainActivity;
 import team.sao.musictool.R;
 import team.sao.musictool.adapter.SongListViewAdapter;
 import team.sao.musictool.annotation.ViewID;
@@ -23,7 +18,6 @@ import team.sao.musictool.config.PlayerInfo;
 import team.sao.musictool.config.ReceiverAction;
 import team.sao.musictool.entity.Song;
 import team.sao.musictool.fragment.PlayBarFragment;
-import team.sao.musictool.receiver.MusicPlayReceiver;
 import team.sao.musictool.util.*;
 
 import java.io.IOException;
@@ -151,14 +145,13 @@ public class SearchActivity extends FragmentActivity {
      * @param songs
      */
     private void search(final String keyword, final List<Song> songs) {
-
         final Handler handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 if (msg.what == 1) {
                     ((BaseAdapter) songlist.getAdapter()).notifyDataSetChanged();
                 } else if (msg.what == -1) {
-                    Toast.makeText(SearchActivity.this, "暂无数据", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SearchActivity.this.getApplicationContext(), "暂无数据", Toast.LENGTH_SHORT).show();
                 }
                 alert.hide();
                 super.handleMessage(msg);

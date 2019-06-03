@@ -20,7 +20,7 @@ public class AnnotationProcesser {
 
     public static void inject(Object injectTo, Class superEnd, Object source) {
         if (source instanceof View) {
-            List<Field> fields = getAllDeclaredFields(injectTo, superEnd);
+            List<Field> fields = getAllDeclaredFields(injectTo.getClass(), superEnd);
             for (Field f : fields) {
                 if (f.isAnnotationPresent(ViewID.class)) {
                     ViewID viewId = f.getAnnotation(ViewID.class);
@@ -33,7 +33,7 @@ public class AnnotationProcesser {
                 }
             }
         } else if (source instanceof Activity) {
-            List<Field> fields = getAllDeclaredFields(injectTo, superEnd);
+            List<Field> fields = getAllDeclaredFields(injectTo.getClass(), superEnd);
             for (Field f : fields) {
                 if (f.isAnnotationPresent(ViewID.class)) {
                     ViewID viewId = f.getAnnotation(ViewID.class);
@@ -50,14 +50,12 @@ public class AnnotationProcesser {
 
     /**
      * 获取到superEnd为父类的所有域
-     * @param obj
+     * @param clazz
      * @param superEnd
      * @return
      */
-    public static List<Field> getAllDeclaredFields(Object obj, Class superEnd) {
-        System.out.println(obj.getClass() + "," + superEnd);
+    public static List<Field> getAllDeclaredFields(Class clazz, Class superEnd) {
         ArrayList<Field> fields = new ArrayList<>();
-        Class clazz = obj.getClass();
         while (true) {
             if (clazz == null) {
                 break;

@@ -93,7 +93,7 @@ public class MainActivity extends FragmentActivity {
         mine.setOnMenuItemClicked(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MainActivity.this, position + "", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this.getApplicationContext(), position + "", Toast.LENGTH_SHORT).show();
             }
         });
         mine.addListMenuItem(new ListMenuItem(R.drawable.local_music_red, "本地音乐", "0", R.drawable.enter_black));
@@ -211,7 +211,7 @@ public class MainActivity extends FragmentActivity {
         menu.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                Toast.makeText(MainActivity.this, menuItem.getTitle(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this.getApplicationContext(), menuItem.getTitle(), Toast.LENGTH_SHORT).show();
                 return false;
             }
         });

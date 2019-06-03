@@ -26,14 +26,14 @@ public class MusicPlayerService extends Service {
     public void onCreate() {
         super.onCreate();
         regist();
-        Toast.makeText(this, "MusicPlayer Service onCreate", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this.getApplicationContext(), "MusicPlayer Service onCreate", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onDestroy() {
         unRegist();
         super.onDestroy();
-        Toast.makeText(this, "MusicPlayer Service onDestroy", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this.getApplicationContext(), "MusicPlayer Service onDestroy", Toast.LENGTH_SHORT).show();
     }
 
     private void regist() {
