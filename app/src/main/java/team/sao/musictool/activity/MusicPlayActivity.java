@@ -1,6 +1,7 @@
 package team.sao.musictool.activity;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,10 +14,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
+import team.sao.musictool.MainApp;
 import team.sao.musictool.R;
 import team.sao.musictool.annotation.ViewID;
 import team.sao.musictool.config.PlayerInfo;
 import team.sao.musictool.config.ReceiverAction;
+import team.sao.musictool.dao.MusicToolDataBase;
+import team.sao.musictool.entity.MyFavorSong;
 import team.sao.musictool.entity.Song;
 import team.sao.musictool.receiver.MusicPlayReceiver;
 import team.sao.musictool.util.IntentBuilder;
@@ -65,6 +70,7 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
     private PlayerInfo playerInfo = PlayerInfo.getInstance();
     private MusicPlayActivityReceiver receiver;
     private boolean isSeeking = false;
+    private MusicToolDataBase musicToolDataBase = MusicToolDataBase.getInstance(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,7 +153,7 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
         if (action == MotionEvent.ACTION_DOWN) {
             v.setAlpha(0.5f);
             return true;
-        }  else if (action == MotionEvent.ACTION_UP) {
+        } else if (action == MotionEvent.ACTION_UP) {
             v.setAlpha(1.0f);
             switch (v.getId()) {
                 case R.id.ic_presong: //上一首
@@ -173,6 +179,31 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
                         new IntentBuilder().action(ReceiverAction.MUSICPLAY_CENTER).extra(OPERATE, OP_NEXT_SONG).send(MusicPlayActivity.this);
                     }
                     break;
+                case R.id.ic_like: //喜欢
+                    if (playerInfo.getPlayingSong() != null) {
+                        String msg ;
+                        if (playerInfo.isMyFavor()) {
+                            int flag = musicToolDataBase.deleteByPrimaryKey(MyFavorSong.class, "'" + playerInfo.getPlayingSong().getSongid() + "'");
+                            if (flag > 0) {
+                                msg = "取消喜欢成功";
+                                playerInfo.setMyFavor(false);
+                                like.setImageResource(R.drawable.like_empty_white);
+                            } else {
+                                msg = "取消喜欢失败";
+                            }
+                        } else {
+                            boolean flag = musicToolDataBase.insert(new MyFavorSong(playerInfo.getPlayingSong()));
+                            if (flag) {
+                                msg = "添加喜欢成功";
+                                playerInfo.setMyFavor(true);
+                                like.setImageResource(R.drawable.like_fill_red);
+                            } else {
+                                msg = "添加喜欢失败";
+                            }
+                        }
+                        Toast.makeText(MainApp.getInstance(), msg, Toast.LENGTH_SHORT).show();
+                    }
+                    break;
             }
             return true;
         }
@@ -183,7 +214,7 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
         receiver = new MusicPlayActivityReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION);
-       registerReceiver(receiver, intentFilter);
+        registerReceiver(receiver, intentFilter);
     }
 
     private void unRegister() {
@@ -224,6 +255,7 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
                             songname.setText(song.getName());
                             singer.setText(song.getSinger());
                             totalTime.setText(song.getFormatTime());
+                            like.setImageResource(playerInfo.isMyFavor() ? R.drawable.like_fill_red : R.drawable.like_empty_white);
                             if (playerInfo.getSongImg() != null) {
                                 aimg.setImageBitmap(playerInfo.getSongImg());
                             }
@@ -237,11 +269,12 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
                             aimg.setImageBitmap(playerInfo.getSongImg());
                         }
                         break;
-                    case OP_UPDATE_UI_NOIMG : //更新除img的ui
+                    case OP_UPDATE_UI_NOIMG: //更新除img的ui
                         final Song song1 = playerInfo.getPlayingSong();
                         if (song1 != null) {
                             songname.setText(song1.getName());
                             singer.setText(song1.getSinger());
+                            like.setImageResource(playerInfo.isMyFavor() ? R.drawable.like_fill_red : R.drawable.like_empty_white);
                             aimg.setImageResource(R.drawable.ic_music_logo_white);
                             totalTime.setText(song1.getFormatTime());
                             crttime.setText(formatTime(0));

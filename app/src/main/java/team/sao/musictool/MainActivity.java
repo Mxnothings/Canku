@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import team.sao.musictool.activity.SearchActivity;
+import team.sao.musictool.activity.SongsActivity;
 import team.sao.musictool.adapter.MyFragmentPagerAdapter;
 import team.sao.musictool.adapter.SearchListMenuAdapter;
 import team.sao.musictool.annotation.ViewID;
@@ -93,7 +94,19 @@ public class MainActivity extends FragmentActivity {
         mine.setOnMenuItemClicked(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MainActivity.this.getApplicationContext(), position + "", Toast.LENGTH_SHORT).show();
+                IntentBuilder builder = new IntentBuilder().clazz(MainActivity.this, SongsActivity.class);
+                switch (position) {
+                    case 0: //本地音乐
+                        builder.extra(ListMenuItem.EXTRA_NAME, SongsActivity.TYPE_LOCAL_MUSIC);
+                        break;
+                    case 1: //最近播放
+                        builder.extra(ListMenuItem.EXTRA_NAME, SongsActivity.TYPE_RECENT_PLAY);
+                        break;
+                    case 2: //我的收藏
+                        builder.extra(ListMenuItem.EXTRA_NAME, SongsActivity.TYPE_MY_FAVOR);
+                        break;
+                }
+                startActivity(builder.build());
             }
         });
         mine.addListMenuItem(new ListMenuItem(R.drawable.local_music_red, "本地音乐", "0", R.drawable.enter_black));

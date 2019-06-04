@@ -27,45 +27,34 @@
                     android:orientation="horizontal" android:layout_marginEnd="-1dp"
                     android:layout_alignEnd="@+id/toolbar_menu">
                 <TextView
-                        android:id="@+id/activity_search_title"
-                        android:text="QQ音乐搜索"
+                        android:id="@+id/activity_songs_title"
+                        android:text="我的收藏"
                         android:layout_marginLeft="20dp"
-                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:gravity="center_vertical" android:textSize="16sp"/>
+                        android:gravity="center_vertical"
+                        android:textSize="16sp"/>
+                <ImageView android:layout_width="40dp"
+                           android:layout_height="match_parent"
+                           android:src="@drawable/trash_black"
+                           android:id="@+id/activity_songs_ic_trash"
+                           android:padding="10dp"
+                           android:background="@color/color_netease_white"
+                           android:layout_gravity="right"
+                           android:layout_marginRight="10dp"/>
             </LinearLayout>
         </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
-    <LinearLayout android:layout_width="match_parent"
-                  android:orientation="horizontal"
-                  android:layout_height="40dp"
-                  android:layout_marginStart="8dp"
-                  app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="8dp"
-                  app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
-                  android:layout_marginEnd="8dp"
 
-                  android:id="@+id/linearLayout">
-        <EditText
-                android:id="@+id/keyword_input"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textSize="14sp"
-                android:imeOptions="actionSearch"
-                android:inputType="text"
-                android:paddingLeft="40px"
-                android:paddingRight="40px"
-                android:background="@drawable/search_text_keyword"
-                android:hint="请输入搜索关键词"
-        />
-    </LinearLayout>
     <ListView android:layout_width="match_parent"
               android:layout_height="0dp"
               android:layout_weight="1"
               android:dividerHeight="0dp"
               android:divider="@color/color_netease_white"
-              android:id="@+id/activity_songlist"/>
+              android:id="@+id/activity_songs_songslist"/>
     <FrameLayout android:layout_width="match_parent"
                  android:layout_height="@dimen/fragment_playbar_height"
-                 android:id="@+id/playbar" />
+                 android:id="@+id/playbar"/>
 </LinearLayout>

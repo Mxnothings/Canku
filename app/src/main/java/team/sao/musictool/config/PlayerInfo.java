@@ -5,8 +5,12 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import team.sao.musictool.MainApp;
+import team.sao.musictool.dao.MusicToolDataBase;
+import team.sao.musictool.entity.MyFavorSong;
 import team.sao.musictool.entity.Song;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,6 +51,7 @@ public class PlayerInfo {
     }
 
     private PlayerInfo() {
+        this.play_list = new ArrayList<>();
     }
 
     public static PlayerInfo getInstance() {
@@ -59,6 +64,8 @@ public class PlayerInfo {
     private int status = STATUS_NOTINIT;
     private int position = 0;
     private Song playingSong;
+    private boolean isMyFavor = false;
+    private MusicToolDataBase musicToolDataBase = MusicToolDataBase.getInstance(MainApp.getInstance());
 
     public Bitmap getSongImg() {
         return songImg;
@@ -74,26 +81,37 @@ public class PlayerInfo {
 
     public synchronized void setPlayingSong(Song playingSong) {
         this.playingSong = playingSong;
+        Object o = musicToolDataBase.selectTableByPrimaryKey(MyFavorSong.class, "'" + playingSong.getSongid() + "'"); //查找是否是我的喜欢
+        setMyFavor(o == null ? false : true);
+        setPosition(0);
     }
 
     public List<Song> getPlay_list() {
         return play_list;
     }
 
-    public synchronized void setPlay_list(List<Song> play_list) {
-        this.play_list = play_list;
+    public synchronized void resetTo(List<Song> play_list, int index) {
+        this.play_list.clear();
+        this.play_list.addAll(play_list);
+        setPlayingSongIndex(index);
+    }
+
+    public synchronized void addToPlayList(Song song) {
+        this.play_list.add(song);
     }
 
     public synchronized Song nextSong() {
         if (playingSongIndex > -1 && playingSongIndex < play_list.size() - 1) {
-            return playingSong = play_list.get(++playingSongIndex);
+            setPlayingSong(play_list.get(++playingSongIndex));
+            return playingSong;
         }
         return null;
     }
 
     public synchronized Song preSong() {
         if (playingSongIndex > 0 && playingSongIndex < play_list.size() - 1) {
-            return playingSong = play_list.get(--playingSongIndex);
+            setPlayingSong(play_list.get(--playingSongIndex));
+            return playingSong;
         }
         return null;
     }
@@ -105,7 +123,7 @@ public class PlayerInfo {
     public synchronized void setPlayingSongIndex(int playingSongIndex) {
         if (play_list != null && playingSongIndex > -1 && playingSongIndex < play_list.size()) {
             this.playingSongIndex = playingSongIndex;
-            this.playingSong = play_list.get(playingSongIndex);
+            setPlayingSong(play_list.get(playingSongIndex));
         }
     }
 
@@ -127,6 +145,14 @@ public class PlayerInfo {
 
     public synchronized void setPosition(int position) {
         this.position = position;
+    }
+
+    public boolean isMyFavor() {
+        return isMyFavor;
+    }
+
+    public synchronized void setMyFavor(boolean myFavor) {
+        isMyFavor = myFavor;
     }
 
     //获取图片

@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.util.Log;
 import team.sao.musictool.config.PlayerInfo;
 import team.sao.musictool.config.ReceiverAction;
+import team.sao.musictool.dao.MusicToolDataBase;
+import team.sao.musictool.entity.RecentSong;
 import team.sao.musictool.entity.Song;
 import team.sao.musictool.util.IntentBuilder;
 
@@ -32,11 +34,15 @@ public class MusicPlayReceiver extends BroadcastReceiver {
     private Context mContext;
     private PlayerInfo playerInfo = PlayerInfo.getInstance();
     private ExecutorService executor = Executors.newSingleThreadExecutor();
+    private MusicToolDataBase musicToolDataBase;
+    private Thread imgT;
+    private Thread playSongT;
 
     private volatile boolean s = true;
 
     public MusicPlayReceiver(final Context mContext) {
         this.mContext = mContext;
+        this.musicToolDataBase = MusicToolDataBase.getInstance(mContext);
     }
 
     @Override
@@ -71,6 +77,7 @@ public class MusicPlayReceiver extends BroadcastReceiver {
 
     //播放音乐
     private void playMusic(final Context context, final Song song) {
+        musicToolDataBase.insert(new RecentSong(song));
         if (song != null) {
             if (mediaPlayer != null && mediaPlayer.isPlaying()) {
                 s = false;

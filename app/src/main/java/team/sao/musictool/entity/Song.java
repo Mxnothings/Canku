@@ -1,8 +1,10 @@
 package team.sao.musictool.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import team.sao.musictool.annotation.DBColumn;
+import team.sao.musictool.dao.autodatabase.annotation.DBColumn;
+import team.sao.musictool.dao.autodatabase.annotation.Entity;
 import team.sao.musictool.config.MusicType;
+import team.sao.musictool.dao.autodatabase.db.DataType;
 import team.sao.musictool.util.QQMusicUtil;
 
 /****
@@ -10,19 +12,22 @@ import team.sao.musictool.util.QQMusicUtil;
  * @description
  * @Date 2018/12/23 3:33
  *****/
+@Entity
 public class Song {
 
-    @DBColumn(type = "integer")
+    @DBColumn(type = DataType.INTEGER)
     private int musicType;      //音乐类型
     private String name;        //歌名
+    @DBColumn(primaryKey = true)
     private String songid;     //歌曲mid
     private String downloadUrl;        //下载的相对地址
     private String singer;      //歌手
+    @DBColumn(type = DataType.INTEGER)
     private Integer albumid;     //专辑id
     private String albumname;   //专辑名
     private String imgurl;
     private String subtitle;    //专辑副标题
-    @DBColumn(type = "integer")
+    @DBColumn(type = DataType.INTEGER)
     private int time;        //时长
 
     public Song() {

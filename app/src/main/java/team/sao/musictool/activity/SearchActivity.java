@@ -16,6 +16,8 @@ import team.sao.musictool.annotation.ViewID;
 import team.sao.musictool.config.MusicType;
 import team.sao.musictool.config.PlayerInfo;
 import team.sao.musictool.config.ReceiverAction;
+import team.sao.musictool.dao.MusicToolDataBase;
+import team.sao.musictool.entity.SearchHistory;
 import team.sao.musictool.entity.Song;
 import team.sao.musictool.fragment.PlayBarFragment;
 import team.sao.musictool.util.*;
@@ -41,12 +43,13 @@ public class SearchActivity extends FragmentActivity {
     private List<Song> songs;
     private int crtindex = -1;
     private PlayerInfo playerInfo = PlayerInfo.getInstance();
+    private MusicToolDataBase musicToolDataBase = MusicToolDataBase.getInstance(this);
 
     private ProgressDialog alert;
 
     @ViewID(R.id.keyword_input)
     private EditText keywordInput;
-    @ViewID(R.id.icon_back)
+    @ViewID(R.id.activity_songs_icon_back)
     private ImageView icon_back;
     @ViewID(R.id.activity_search_title)
     private TextView title;
@@ -63,6 +66,17 @@ public class SearchActivity extends FragmentActivity {
         setSearchTypeInfo();
         initAction();
         initDataAndView();
+
+//        List<SearchHistory> data = musicToolDataBase.select(SearchHistory.class, "where keyword like ?", new String[]{"%你%"});
+//        if (data != null) {
+//            Log.i("历史搜索,结果数量", data.size() + "");
+//            for (SearchHistory s : data) {
+//                Log.i("历史搜索", s + "");
+//            }
+//        } else {
+//            Log.i("历史搜索", "没有");
+//        }
+
     }
 
 
@@ -105,6 +119,7 @@ public class SearchActivity extends FragmentActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    musicToolDataBase.insert(new SearchHistory(null, keywordInput.getText().toString()));
                     ViewUtil.hideKeyboard(SearchActivity.this, keywordInput);
                     String keyword = keywordInput.getText().toString();
                     songs.clear();
@@ -120,8 +135,7 @@ public class SearchActivity extends FragmentActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (playerInfo.getPlay_list() != songs) {
-                    playerInfo.setPlay_list(songs);
-                    playerInfo.setPlayingSongIndex(position);
+                    playerInfo.resetTo(songs, position);
                     new IntentBuilder().action(ReceiverAction.MUSICPLAY_CENTER)
                             .extra(PlayerInfo.OPERATE, PlayerInfo.OP_PLAY)
                             .send(SearchActivity.this);

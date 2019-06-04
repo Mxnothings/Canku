@@ -8,6 +8,8 @@ package team.sao.musictool.entity;
  **/
 public class ListMenuItem {
 
+    public static final String EXTRA_NAME = "ListMenuItem_Name";
+
     private int icon_main_resource;
     private String name;
     private String tip;

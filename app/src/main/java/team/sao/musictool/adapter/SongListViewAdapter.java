@@ -39,11 +39,20 @@ public class SongListViewAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private Context context;
     private List<Song> songs;
+    private boolean reversal;
 
     public SongListViewAdapter(Context context, List<Song> songs) {
         this.context = context;
         this.songs = songs;
         this.inflater = LayoutInflater.from(context);
+        this.reversal = false;
+    }
+
+    public SongListViewAdapter(Context context, List<Song> songs, boolean reversal) {
+        this.context = context;
+        this.songs = songs;
+        this.inflater = LayoutInflater.from(context);
+        this.reversal = reversal;
     }
 
     @Override
@@ -63,7 +72,7 @@ public class SongListViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final Song song = songs.get(position);
+        Song song = reversal ? songs.get(songs.size() - 1 - position) : songs.get(position) ;
         convertView = inflater.inflate(R.layout.songlist_item, null);
         inject(this, SongListViewAdapter.class, convertView);
 
@@ -72,5 +81,9 @@ public class SongListViewAdapter extends BaseAdapter {
         time.setText(song.getFormatTime());
 
         return convertView;
+    }
+
+    public List<Song> getSongs() {
+        return songs;
     }
 }

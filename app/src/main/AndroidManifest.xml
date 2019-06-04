@@ -3,6 +3,7 @@
           package="team.sao.musictool">
 
     <application
+            android:name=".MainApp"
             android:usesCleartextTraffic="true"
             android:allowBackup="true"
             android:icon="@drawable/ic_launcher"
@@ -21,6 +22,7 @@
                   android:windowSoftInputMode="stateHidden|adjustPan"/>
         <activity android:name=".activity.MusicPlayActivity"
                   android:launchMode="singleInstance" />
+        <activity android:name=".activity.SongsActivity"/>
 
         <service android:name=".service.MusicPlayerService"/>
     </application>
