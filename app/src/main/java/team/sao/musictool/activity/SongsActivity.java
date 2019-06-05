@@ -1,32 +1,32 @@
 package team.sao.musictool.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import team.sao.musictool.MainApp;
 import team.sao.musictool.R;
 import team.sao.musictool.adapter.SongListViewAdapter;
 import team.sao.musictool.annotation.ViewID;
+import team.sao.musictool.config.PlayerInfo;
+import team.sao.musictool.config.ReceiverAction;
 import team.sao.musictool.dao.MusicToolDataBase;
 import team.sao.musictool.entity.*;
 import team.sao.musictool.fragment.PlayBarFragment;
+import team.sao.musictool.util.IntentBuilder;
 import team.sao.musictool.util.StatusBarUtil;
 
-import java.util.LinkedList;
 import java.util.List;
 
-import static team.sao.musictool.annotation.AnnotationProcesser.*;
+import static team.sao.musictool.annotation.AnnotationProcesser.inject;
 
 /**
  * \* Author: MrWangx
@@ -45,6 +45,7 @@ public class SongsActivity extends FragmentActivity {
     private PlayBarFragment playBar;
     private List<Song> songs;
     private SongListViewAdapter songListViewAdapter;
+    private PlayerInfo playerInfo = PlayerInfo.getInstance();
 
     @ViewID(R.id.activity_songs_icon_back)
     private ImageView ic_back;
@@ -94,7 +95,7 @@ public class SongsActivity extends FragmentActivity {
 
         //获取歌曲
         songs = musicToolDataBase.selectTableAll(entityClass);
-        songslist.setAdapter(songListViewAdapter = new SongListViewAdapter(this, songs, true));
+        songslist.setAdapter(songListViewAdapter = new SongListViewAdapter(this, songs));
 
     }
 
@@ -112,14 +113,31 @@ public class SongsActivity extends FragmentActivity {
                 int action = event.getAction();
                 if (action == MotionEvent.ACTION_DOWN) {
                     v.setAlpha(0.5f);
+                    return true;
                 } else if (action == MotionEvent.ACTION_UP) {
                     v.setAlpha(1.0f);
-                    int retult = musicToolDataBase.deleteAll(entityClass);
-                    if (retult > 0) {
-                        Toast.makeText(MainApp.getInstance(), "删除记录:" + retult, Toast.LENGTH_SHORT).show();
-                    }
-                    songs.clear();
-                    songListViewAdapter.notifyDataSetChanged();
+                    //提示确定
+                    AlertDialog.Builder aBuilder = new AlertDialog.Builder(SongsActivity.this);
+                    aBuilder.setTitle("提示");
+                    aBuilder.setMessage("确定删除所有吗?");
+                    aBuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            int retult = musicToolDataBase.deleteAll(entityClass);
+                            if (retult > 0) {
+                                Toast.makeText(MainApp.getInstance(), "删除记录:" + retult, Toast.LENGTH_SHORT).show();
+                            }
+                            songs.clear();
+                            songListViewAdapter.notifyDataSetChanged();
+                        }
+                    });
+                    aBuilder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    aBuilder.show();
                     return true;
                 }
                 return false;
@@ -133,11 +151,33 @@ public class SongsActivity extends FragmentActivity {
             }
         });
 
+        songslist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (playerInfo.getPlay_list() != songs) {
+                    playerInfo.resetTo(songs, position);
+                    new IntentBuilder().action(ReceiverAction.MUSICPLAY_CENTER)
+                            .extra(PlayerInfo.OPERATE, PlayerInfo.OP_PLAY)
+                            .send(SongsActivity.this);
+                } else {
+                    if (!(playerInfo.getPlayingSongIndex() == position)) {
+                        playerInfo.setPlayingSongIndex(position);
+                        new IntentBuilder().action(ReceiverAction.MUSICPLAY_CENTER)
+                                .extra(PlayerInfo.OPERATE, PlayerInfo.OP_PLAY)
+                                .send(SongsActivity.this);
+                    }
+                }
+            }
+        });
+
     }
 
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+        if (item.getItemId() == 0) {
+
+        }
         return super.onContextItemSelected(item);
     }
 

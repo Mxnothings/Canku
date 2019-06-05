@@ -4,6 +4,7 @@
     <color name="color_netease_white">#F9F9F9</color>
     <color name="color_netease_red">#FF3A3A</color>
     <color name="color_netease_text">#343434</color>
+    <color name="color_netease_text_transparent">#70343434</color>
     <color name="color_netease_text_lighter">#858585</color>
 
     <color name="color_playbar_top_border">#F0F0F0</color>

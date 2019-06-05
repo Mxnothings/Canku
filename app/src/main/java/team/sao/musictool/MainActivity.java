@@ -109,9 +109,9 @@ public class MainActivity extends FragmentActivity {
                 startActivity(builder.build());
             }
         });
-        mine.addListMenuItem(new ListMenuItem(R.drawable.local_music_red, "本地音乐", "0", R.drawable.enter_black));
-        mine.addListMenuItem(new ListMenuItem(R.drawable.recent_play_red, "最近播放", "0", R.drawable.enter_black));
-        mine.addListMenuItem(new ListMenuItem(R.drawable.my_favor_red, "我的收藏", "0", R.drawable.enter_black));
+        mine.addListMenuItem(new ListMenuItem(R.drawable.local_music_red, "本地音乐", "", R.drawable.enter_black));
+        mine.addListMenuItem(new ListMenuItem(R.drawable.recent_play_red, "最近播放", "", R.drawable.enter_black));
+        mine.addListMenuItem(new ListMenuItem(R.drawable.my_favor_red, "我的收藏", "", R.drawable.enter_black));
         pagerFragments.add(mine);
 
         /**音乐*/

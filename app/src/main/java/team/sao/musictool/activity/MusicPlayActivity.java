@@ -24,6 +24,7 @@ import team.sao.musictool.dao.MusicToolDataBase;
 import team.sao.musictool.entity.MyFavorSong;
 import team.sao.musictool.entity.Song;
 import team.sao.musictool.receiver.MusicPlayReceiver;
+import team.sao.musictool.util.FastBlurUtil;
 import team.sao.musictool.util.IntentBuilder;
 import team.sao.musictool.util.StatusBarUtil;
 
@@ -40,6 +41,8 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
 
     public static final String ACTION = ReceiverAction.MUSICPLAY_UI;
 
+    @ViewID(R.id.background_blur)
+    private ImageView background_blur;
     @ViewID(R.id.ic_back)
     private ImageView back;
     @ViewID(R.id.songname)
@@ -258,6 +261,7 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
                             like.setImageResource(playerInfo.isMyFavor() ? R.drawable.like_fill_red : R.drawable.like_empty_white);
                             if (playerInfo.getSongImg() != null) {
                                 aimg.setImageBitmap(playerInfo.getSongImg());
+                                background_blur.setImageBitmap(FastBlurUtil.toBlur(playerInfo.getSongImg(), 10));
                             }
                             int position = playerInfo.getPosition();
                             seekProgress.setProgress(position);
@@ -267,6 +271,7 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
                     case OP_UPDATE_UI_IMG: //更新img的ui
                         if (playerInfo.getSongImg() != null) {
                             aimg.setImageBitmap(playerInfo.getSongImg());
+                            background_blur.setImageBitmap(FastBlurUtil.toBlur(playerInfo.getSongImg(), 10));
                         }
                         break;
                     case OP_UPDATE_UI_NOIMG: //更新除img的ui

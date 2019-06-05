@@ -1,23 +1,22 @@
 package team.sao.musictool.adapter;
 
 import android.content.Context;
-import android.content.Intent;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import team.sao.musictool.R;
 import team.sao.musictool.annotation.ViewID;
-import team.sao.musictool.config.PlayerInfo;
 import team.sao.musictool.entity.Song;
-import team.sao.musictool.receiver.MusicPlayReceiver;
-import team.sao.musictool.util.JSONUtil;
 
 import java.util.List;
 
-import static team.sao.musictool.annotation.AnnotationProcesser.*;
+import static team.sao.musictool.annotation.AnnotationProcesser.inject;
+import static team.sao.musictool.config.MusicType.*;
 
 /**
  * \* Author: MrWangx
@@ -33,8 +32,10 @@ public class SongListViewAdapter extends BaseAdapter {
     private TextView singerAlbum;
     @ViewID(R.id.tv_time)
     private TextView time;
-    @ViewID(R.id.ic_download)
-    private ImageView download;
+    @ViewID(R.id.songslist_item_ic_more)
+    private ImageView more;
+    @ViewID(R.id.songslist_item_ic_music_type)
+    private ImageView musicType;
 
     private LayoutInflater inflater;
     private Context context;
@@ -72,10 +73,17 @@ public class SongListViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Song song = reversal ? songs.get(songs.size() - 1 - position) : songs.get(position) ;
+        Song song = reversal ? songs.get(songs.size() - 1 - position) : songs.get(position);
         convertView = inflater.inflate(R.layout.songlist_item, null);
         inject(this, SongListViewAdapter.class, convertView);
-
+        switch (song.getMusicType()) {
+            case QQ_MUSIC:
+                musicType.setImageResource(R.drawable.qqmusic_logo);
+                break;
+            case NETEASE_MUSIC:
+                musicType.setImageResource(R.drawable.netease_cloud_music_logo);
+                break;
+        }
         songName.setText(song.getName());
         singerAlbum.setText(song.getSinger() + "-" + song.getAlbumname());
         time.setText(song.getFormatTime());
@@ -86,4 +94,15 @@ public class SongListViewAdapter extends BaseAdapter {
     public List<Song> getSongs() {
         return songs;
     }
+
+    private void showPopupWindow() {
+        View root = LayoutInflater.from(context).inflate(R.layout.songslist_popupwindow, null);
+        PopupWindow popupWindow = new PopupWindow(root,
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        popupWindow.setContentView(root);
+        //显示PopupWindow
+        View rootview = LayoutInflater.from(context).inflate(R.layout.activity_search, null);
+        popupWindow.showAtLocation(rootview, Gravity.BOTTOM, 0, 0);
+    }
+
 }
