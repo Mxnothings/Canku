@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:padding="10dp"
+                  android:orientation="vertical"
+                  android:layout_height="300dp">
+        <TextView android:layout_width="match_parent"
+                  android:textSize="25sp"
+                  android:textFontWeight="1"
+                  android:text="热门歌单"
+                  android:layout_height="40dp"/>
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="0dp"
+                      android:layout_weight="1">
+            <LinearLayout android:layout_width="0dp"
+                          android:orientation="vertical"
+                          android:gravity="center_horizontal"
+                          android:layout_height="match_parent"
+                          android:layout_weight="1">
+                <ImageView android:layout_width="match_parent"
+                           android:layout_height="0dp"
+                           android:padding="5dp"
+                           android:src="@drawable/album_img"
+                           android:layout_weight="1"/>
+                <TextView android:layout_width="match_parent"
+                          android:text="关于周杰伦的记忆"
+                          android:gravity="center"
+                          android:textSize="8dp"
+                          android:layout_height="20dp"/>
+
+            </LinearLayout>
+            <LinearLayout android:layout_width="0dp"
+                          android:orientation="vertical"
+                          android:gravity="center_horizontal"
+                          android:layout_height="match_parent"
+                          android:layout_weight="1">
+                <ImageView android:layout_width="match_parent"
+                           android:layout_height="0dp"
+                           android:padding="5dp"
+                           android:src="@drawable/album_img"
+                           android:layout_weight="1"/>
+                <TextView android:layout_width="match_parent"
+                          android:text="关于周杰伦的记忆"
+                          android:gravity="center"
+                          android:textSize="8dp"
+                          android:layout_height="20dp"/>
+
+            </LinearLayout>
+            <LinearLayout android:layout_width="0dp"
+                          android:orientation="vertical"
+                          android:gravity="center_horizontal"
+                          android:layout_height="match_parent"
+                          android:layout_weight="1">
+                <ImageView android:layout_width="match_parent"
+                           android:layout_height="0dp"
+                           android:padding="5dp"
+                           android:src="@drawable/album_img"
+                           android:layout_weight="1"/>
+                <TextView android:layout_width="match_parent"
+                          android:text="关于周杰伦的记忆"
+                          android:gravity="center"
+                          android:textSize="8dp"
+                          android:layout_height="20dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="0dp"
+                      android:layout_weight="1">
+            <LinearLayout android:layout_width="0dp"
+                          android:orientation="vertical"
+                          android:gravity="center_horizontal"
+                          android:layout_height="match_parent"
+                          android:layout_weight="1">
+                <ImageView android:layout_width="match_parent"
+                           android:layout_height="0dp"
+                           android:padding="5dp"
+                           android:src="@drawable/album_img"
+                           android:layout_weight="1"/>
+                <TextView android:layout_width="match_parent"
+                          android:text="关于周杰伦的记忆"
+                          android:gravity="center"
+                          android:textSize="8dp"
+                          android:layout_height="20dp"/>
+
+            </LinearLayout>
+            <LinearLayout android:layout_width="0dp"
+                          android:orientation="vertical"
+                          android:gravity="center_horizontal"
+                          android:layout_height="match_parent"
+                          android:layout_weight="1">
+                <ImageView android:layout_width="match_parent"
+                           android:layout_height="0dp"
+                           android:padding="5dp"
+                           android:src="@drawable/album_img"
+                           android:layout_weight="1"/>
+                <TextView android:layout_width="match_parent"
+                          android:text="关于周杰伦的记忆"
+                          android:gravity="center"
+                          android:textSize="8dp"
+                          android:layout_height="20dp"/>
+
+            </LinearLayout>
+            <LinearLayout android:layout_width="0dp"
+                          android:orientation="vertical"
+                          android:gravity="center_horizontal"
+                          android:layout_height="match_parent"
+                          android:layout_weight="1">
+                <ImageView android:layout_width="match_parent"
+                           android:layout_height="0dp"
+                           android:padding="5dp"
+                           android:src="@drawable/album_img"
+                           android:layout_weight="1"/>
+                <TextView android:layout_width="match_parent"
+                          android:text="关于周杰伦的记忆"
+                          android:gravity="center"
+                          android:textSize="8dp"
+                          android:layout_height="20dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

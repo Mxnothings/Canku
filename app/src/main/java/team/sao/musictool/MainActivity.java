@@ -115,6 +115,7 @@ public class MainActivity extends FragmentActivity {
         /**音乐*/
         pagerFragments.add(new MusicFragment());
 
+
         /**搜索*/
         ListMenu search = new ListMenu();
         search.setOnMenuItemClicked(new AdapterView.OnItemClickListener() {
