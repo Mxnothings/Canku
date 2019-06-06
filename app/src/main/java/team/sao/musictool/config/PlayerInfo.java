@@ -8,7 +8,7 @@ import org.jsoup.Jsoup;
 import team.sao.musictool.MainApp;
 import team.sao.musictool.dao.MusicToolDataBase;
 import team.sao.musictool.entity.MyFavorSong;
-import team.sao.musictool.entity.Song;
+import team.sao.musictool.music.entity.Song;
 
 import java.util.ArrayList;
 import java.util.List;

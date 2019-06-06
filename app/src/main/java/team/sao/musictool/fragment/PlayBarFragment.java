@@ -21,7 +21,7 @@ import team.sao.musictool.activity.MusicPlayActivity;
 import team.sao.musictool.annotation.ViewID;
 import team.sao.musictool.config.PlayerInfo;
 import team.sao.musictool.config.ReceiverAction;
-import team.sao.musictool.entity.Song;
+import team.sao.musictool.music.entity.Song;
 import team.sao.musictool.util.IntentBuilder;
 
 import static team.sao.musictool.annotation.AnnotationProcesser.inject;

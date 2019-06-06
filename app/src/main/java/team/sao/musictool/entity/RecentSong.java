@@ -1,6 +1,7 @@
 package team.sao.musictool.entity;
 
 import team.sao.musictool.dao.autodatabase.annotation.Entity;
+import team.sao.musictool.music.entity.Song;
 
 /**
  * \* Author: MrWangx
@@ -14,12 +15,12 @@ public class RecentSong extends Song {
     public RecentSong() {
     }
 
-    public RecentSong(int musicType, String name, String songid, String downloadUrl, String singer, Integer albumid, String albumname, String imgurl, String subtitle, int time) {
-        super(musicType, name, songid, downloadUrl, singer, albumid, albumname, imgurl, subtitle, time);
+    public RecentSong(String musicType, String name, String songid, String downloadUrl, String singer, String albumid, String albumname, String imgurl, String alia, int duration) {
+        super(musicType, name, songid, downloadUrl, singer, albumid, albumname, imgurl, alia, duration);
     }
 
     public RecentSong(Song song) {
-        super(song.getMusicType(), song.getName(), song.getSongid(), song.getDownloadUrl(), song.getSinger(), song.getAlbumid(), song.getAlbumname(), song.getImgurl(), song.getSubtitle(), song.getTime());
+        super(song.getMusicType(), song.getName(), song.getSongid(), song.getDownloadUrl(), song.getSinger(), song.getAlbumid(), song.getAlbumname(), song.getImgurl(), song.getAlia(), song.getDuration());
     }
 
 }

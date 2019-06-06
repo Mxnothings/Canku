@@ -21,6 +21,7 @@ import team.sao.musictool.config.ReceiverAction;
 import team.sao.musictool.dao.MusicToolDataBase;
 import team.sao.musictool.entity.*;
 import team.sao.musictool.fragment.PlayBarFragment;
+import team.sao.musictool.music.entity.Song;
 import team.sao.musictool.util.IntentBuilder;
 import team.sao.musictool.util.StatusBarUtil;
 

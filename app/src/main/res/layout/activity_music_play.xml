@@ -55,7 +55,6 @@
                               android:textColor="@color/color_netease_text_lighter"
                               android:text=""
                               android:gravity="top"/>
-
                 </LinearLayout>
             </LinearLayout>
         </android.support.v7.widget.Toolbar>
@@ -63,6 +62,11 @@
                       android:layout_height="0dp"
                       android:layout_weight="1"
                       android:orientation="vertical">
+            <ImageView android:layout_width="match_parent"
+                       android:layout_marginTop="3dp"
+                       android:id="@+id/activity_play_music_logo"
+                       android:layout_gravity="center"
+                       android:layout_height="20dp"/>
             <ImageView android:layout_width="match_parent"
                        android:padding="60dp"
                        android:id="@+id/album_img"

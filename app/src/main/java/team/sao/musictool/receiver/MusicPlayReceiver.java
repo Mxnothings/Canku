@@ -11,7 +11,7 @@ import team.sao.musictool.config.PlayerInfo;
 import team.sao.musictool.config.ReceiverAction;
 import team.sao.musictool.dao.MusicToolDataBase;
 import team.sao.musictool.entity.RecentSong;
-import team.sao.musictool.entity.Song;
+import team.sao.musictool.music.entity.Song;
 import team.sao.musictool.util.IntentBuilder;
 
 import java.io.IOException;
@@ -129,7 +129,7 @@ public class MusicPlayReceiver extends BroadcastReceiver {
                         mediaPlayer.start();
                         playerInfo.setStatus(STATUS_PLAYING);
                         playerInfo.setPosition(0);
-                        playerInfo.getPlayingSong().setTime(mediaPlayer.getDuration() / 1000);
+                        playerInfo.getPlayingSong().setDuration(mediaPlayer.getDuration() / 1000);
                         new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(UPDATE_STATUS, true).send(mContext);
                         startUpdateProgres();
                     } catch (IOException e) {

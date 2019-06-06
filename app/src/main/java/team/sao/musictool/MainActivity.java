@@ -24,13 +24,10 @@ import team.sao.musictool.activity.SongsActivity;
 import team.sao.musictool.adapter.MyFragmentPagerAdapter;
 import team.sao.musictool.adapter.SearchListMenuAdapter;
 import team.sao.musictool.annotation.ViewID;
-import team.sao.musictool.config.MusicType;
-import team.sao.musictool.config.PlayerInfo;
 import team.sao.musictool.entity.ListMenuItem;
 import team.sao.musictool.fragment.ListMenu;
 import team.sao.musictool.fragment.MusicFragment;
 import team.sao.musictool.fragment.PlayBarFragment;
-import team.sao.musictool.receiver.MusicPlayReceiver;
 import team.sao.musictool.service.MusicPlayerService;
 import team.sao.musictool.util.IntentBuilder;
 import team.sao.musictool.util.StatusBarUtil;
@@ -41,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 import static team.sao.musictool.annotation.AnnotationProcesser.inject;
+import static team.sao.musictool.music.config.MusicAPIConfig.*;
 
 public class MainActivity extends FragmentActivity {
 
@@ -122,16 +120,31 @@ public class MainActivity extends FragmentActivity {
         search.setOnMenuItemClicked(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
-                    startActivity(new IntentBuilder().clazz(MainActivity.this, SearchActivity.class).extra(MusicType.NAME, MusicType.QQ_MUSIC).build());
-                } else if (position == 1) {
-                    startActivity(new IntentBuilder().clazz(MainActivity.this, SearchActivity.class).extra(MusicType.NAME, MusicType.NETEASE_MUSIC).build());
+                switch (position) {
+                    case 0:
+                        startActivity(new IntentBuilder().clazz(MainActivity.this, SearchActivity.class).extra(MUSIC_TYPENAME, MUSIC_TYPE_TECENT).build());
+                        break;
+                    case 1:
+                        startActivity(new IntentBuilder().clazz(MainActivity.this, SearchActivity.class).extra(MUSIC_TYPENAME, MUSIC_TYPE_NETEASE).build());
+                        break;
+                    case 2:
+                        startActivity(new IntentBuilder().clazz(MainActivity.this, SearchActivity.class).extra(MUSIC_TYPENAME, MUSIC_TYPE_KUGOU).build());
+                        break;
+                    case 3:
+                        startActivity(new IntentBuilder().clazz(MainActivity.this, SearchActivity.class).extra(MUSIC_TYPENAME, MUSIC_TYPE_KUWO).build());
+                        break;
+                    case 4:
+                        startActivity(new IntentBuilder().clazz(MainActivity.this, SearchActivity.class).extra(MUSIC_TYPENAME, MUSIC_TYPE_BAIDU).build());
+                        break;
                 }
             }
         });
 
         search.addListMenuItem(new ListMenuItem(R.drawable.qqmusic_logo, "QQ音乐", "", R.drawable.enter_black));
         search.addListMenuItem(new ListMenuItem(R.drawable.netease_cloud_music_logo, "网易云音乐", "", R.drawable.enter_black));
+        search.addListMenuItem(new ListMenuItem(R.drawable.kugou_music_logo, "酷狗音乐", "", R.drawable.enter_black));
+        search.addListMenuItem(new ListMenuItem(R.drawable.kuwo_music_logo, "酷我音乐", "", R.drawable.enter_black));
+        search.addListMenuItem(new ListMenuItem(R.drawable.baidu_music_logo, "百度音乐", "", R.drawable.enter_black));
         search.setListMenuAdapter(new SearchListMenuAdapter());
         pagerFragments.add(search);
 

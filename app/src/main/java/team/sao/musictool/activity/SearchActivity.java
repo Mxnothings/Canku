@@ -13,20 +13,24 @@ import android.widget.*;
 import team.sao.musictool.R;
 import team.sao.musictool.adapter.SongListViewAdapter;
 import team.sao.musictool.annotation.ViewID;
-import team.sao.musictool.config.MusicType;
 import team.sao.musictool.config.PlayerInfo;
 import team.sao.musictool.config.ReceiverAction;
 import team.sao.musictool.dao.MusicToolDataBase;
 import team.sao.musictool.entity.SearchHistory;
-import team.sao.musictool.entity.Song;
 import team.sao.musictool.fragment.PlayBarFragment;
-import team.sao.musictool.util.*;
+import team.sao.musictool.music.MusicAPIHolder;
+import team.sao.musictool.music.api.MusicAPI;
+import team.sao.musictool.music.entity.Song;
+import team.sao.musictool.util.IntentBuilder;
+import team.sao.musictool.util.StatusBarUtil;
+import team.sao.musictool.util.ViewUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static team.sao.musictool.annotation.AnnotationProcesser.inject;
+import static team.sao.musictool.music.config.MusicAPIConfig.*;
 
 /**
  * \* Author: MrWangx
@@ -39,11 +43,12 @@ public class SearchActivity extends FragmentActivity {
     private static final int PAGE_SIZE = 20;
     private static final int MAX_PAGE_NUM = 20;
 
-    private int musicType;
+    private String musicType;
     private List<Song> songs;
     private int crtindex = -1;
     private PlayerInfo playerInfo = PlayerInfo.getInstance();
     private MusicToolDataBase musicToolDataBase = MusicToolDataBase.getInstance(this);
+    private MusicAPI musicAPI;
 
     private ProgressDialog alert;
 
@@ -84,13 +89,26 @@ public class SearchActivity extends FragmentActivity {
      *
      */
     private void setSearchTypeInfo() {
-        musicType = getIntent().getIntExtra(MusicType.NAME, MusicType.QQ_MUSIC);
+        musicType = getIntent().getStringExtra(MUSIC_TYPENAME);
         String titleString = null;
-        if (musicType == MusicType.QQ_MUSIC) {
-            titleString = "QQ音乐搜索";
-        } else if (musicType == MusicType.NETEASE_MUSIC) {
-            titleString = "网易云音乐搜索";
+        switch (musicType) {
+            case MUSIC_TYPE_TECENT:
+                titleString = "QQ音乐搜索";
+                break;
+            case MUSIC_TYPE_NETEASE:
+                titleString = "网易云音乐搜索";
+                break;
+            case MUSIC_TYPE_KUGOU:
+                titleString = "酷狗音乐搜索";
+                break;
+            case MUSIC_TYPE_KUWO:
+                titleString = "酷我音乐搜索";
+                break;
+            case MUSIC_TYPE_BAIDU:
+                titleString = "百度音乐搜索";
+                break;
         }
+        musicAPI = MusicAPIHolder.getAPI(musicType);
         title.setText(titleString);
     }
 
@@ -177,11 +195,7 @@ public class SearchActivity extends FragmentActivity {
             public void run() {
                 List<Song> songs1 = null;
                 try {
-                    if (musicType == MusicType.QQ_MUSIC) {
-                        songs1 = QQMusicUtil.getSongsByKeyword(keyword, 1, PAGE_SIZE);
-                    } else if (musicType == MusicType.NETEASE_MUSIC) {
-                        songs1 = NetEaseMusicUtil.getSongsByKeyword(keyword, 1, PAGE_SIZE);
-                    }
+                    songs1 = musicAPI.searchSongs(keyword, 0, PAGE_SIZE);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {

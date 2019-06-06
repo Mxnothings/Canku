@@ -6,8 +6,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import team.sao.musictool.config.MusicType;
-import team.sao.musictool.entity.Song;
+import team.sao.musictool.music.entity.Song;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,8 +58,8 @@ public class QQMusicUtil {
                 String album_name = songinfo.getJSONObject("album").getString("name");
                 String album_subtitle = songinfo.getJSONObject("album").getString("subtitle");
                 Integer time = songinfo.getInteger("interval");
-                Song song = new Song(MusicType.QQ_MUSIC, name, songid, purl.matches("^\\s*$") ? purl : DOWNLOAD_BASE_URL + purl, singer_name, album_id, album_name, null, album_subtitle, time == null ? 0 : time);
-                songslist.add(song);
+//                Song song = new Song(MusicType.QQ_MUSIC, name, songid, purl.matches("^\\s*$") ? purl : DOWNLOAD_BASE_URL + purl, singer_name, album_id, album_name, null, album_subtitle, time == null ? 0 : time);
+//                songslist.add(song);
             } catch (IOException e) {
                 e.printStackTrace();
             }

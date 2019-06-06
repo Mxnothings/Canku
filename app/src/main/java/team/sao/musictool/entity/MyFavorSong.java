@@ -1,6 +1,7 @@
 package team.sao.musictool.entity;
 
 import team.sao.musictool.dao.autodatabase.annotation.Entity;
+import team.sao.musictool.music.entity.Song;
 
 /**
  * \* Author: MrWangx
@@ -9,17 +10,17 @@ import team.sao.musictool.dao.autodatabase.annotation.Entity;
  * \* Description:
  **/
 @Entity("my_favor_song")
-public class MyFavorSong extends Song {
+public class MyFavorSong extends team.sao.musictool.music.entity.Song {
 
     public MyFavorSong() {
     }
 
-    public MyFavorSong(int musicType, String name, String songid, String downloadUrl, String singer, Integer albumid, String albumname, String imgurl, String subtitle, int time) {
-        super(musicType, name, songid, downloadUrl, singer, albumid, albumname, imgurl, subtitle, time);
+    public MyFavorSong(String musicType, String name, String songid, String downloadUrl, String singer, String albumid, String albumname, String imgurl, String alia, int duration) {
+        super(musicType, name, songid, downloadUrl, singer, albumid, albumname, imgurl, alia, duration);
     }
 
     public MyFavorSong(Song song) {
-        super(song.getMusicType(), song.getName(), song.getSongid(), song.getDownloadUrl(), song.getSinger(), song.getAlbumid(), song.getAlbumname(), song.getImgurl(), song.getSubtitle(), song.getTime());
+        super(song.getMusicType(), song.getName(), song.getSongid(), song.getDownloadUrl(), song.getSinger(), song.getAlbumid(), song.getAlbumname(), song.getImgurl(), song.getAlia(), song.getDuration());
     }
 
 }

@@ -11,12 +11,13 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import team.sao.musictool.R;
 import team.sao.musictool.annotation.ViewID;
-import team.sao.musictool.entity.Song;
+import team.sao.musictool.music.entity.Song;
 
 import java.util.List;
 
 import static team.sao.musictool.annotation.AnnotationProcesser.inject;
-import static team.sao.musictool.config.MusicType.*;
+import static team.sao.musictool.music.config.MusicAPIConfig.*;
+
 
 /**
  * \* Author: MrWangx
@@ -77,11 +78,20 @@ public class SongListViewAdapter extends BaseAdapter {
         convertView = inflater.inflate(R.layout.songlist_item, null);
         inject(this, SongListViewAdapter.class, convertView);
         switch (song.getMusicType()) {
-            case QQ_MUSIC:
+            case MUSIC_TYPE_TECENT:
                 musicType.setImageResource(R.drawable.qqmusic_logo);
                 break;
-            case NETEASE_MUSIC:
+            case MUSIC_TYPE_NETEASE:
                 musicType.setImageResource(R.drawable.netease_cloud_music_logo);
+                break;
+            case MUSIC_TYPE_KUGOU:
+                musicType.setImageResource(R.drawable.kugou_music_logo);
+                break;
+            case MUSIC_TYPE_KUWO:
+                musicType.setImageResource(R.drawable.kuwo_music_logo);
+                break;
+            case MUSIC_TYPE_BAIDU:
+                musicType.setImageResource(R.drawable.baidu_music_logo);
                 break;
         }
         songName.setText(song.getName());

@@ -22,7 +22,7 @@ import team.sao.musictool.config.PlayerInfo;
 import team.sao.musictool.config.ReceiverAction;
 import team.sao.musictool.dao.MusicToolDataBase;
 import team.sao.musictool.entity.MyFavorSong;
-import team.sao.musictool.entity.Song;
+import team.sao.musictool.music.entity.Song;
 import team.sao.musictool.receiver.MusicPlayReceiver;
 import team.sao.musictool.util.FastBlurUtil;
 import team.sao.musictool.util.IntentBuilder;
@@ -30,6 +30,7 @@ import team.sao.musictool.util.StatusBarUtil;
 
 import static team.sao.musictool.annotation.AnnotationProcesser.inject;
 import static team.sao.musictool.config.PlayerInfo.*;
+import static team.sao.musictool.music.config.MusicAPIConfig.*;
 
 /**
  * \* Author: MrWangx
@@ -43,6 +44,8 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
 
     @ViewID(R.id.background_blur)
     private ImageView background_blur;
+    @ViewID(R.id.activity_play_music_logo)
+    private ImageView musicLogo;
     @ViewID(R.id.ic_back)
     private ImageView back;
     @ViewID(R.id.songname)
@@ -254,7 +257,7 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
                     case OP_UPDATE_UI: //更新所有ui
                         Song song = playerInfo.getPlayingSong();
                         if (song != null) {
-                            seekProgress.setMax(song.getTime());
+                            seekProgress.setMax(song.getDuration());
                             songname.setText(song.getName());
                             singer.setText(song.getSinger());
                             totalTime.setText(song.getFormatTime());
@@ -266,6 +269,23 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
                             int position = playerInfo.getPosition();
                             seekProgress.setProgress(position);
                             crttime.setText(formatTime(position));
+                            switch (playerInfo.getPlayingSong().getMusicType()) {
+                                case MUSIC_TYPE_TECENT:
+                                    musicLogo.setImageResource(R.drawable.qqmusic_logo);
+                                    break;
+                                case MUSIC_TYPE_NETEASE:
+                                    musicLogo.setImageResource(R.drawable.netease_cloud_music_logo);
+                                    break;
+                                case MUSIC_TYPE_KUGOU:
+                                    musicLogo.setImageResource(R.drawable.kugou_music_logo);
+                                    break;
+                                case MUSIC_TYPE_KUWO:
+                                    musicLogo.setImageResource(R.drawable.kuwo_music_logo);
+                                    break;
+                                case MUSIC_TYPE_BAIDU:
+                                    musicLogo.setImageResource(R.drawable.baidu_music_logo);
+                                    break;
+                            }
                         }
                         break;
                     case OP_UPDATE_UI_IMG: //更新img的ui
@@ -284,7 +304,24 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
                             totalTime.setText(song1.getFormatTime());
                             crttime.setText(formatTime(0));
                             seekProgress.setProgress(0);
-                            seekProgress.setMax(song1.getTime());
+                            seekProgress.setMax(song1.getDuration());
+                            switch (playerInfo.getPlayingSong().getMusicType()) {
+                                case MUSIC_TYPE_TECENT:
+                                    musicLogo.setImageResource(R.drawable.qqmusic_logo);
+                                    break;
+                                case MUSIC_TYPE_NETEASE:
+                                    musicLogo.setImageResource(R.drawable.netease_cloud_music_logo);
+                                    break;
+                                case MUSIC_TYPE_KUGOU:
+                                    musicLogo.setImageResource(R.drawable.kugou_music_logo);
+                                    break;
+                                case MUSIC_TYPE_KUWO:
+                                    musicLogo.setImageResource(R.drawable.kuwo_music_logo);
+                                    break;
+                                case MUSIC_TYPE_BAIDU:
+                                    musicLogo.setImageResource(R.drawable.baidu_music_logo);
+                                    break;
+                            }
                         }
                         break;
                     case OP_UPDATE_PROGRESS:
