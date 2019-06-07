@@ -1,5 +1,6 @@
 package team.sao.musictool.music.api;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import team.sao.musictool.music.entity.Song;
 import team.sao.musictool.music.entity.SongList;
@@ -39,6 +40,7 @@ public interface MusicAPI {
      * @return
      */
     List<SongList> searchSongList(String keyword, int pagenum, int pagesize);
+
 
     /**
      * 获取歌单的json

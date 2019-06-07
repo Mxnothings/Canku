@@ -51,12 +51,18 @@ public class SearchActivity extends FragmentActivity {
     private static final int MAX_PAGE_NUM = 20;
 
     //当前一些信息
-    private int crtSongPagenum = 0;
-    private int crtSongListPagenum = 0;
-    private int crtSelectPage = 0;  //当前被选中的page
-    private String crtKeyword = null;
-    private boolean isSongSearched = false;
-    private boolean isSongListSearched = false;
+    private int crtSongPagenum = 0;             //当前歌曲的page
+    private int crtSongListPagenum = 0;         //当前歌单的page
+
+    private int crtSelectPage = 0;              //当前被选中的page
+    private String crtKeyword = null;           //当前的搜索keyword
+
+    private boolean isSongSearched = false;     //歌曲是否已经搜索
+    private boolean isSongListSearched = false; //歌单是否已经搜索
+
+    //是否达到最大页
+    private boolean isSongToMaxPage = false;
+    private boolean isSongListToMaxPage = false;
 
 
     private String musicType;
@@ -159,12 +165,7 @@ public class SearchActivity extends FragmentActivity {
                         crtKeyword = keywordTemp;
                         musicToolDataBase.insert(new SearchHistory(null, keywordInput.getText().toString()));
                         ViewUtil.hideKeyboard(SearchActivity.this, keywordInput);
-
-                        songs.clear();
-                        crtSongPagenum = 0;
-                        crtSongListPagenum = 0;
-                        isSongSearched = false;
-                        isSongListSearched = false;
+                        resetDataAndFlag();
                         switch (crtSelectPage) {
                             case 0: //搜索歌曲
                                 isSongSearched = true;
@@ -238,6 +239,7 @@ public class SearchActivity extends FragmentActivity {
             }
         });
 
+        //歌单被点击
         songlist_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -297,7 +299,6 @@ public class SearchActivity extends FragmentActivity {
             final View bottomChildView = listView.getChildAt(listView.getLastVisiblePosition() - listView.getFirstVisiblePosition());
             result = (listView.getHeight() >= bottomChildView.getBottom());
         }
-        ;
         return result;
     }
 
@@ -307,7 +308,7 @@ public class SearchActivity extends FragmentActivity {
      * @param keyword
      */
     private void searchSong(final String keyword) {
-        if (crtSongPagenum < MAX_PAGE_NUM) {
+        if (!isSongToMaxPage) {
             alert.show();
             final Handler handler = new Handler() {
                 @Override
@@ -337,12 +338,15 @@ public class SearchActivity extends FragmentActivity {
                             message.what = -1;
                         } else {
                             message.what = 1;
+                            isSongToMaxPage = songs1.size() < PAGE_SIZE;
                             songs.addAll(songs1);
                         }
                         handler.sendMessage(message);
                     }
                 }
             }).start();
+        } else { //歌曲达到最大页数
+
         }
     }
 
@@ -352,7 +356,7 @@ public class SearchActivity extends FragmentActivity {
      * @param keyword
      */
     private void searchSongList(final String keyword) {
-        if (crtSongListPagenum < MAX_PAGE_NUM) {
+        if (!isSongListToMaxPage) {
             alert.show();
             Log.i("搜索歌单页数:", crtSongListPagenum + "");
             final Handler handler = new Handler() {
@@ -383,12 +387,15 @@ public class SearchActivity extends FragmentActivity {
                             message.what = -1;
                         } else {
                             message.what = 1;
+                            isSongListToMaxPage = songLists1.size() < PAGE_SIZE;
                             songLists.addAll(songLists1);
                         }
                         handler.sendMessage(message);
                     }
                 }
             }).start();
+        } else { //歌单达到最大的page
+
         }
     }
 
@@ -399,5 +406,14 @@ public class SearchActivity extends FragmentActivity {
         return progressDialog;
     }
 
+    private void resetDataAndFlag() {
+        songs.clear();
+        crtSongPagenum = 0;
+        crtSongListPagenum = 0;
+        isSongSearched = false;
+        isSongListSearched = false;
+        isSongToMaxPage = false;
+        isSongListToMaxPage = false;
+    }
 
 }

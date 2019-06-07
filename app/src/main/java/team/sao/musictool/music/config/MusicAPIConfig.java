@@ -43,6 +43,10 @@ public class MusicAPIConfig {
     public static final String MUSIC_TYPE_MIGU = "migu";
     public static final String MUSIC_TYPE_BAIDU = "baidu";
 
+    //歌单类型
+    public static final String SONGLIST_ORDERTYPE_HOT = "hot";
+    public static final String SONGLIST_ORDERTYPE_NEW = "new";
+
 
     public static void main(String[] args) {
         System.out.println(SONG_PLAY_URL(MUSIC_TYPE_NETEASE, "424264505"));

@@ -27,10 +27,48 @@ public class QQMusicAPI implements MusicAPI {
     public static final String MUSIC_TYPE = MUSIC_TYPE_TECENT;
 
     public static void main(String[] args) {
-        MusicAPI api = new QQMusicAPI();
-        for (Song s: api.getSongsFromSongList("6914150646")) {
+        QQMusicAPI api = new QQMusicAPI();
+//        for (Song s: api.getSongsFromSongList("6914150646")) {
+//            System.out.println(s);
+//        }
+        for (SongList s : api.getHotSongList(SONGLIST_ORDERTYPE_HOT, 0, 20)) {
             System.out.println(s);
         }
+    }
+
+    //获取热门歌单
+    public static List<SongList> getHotSongList(String SONGLIST_TYPE, int pagenum, int pagesize) {
+        JSONArray songlist_result = null;
+        try {
+            songlist_result = JSON.parseObject(Jsoup.connect(API_BASE_URL + "/" + MUSIC_TYPE + "/songList/hot?cat=全部&pageSize="
+                    + pagesize + "&page=" + pagenum + "&orderType=" + SONGLIST_TYPE)
+                    .header("Content-type", "application/x-www-form-urlencoded")
+                    .method(Connection.Method.GET)
+                    .ignoreContentType(true)
+                    .execute()
+                    .body()).getJSONObject("data").getJSONArray("list")
+                    ;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        System.out.println(songlist_result);
+        List<SongList> songlists = new ArrayList<>();
+        for (Object o : songlist_result) {
+            try {
+                JSONObject songlist_jo = (JSONObject) o;
+                String id = songlist_jo.getString("dissid");
+                String imgUrl = songlist_jo.getString("imgurl");
+                String name = songlist_jo.getString("dissname");
+                Integer songCount = -1;
+                Integer playCount = songlist_jo.getInteger("listennum");
+                SongList songList = new SongList(MUSIC_TYPE, id, imgUrl, name, songCount, playCount);
+                songlists.add(songList);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return songlists;
     }
 
     @Override
@@ -98,6 +136,7 @@ public class QQMusicAPI implements MusicAPI {
         try {
             songlist_result = getSongListSearchJson(keyword, pagenum, pagesize).getJSONObject("data").getJSONArray("list");
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
         List<SongList> songlists = new ArrayList<>();
