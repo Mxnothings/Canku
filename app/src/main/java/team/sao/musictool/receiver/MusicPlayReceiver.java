@@ -124,7 +124,7 @@ public class MusicPlayReceiver extends BroadcastReceiver {
                     try {
                         playerInfo.setStatus(STATUS_LOADING);
                         new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(UPDATE_STATUS, true).send(mContext);
-                        mediaPlayer.setDataSource(context, Uri.parse(song.getDownloadUrl()));
+                        mediaPlayer.setDataSource(context, Uri.parse(song.SONG_PLAY_URL()));
                         mediaPlayer.prepare();
                         mediaPlayer.start();
                         playerInfo.setStatus(STATUS_PLAYING);
@@ -143,13 +143,19 @@ public class MusicPlayReceiver extends BroadcastReceiver {
     }
 
     private void nextSong() {
-        playMusic(mContext, playerInfo.nextSong());
-        new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(OPERATE, OP_UPDATE_UI_NOIMG).extra(UPDATE_STATUS, true).send(mContext); //更新ui noimg
+        Song song = playerInfo.nextSong();
+        if (song != null) {
+            playMusic(mContext, song);
+            new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(OPERATE, OP_UPDATE_UI_NOIMG).extra(UPDATE_STATUS, true).send(mContext); //更新ui noimg
+        }
     }
 
     private void preSong() {
-        playMusic(mContext, playerInfo.preSong());
-        new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(OPERATE, OP_UPDATE_UI_NOIMG).extra(UPDATE_STATUS, true).send(mContext); //更新ui noimg
+        Song song = playerInfo.nextSong();
+        if (song != null) {
+            playMusic(mContext, song);
+            new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(OPERATE, OP_UPDATE_UI_NOIMG).extra(UPDATE_STATUS, true).send(mContext); //更新ui noimg
+        }
     }
 
     private void pause() {

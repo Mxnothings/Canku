@@ -2,6 +2,11 @@ package team.sao.musictool.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.renderscript.Allocation;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
+import android.view.View;
 
 import java.io.*;
 import java.net.URL;
@@ -29,7 +34,6 @@ public class FastBlurUtil {
      * @return
      */
     public static int IO_BUFFER_SIZE = 2 * 1024;
-
 
     public static Bitmap GetUrlBitmap(String url, int scaleRatio) {
 

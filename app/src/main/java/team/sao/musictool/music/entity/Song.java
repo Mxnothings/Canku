@@ -3,6 +3,7 @@ package team.sao.musictool.music.entity;
 import com.alibaba.fastjson.annotation.JSONField;
 import team.sao.musictool.dao.autodatabase.annotation.DBColumn;
 import team.sao.musictool.dao.autodatabase.db.DataType;
+import team.sao.musictool.music.config.MusicAPIConfig;
 
 /****
  * @author:MrWangx
@@ -15,7 +16,6 @@ public class Song {
     private String name;        //歌名
     @DBColumn(primaryKey = true)
     private String songid;     //歌曲mid
-    private String downloadUrl;        //下载的相对地址 播放地址
     private String singer;      //歌手
     private String albumid;     //专辑id
     private String albumname;   //专辑名
@@ -28,11 +28,10 @@ public class Song {
 
     }
 
-    public Song(String musicType, String name, String songid, String downloadUrl, String singer, String albumid, String albumname, String imgurl, String alia, int duration) {
+    public Song(String musicType, String name, String songid, String singer, String albumid, String albumname, String imgurl, String alia, int duration) {
         this.musicType = musicType;
         this.name = name;
         this.songid = songid;
-        this.downloadUrl = downloadUrl;
         this.singer = singer;
         this.albumid = albumid;
         this.albumname = albumname;
@@ -47,9 +46,8 @@ public class Song {
                 "musicType='" + musicType + '\'' +
                 ", name='" + name + '\'' +
                 ", songid='" + songid + '\'' +
-                ", downloadUrl='" + downloadUrl + '\'' +
                 ", singer='" + singer + '\'' +
-                ", albumid=" + albumid +
+                ", albumid='" + albumid + '\'' +
                 ", albumname='" + albumname + '\'' +
                 ", imgurl='" + imgurl + '\'' +
                 ", alia='" + alia + '\'' +
@@ -86,12 +84,9 @@ public class Song {
         this.songid = songid;
     }
 
-    public String getDownloadUrl() {
-        return downloadUrl;
-    }
-
-    public void setDownloadUrl(String downloadUrl) {
-        this.downloadUrl = downloadUrl;
+    @JSONField(serialize = false)
+    public String SONG_PLAY_URL() {
+        return MusicAPIConfig.SONG_PLAY_URL(musicType, songid);
     }
 
     public String getSinger() {

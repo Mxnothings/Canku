@@ -23,6 +23,7 @@
         <activity android:name=".activity.MusicPlayActivity"
                   android:launchMode="singleInstance" />
         <activity android:name=".activity.SongsActivity"/>
+        <activity android:name=".activity.SongListActivity"/>
 
         <service android:name=".service.MusicPlayerService"/>
     </application>

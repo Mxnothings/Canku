@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:gravity="center_vertical"
+              android:layout_height="wrap_content" android:orientation="vertical">
+    <LinearLayout android:layout_width="match_parent"
+                  android:gravity="center_vertical"
+                  android:layout_height="70dp"
+                  android:orientation="horizontal"
+                  android:paddingLeft="10dp">
+        <ImageView android:layout_width="60dp"
+                   android:id="@+id/iv_songlist_img"
+                   android:src="@drawable/album_img"
+                   android:layout_height="60dp"/>
+        <LinearLayout android:layout_width="0dp"
+                      android:paddingLeft="10dp"
+                      android:layout_weight="1"
+                      android:layout_height="match_parent"
+                      android:gravity="center_vertical"
+                      android:orientation="vertical">
+            <TextView android:layout_width="match_parent"
+                      android:layout_height="40dp"
+                      android:paddingBottom="3dp"
+                      android:gravity="bottom"
+                      android:id="@+id/tv_songlist_name"
+                      android:textSize="@dimen/songlist_item_name_textsize"
+                      android:text="[你好骚啊]217的李瑞为什么这么骚"/>
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:gravity="center_vertical"
+                          android:orientation="horizontal">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="match_parent"
+                          android:gravity="top"
+                          android:textColor="@color/color_netease_text_lighter"
+                          android:id="@+id/tv_song_count"
+                          android:textSize="@dimen/songlist_item_info_textsize"
+                          android:text="666首"/>
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="match_parent"
+                          android:gravity="top"
+                          android:textColor="@color/color_netease_text_lighter"
+                          android:layout_marginLeft="15dp"
+                          android:id="@+id/tv_play_count"
+                          android:text="13664次播放"
+                          android:textSize="@dimen/songlist_item_info_textsize"/>
+            </LinearLayout>
+        </LinearLayout>
+        <ImageView android:layout_width="15dp"
+                   android:id="@+id/songslist_item_ic_music_type"
+                   android:layout_height="match_parent"/>
+    </LinearLayout>
+</LinearLayout>

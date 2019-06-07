@@ -15,11 +15,11 @@ public class LocalSong extends team.sao.musictool.music.entity.Song {
     public LocalSong() {
     }
 
-    public LocalSong(String musicType, String name, String songid, String downloadUrl, String singer, String albumid, String albumname, String imgurl, String alia, int duration) {
-        super(musicType, name, songid, downloadUrl, singer, albumid, albumname, imgurl, alia, duration);
+    public LocalSong(String musicType, String name, String songid,  String singer, String albumid, String albumname, String imgurl, String alia, int duration) {
+        super(musicType, name, songid, singer, albumid, albumname, imgurl, alia, duration);
     }
 
     public LocalSong(Song song) {
-        super(song.getMusicType(), song.getName(), song.getSongid(), song.getDownloadUrl(), song.getSinger(), song.getAlbumid(), song.getAlbumname(), song.getImgurl(), song.getAlia(), song.getDuration());
+        super(song.getMusicType(), song.getName(), song.getSongid(), song.getSinger(), song.getAlbumid(), song.getAlbumname(), song.getImgurl(), song.getAlia(), song.getDuration());
     }
 }

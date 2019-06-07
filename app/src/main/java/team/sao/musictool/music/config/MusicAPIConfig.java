@@ -19,6 +19,8 @@ public class MusicAPIConfig {
     public static final String SONG_IMG_BASE_URL = "/pic?id=${songid}";
     //歌词
     public static final String LYRIC_BASE_URL = "/lrc?id=${songid}";
+    //歌单
+    public static final String SONGLIST_BASE_URL = "/songList?id=${songlistid}";
 
 
 
@@ -79,9 +81,24 @@ public class MusicAPIConfig {
         return API_BASE_URL + "/" + MUSICTYPE + "/pic?id=" + songid;
     }
 
-    public static final String LYRIC_URL(String MUSICTYPE, String songid) {
+    /**
+     * 获取歌词的url
+     * @param MUSICTYPE
+     * @param songid
+     * @return
+     */
+    public static String LYRIC_URL(String MUSICTYPE, String songid) {
         return API_BASE_URL + "/" + MUSICTYPE + "/lrc?id=" + songid;
     }
 
+    /**
+     * 获取歌单的url
+     * @param MUSICTYPE
+     * @param songlistid
+     * @return
+     */
+    public static String SONGLIST_URL(String MUSICTYPE, String songlistid) {
+        return API_BASE_URL + "/" + MUSICTYPE + "/songList?id=" + songlistid;
+    }
 
 }

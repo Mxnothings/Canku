@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.*;
 import team.sao.musictool.MainApp;
 import team.sao.musictool.R;
-import team.sao.musictool.adapter.SongListViewAdapter;
+import team.sao.musictool.adapter.SongAdapter;
 import team.sao.musictool.annotation.ViewID;
 import team.sao.musictool.config.PlayerInfo;
 import team.sao.musictool.config.ReceiverAction;
@@ -45,7 +45,7 @@ public class SongsActivity extends FragmentActivity {
     private FragmentManager fragmentManager;
     private PlayBarFragment playBar;
     private List<Song> songs;
-    private SongListViewAdapter songListViewAdapter;
+    private SongAdapter songAdapter;
     private PlayerInfo playerInfo = PlayerInfo.getInstance();
 
     @ViewID(R.id.activity_songs_icon_back)
@@ -96,7 +96,7 @@ public class SongsActivity extends FragmentActivity {
 
         //获取歌曲
         songs = musicToolDataBase.selectTableAll(entityClass);
-        songslist.setAdapter(songListViewAdapter = new SongListViewAdapter(this, songs));
+        songslist.setAdapter(songAdapter = new SongAdapter(this, songs));
 
     }
 
@@ -129,7 +129,7 @@ public class SongsActivity extends FragmentActivity {
                                 Toast.makeText(MainApp.getInstance(), "删除记录:" + retult, Toast.LENGTH_SHORT).show();
                             }
                             songs.clear();
-                            songListViewAdapter.notifyDataSetChanged();
+                            songAdapter.notifyDataSetChanged();
                         }
                     });
                     aBuilder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -188,6 +188,6 @@ public class SongsActivity extends FragmentActivity {
         List<Song> tSongs = musicToolDataBase.selectTableAll(entityClass);
         songs.clear();
         songs.addAll(tSongs);
-        songListViewAdapter.notifyDataSetChanged();
+        songAdapter.notifyDataSetChanged();
     }
 }

@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 import team.sao.musictool.R;
 import team.sao.musictool.adapter.FragmentMusicItemAdapter;
 import team.sao.musictool.annotation.ViewID;
@@ -16,7 +15,7 @@ import team.sao.musictool.annotation.ViewID;
 import java.util.ArrayList;
 import java.util.List;
 
-import static team.sao.musictool.annotation.AnnotationProcesser.*;
+import static team.sao.musictool.annotation.AnnotationProcesser.inject;
 
 /**
  * \* Author: MrWangx

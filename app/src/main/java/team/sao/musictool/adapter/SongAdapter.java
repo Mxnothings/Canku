@@ -25,7 +25,7 @@ import static team.sao.musictool.music.config.MusicAPIConfig.*;
  * \* Time: 17:44
  * \* Description:
  **/
-public class SongListViewAdapter extends BaseAdapter {
+public class SongAdapter extends BaseAdapter {
 
     @ViewID(R.id.tv_song_name)
     private TextView songName;
@@ -43,14 +43,14 @@ public class SongListViewAdapter extends BaseAdapter {
     private List<Song> songs;
     private boolean reversal;
 
-    public SongListViewAdapter(Context context, List<Song> songs) {
+    public SongAdapter(Context context, List<Song> songs) {
         this.context = context;
         this.songs = songs;
         this.inflater = LayoutInflater.from(context);
         this.reversal = false;
     }
 
-    public SongListViewAdapter(Context context, List<Song> songs, boolean reversal) {
+    public SongAdapter(Context context, List<Song> songs, boolean reversal) {
         this.context = context;
         this.songs = songs;
         this.inflater = LayoutInflater.from(context);
@@ -75,8 +75,8 @@ public class SongListViewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Song song = reversal ? songs.get(songs.size() - 1 - position) : songs.get(position);
-        convertView = inflater.inflate(R.layout.songlist_item, null);
-        inject(this, SongListViewAdapter.class, convertView);
+        convertView = inflater.inflate(R.layout.song_listview_item, null);
+        inject(this, SongAdapter.class, convertView);
         switch (song.getMusicType()) {
             case MUSIC_TYPE_TECENT:
                 musicType.setImageResource(R.drawable.qqmusic_logo);
