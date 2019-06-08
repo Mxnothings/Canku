@@ -81,7 +81,8 @@ public class PlayerInfo {
 
     public synchronized void setPlayingSong(Song playingSong) {
         this.playingSong = playingSong;
-        Object o = musicToolDataBase.selectTableByPrimaryKey(MyFavorSong.class, "'" + playingSong.getSongid() + "'"); //查找是否是我的喜欢
+        Log.i("*********", "val:" + "'" + playingSong.getMusicType() + "','" + playingSong.getSongid() + "'");
+        Object o = musicToolDataBase.selectTableByPrimaryKey(MyFavorSong.class, "'" + playingSong.getMusicType() + "'", "'" + playingSong.getSongid() + "'"); //查找是否是我的喜欢
         setMyFavor(o == null ? false : true);
         setPosition(0);
     }

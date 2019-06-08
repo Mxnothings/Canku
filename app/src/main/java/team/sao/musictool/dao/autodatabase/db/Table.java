@@ -1,5 +1,9 @@
 package team.sao.musictool.dao.autodatabase.db;
 
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -8,7 +12,7 @@ import java.util.Map;
  * \* Time: 15:03
  * \* Description:
  **/
-public class Table  {
+public class Table {
 
     private String tableCreateSQL;
     private String insertSQL;
@@ -16,7 +20,7 @@ public class Table  {
     private String baseDeleteSQL;
 
     private String tablename;
-    private String primaryKey;
+    private List<String> primaryKeys;
     private Class entityClass;
     private Map<String, Column> columns;
 
@@ -24,11 +28,15 @@ public class Table  {
         this.tablename = tablename;
         this.columns = columns;
         this.entityClass = entityClass;
-        this.tableCreateSQL = tableCreateSQL(this);
-        this.insertSQL = insertSQL(this);
-        this.baseSelectSQL = baseSelectSQL(this);
-        this.baseDeleteSQL = baseDeleteSQL(this);
         setPrimaryKey();
+        this.tableCreateSQL = tableCreateSQL(this);
+        Log.i("Table " + tablename + " tableCreateSQL:", tableCreateSQL);
+        this.insertSQL = insertSQL(this);
+        Log.i("Table " + tablename + " insertSQL:", insertSQL);
+        this.baseSelectSQL = baseSelectSQL(this);
+        Log.i("Table " + tablename + " baseSelectSQL:", baseSelectSQL);
+        this.baseDeleteSQL = baseDeleteSQL(this);
+        Log.i("Table " + tablename + " baseDeleteSQL:", baseDeleteSQL);
     }
 
 
@@ -40,16 +48,44 @@ public class Table  {
         String tablename = table.getTablename();
         StringBuffer sql = new StringBuffer();
         sql.append("create table " + tablename + "(");
-        for (Map.Entry<String, Column> e : table.getColumns().entrySet()) {
-            Column column = e.getValue();
-            String cname = column.getName();
-            String type = column.getDataType().typeName();
-            String primarykey = column.isPrimaryKey() ? "primary key" : "";
-            String autoincrement = column.isAutoincrement() ? "autoincrement" : "";
-            sql.append(cname + " " + type + " " + primarykey + " " + autoincrement + ",");
+        String[] primaryKeys = table.getPrimaryKeys();
+        if (primaryKeys == null) {
+            for (Map.Entry<String, Column> e : table.getColumns().entrySet()) {
+                Column column = e.getValue();
+                String cname = column.getName();
+                String type = column.getDataType().typeName();
+                String autoincrement = column.isAutoincrement() ? "autoincrement" : "";
+                sql.append(cname + " " + type + " " + autoincrement + ",");
+            }
+            sql.deleteCharAt(sql.length() - 1);
+            sql.append(")");
+        } else if (primaryKeys.length == 1) {
+            for (Map.Entry<String, Column> e : table.getColumns().entrySet()) {
+                Column column = e.getValue();
+                String cname = column.getName();
+                String type = column.getDataType().typeName();
+                String primaryKey = column.isPrimaryKey() ? "primary key" : "";
+                String autoincrement = column.isAutoincrement() ? "autoincrement" : "";
+                sql.append(cname + " " + type + " " + primaryKey + " " + autoincrement + ",");
+            }
+            sql.deleteCharAt(sql.length() - 1);
+            sql.append(")");
+        } else if (primaryKeys.length > 1) {
+            for (Map.Entry<String, Column> e : table.getColumns().entrySet()) {
+                Column column = e.getValue();
+                String cname = column.getName();
+                String type = column.getDataType().typeName();
+                String autoincrement = column.isAutoincrement() ? "autoincrement" : "";
+                sql.append(cname + " " + type + " " + autoincrement + ",");
+            }
+            sql.append("primary key(");
+            for (String primaryKey : primaryKeys) {
+                sql.append(primaryKey + ",");
+            }
+            sql.deleteCharAt(sql.length() - 1);
+            sql.append(")");
+            sql.append(")");
         }
-        sql.deleteCharAt(sql.length() - 1);
-        sql.append(")");
         return sql.toString();
     }
 
@@ -79,13 +115,15 @@ public class Table  {
     }
 
 
+    //设置主键
     private void setPrimaryKey() {
+        List<String> primaryKeysTemp = new ArrayList<>();
         for (Column column : columns.values()) {
             if (column.isPrimaryKey()) {
-                this.primaryKey = column.getName();
-                break;
+                primaryKeysTemp.add(column.getName());
             }
         }
+        primaryKeys = primaryKeysTemp.isEmpty() ? null : primaryKeysTemp;
     }
 
     public Column addColumn(Column column) {
@@ -108,8 +146,14 @@ public class Table  {
         return entityClass;
     }
 
-    public String getPrimaryKey() {
-        return primaryKey;
+    public String[] getPrimaryKeys() {
+        if (primaryKeys == null) return null;
+        String[] pKeys = new String[primaryKeys.size()];
+        for (int i = 0; i < primaryKeys.size(); i++){
+            pKeys[i] = primaryKeys.get(i);
+            Log.i("******", "getPrimaryKeys: " + pKeys[i]);
+        }
+        return pKeys;
     }
 
     public String getInsertSQL() {

@@ -98,20 +98,21 @@ public class AutoDataBase extends SQLiteOpenHelper {
                 }
                 cursor.close();
             } catch (Exception e) {
+                e.printStackTrace();
                 Log.e("查询" + tablename, "失败");
             }
         }
         return list;
     }
 
-    public List select(Class entityClass, String condition,  String[] arg) {
+    public List select(Class entityClass, String condition, String[] arg) {
         Table table = getTable(entityClass);
-        return select(table.getTablename(), condition,  arg);
+        return select(table.getTablename(), condition, arg);
     }
 
 
     public List selectTableAll(String tablename) {
-        return select(tablename,"", null);
+        return select(tablename, "", null);
     }
 
     public List selectTableAll(Class entityClass) {
@@ -119,20 +120,29 @@ public class AutoDataBase extends SQLiteOpenHelper {
         return selectTableAll(table.getTablename());
     }
 
-    public Object selectTableByPrimaryKey(String tablename, String val) {
+    public Object selectTableByPrimaryKey(String tablename, String... val) {
         Table table = getTable(tablename);
         if (table != null) {
-            List list = select(table.getTablename(), "where " + table.getPrimaryKey() + " = " + val, null);
+            StringBuffer sql = new StringBuffer("where");
+            String[] primaryKeys = table.getPrimaryKeys();
+            if (primaryKeys != null && val != null && primaryKeys.length == val.length) {
+                int i;
+                for (i = 0; i < primaryKeys.length - 1; i++) {
+                    sql.append(" " + primaryKeys[i] + "=" + val[i] + " and");
+                }
+                sql.append(" " + primaryKeys[i] + "=" + val[i]);
+            }
+            Log.i("****", "selectTableByPrimaryKey: " + sql.toString());
+            List list = select(table.getTablename(), sql.toString(), null);
             if (list != null && !list.isEmpty()) return list.get(0);
         }
         return null;
     }
 
-    public Object selectTableByPrimaryKey(Class entityClass, String val) {
+    public Object selectTableByPrimaryKey(Class entityClass, String... val) {
         Table table = getTable(entityClass);
         if (table != null) {
-            List list = select(table.getTablename(), "where " + table.getPrimaryKey() + " = " + val, null);
-            if (list != null && !list.isEmpty()) return list.get(0);
+            return selectTableByPrimaryKey(table.getTablename(), val);
         }
         return null;
     }
@@ -194,18 +204,29 @@ public class AutoDataBase extends SQLiteOpenHelper {
         return delete(entityClass, null, null);
     }
 
-    public int deleteByPrimaryKey(String tablename, String val) {
+    public int deleteByPrimaryKey(String tablename, String... val) {
         Table table = getTable(tablename);
         if (table != null) {
-            return delete(table.getTablename(), table.getPrimaryKey() + " = " + val, null);
+            StringBuffer sql = new StringBuffer();
+            String[] primaryKeys = table.getPrimaryKeys();
+            if (primaryKeys != null && val != null && primaryKeys.length == val.length) {
+                for (int i = 0; i < primaryKeys.length; i++) {
+                    if (i == primaryKeys.length - 1) {
+                        sql.append(" " + primaryKeys[i] + "=" + val);
+                    } else {
+                        sql.append(" " + primaryKeys[i] + "=" + val + "and");
+                    }
+                }
+            }
+            return delete(table.getTablename(), sql.toString(), null);
         }
         return 0;
     }
 
-    public int deleteByPrimaryKey(Class entityClass, String val) {
+    public int deleteByPrimaryKey(Class entityClass, String... val) {
         Table table = getTable(entityClass);
         if (table != null) {
-            return delete(table.getTablename(), table.getPrimaryKey() + " = " + val, null);
+            return deleteByPrimaryKey(table.getTablename(), val);
         }
         return 0;
     }

@@ -12,6 +12,7 @@ import team.sao.musictool.music.config.MusicAPIConfig;
  *****/
 public class Song {
 
+    @DBColumn(primaryKey = true)
     private String musicType;      //音乐类型
     private String name;        //歌名
     @DBColumn(primaryKey = true)

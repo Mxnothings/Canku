@@ -151,7 +151,7 @@ public class MusicPlayReceiver extends BroadcastReceiver {
     }
 
     private void preSong() {
-        Song song = playerInfo.nextSong();
+        Song song = playerInfo.preSong();
         if (song != null) {
             playMusic(mContext, song);
             new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(OPERATE, OP_UPDATE_UI_NOIMG).extra(UPDATE_STATUS, true).send(mContext); //更新ui noimg

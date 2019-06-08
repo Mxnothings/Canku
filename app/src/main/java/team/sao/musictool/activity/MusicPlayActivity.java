@@ -189,7 +189,7 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
                     if (playerInfo.getPlayingSong() != null) {
                         String msg ;
                         if (playerInfo.isMyFavor()) {
-                            int flag = musicToolDataBase.deleteByPrimaryKey(MyFavorSong.class, "'" + playerInfo.getPlayingSong().getSongid() + "'");
+                            int flag = musicToolDataBase.deleteByPrimaryKey(MyFavorSong.class, "'" + playerInfo.getPlayingSong().getMusicType() + "'", "'" + playerInfo.getPlayingSong().getSongid() + "'");
                             if (flag > 0) {
                                 msg = "取消喜欢成功";
                                 playerInfo.setMyFavor(false);

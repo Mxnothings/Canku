@@ -110,6 +110,11 @@ public class SearchActivity extends FragmentActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        alert.dismiss();
+        super.onDestroy();
+    }
 
     /**
      *
