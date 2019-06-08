@@ -67,6 +67,14 @@ public interface MusicAPI {
      */
     JSONObject getSongListSearchJson(String keyword, int pagenum, int pagesize) throws IOException;
 
+
+    /**
+     * 获取歌词
+     * @param songid
+     * @return
+     */
+    String getLyric(String songid);
+
     /**
      * 获取歌单搜索的url
      * @param keyword

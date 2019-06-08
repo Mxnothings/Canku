@@ -159,6 +159,22 @@ public class KugouMusicAPI implements MusicAPI {
     }
 
     @Override
+    public String getLyric(String songid) {
+        String lyric = null;
+        try {
+            lyric = Jsoup.connect(LYRIC_URL(MUSIC_TYPE, songid))
+                    .header("Content-type", "application/x-www-form-urlencoded")
+                    .method(Connection.Method.GET)
+                    .ignoreContentType(true)
+                    .execute()
+                    .body();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lyric;
+    }
+
+    @Override
     public String getSongListSearchURL(String keyword, int pagenum, int pagesize) {
         return SEARCH_URL(MUSIC_TYPE, keyword, SEARCH_TYPE_SONGLIST, pagenum, pagesize);
     }

@@ -6,11 +6,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.util.Log;
 import team.sao.musictool.config.PlayerInfo;
 import team.sao.musictool.config.ReceiverAction;
 import team.sao.musictool.dao.MusicToolDataBase;
 import team.sao.musictool.entity.RecentSong;
+import team.sao.musictool.music.MusicAPIHolder;
 import team.sao.musictool.music.entity.Song;
 import team.sao.musictool.util.IntentBuilder;
 
@@ -35,8 +37,9 @@ public class MusicPlayReceiver extends BroadcastReceiver {
     private PlayerInfo playerInfo = PlayerInfo.getInstance();
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private MusicToolDataBase musicToolDataBase;
-    private Thread imgT;
-    private Thread playSongT;
+    private LoadPlyerSongTask songTask;
+    private LoadImgTask imgTask;
+    private LoadLyricTask lyricTask;
 
     private volatile boolean s = true;
 
@@ -48,7 +51,6 @@ public class MusicPlayReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         int operate = intent.getIntExtra(OPERATE, -1);
-        IntentBuilder ib = new IntentBuilder();
         switch (operate) {
             case OP_PLAY:          //播放音乐
                 playMusic(context, playerInfo.getPlayingSong());
@@ -85,6 +87,15 @@ public class MusicPlayReceiver extends BroadcastReceiver {
                 mediaPlayer = null;
                 s = true;
             }
+            if (songTask != null && !songTask.isCancelled()) {
+                songTask.cancel(true);
+            }
+            if (imgTask != null && !imgTask.isCancelled()) {
+                imgTask.cancel(true);
+            }
+            if (lyricTask != null && !lyricTask.isCancelled()) {
+                lyricTask.cancel(true);
+            }
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
                 @Override
@@ -101,7 +112,7 @@ public class MusicPlayReceiver extends BroadcastReceiver {
                     nextSong();
                 }
             });
-            mediaPlayer.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() {
+            mediaPlayer.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() { //设置seek完成
                 @Override
                 public void onSeekComplete(MediaPlayer mp) {
                     if (playerInfo.getStatus() == STATUS_PLAYING) {
@@ -109,36 +120,15 @@ public class MusicPlayReceiver extends BroadcastReceiver {
                     }
                 }
             });
+            playerInfo.setStatus(STATUS_PAUSE);
             new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(OPERATE, OP_UPDATE_UI_NOIMG).extra(UPDATE_STATUS, true).send(mContext); //更新ui noimg
-            new Thread(new Runnable() {
-                @Override
-                public void run() { //获取图片
-                    Bitmap img = getURLimage(song.getImgurl());
-                    playerInfo.setSongImg(img);
-                    new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(OPERATE, OP_UPDATE_UI_IMG).send(mContext);
-                }
-            }).start();
-            new Thread(new Runnable() {
-                @Override
-                public void run() { //加载音乐
-                    try {
-                        playerInfo.setStatus(STATUS_LOADING);
-                        new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(UPDATE_STATUS, true).send(mContext);
-                        mediaPlayer.setDataSource(context, Uri.parse(song.SONG_PLAY_URL()));
-                        mediaPlayer.prepare();
-                        mediaPlayer.start();
-                        playerInfo.setStatus(STATUS_PLAYING);
-                        playerInfo.setPosition(0);
-                        playerInfo.getPlayingSong().setDuration(mediaPlayer.getDuration() / 1000);
-                        new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(UPDATE_STATUS, true).send(mContext);
-                        startUpdateProgres();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        playerInfo.setStatus(STATUS_PAUSE);
-                        new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(UPDATE_STATUS, true).send(mContext);
-                    }
-                }
-            }).start();
+
+            imgTask = new LoadImgTask();
+            imgTask.execute(song.getImgurl()); //加载图片
+            lyricTask = new LoadLyricTask();
+            lyricTask.execute(); //加载歌词
+            songTask = new LoadPlyerSongTask(context);
+            songTask.execute(song.SONG_PLAY_URL()); //加载音乐
         }
     }
 
@@ -146,7 +136,6 @@ public class MusicPlayReceiver extends BroadcastReceiver {
         Song song = playerInfo.nextSong();
         if (song != null) {
             playMusic(mContext, song);
-            new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(OPERATE, OP_UPDATE_UI_NOIMG).extra(UPDATE_STATUS, true).send(mContext); //更新ui noimg
         }
     }
 
@@ -154,7 +143,6 @@ public class MusicPlayReceiver extends BroadcastReceiver {
         Song song = playerInfo.preSong();
         if (song != null) {
             playMusic(mContext, song);
-            new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(OPERATE, OP_UPDATE_UI_NOIMG).extra(UPDATE_STATUS, true).send(mContext); //更新ui noimg
         }
     }
 
@@ -178,25 +166,20 @@ public class MusicPlayReceiver extends BroadcastReceiver {
         if (mediaPlayer != null) {
             Log.i("seek", "接收到seek" + position);
             mediaPlayer.seekTo(position);
-            playerInfo.setPosition(position / 1000);
+            playerInfo.setPosition(position);
         }
     }
 
-    private void startUpdateProgres() {
+    private void startUpdateProgress() {
         executor.execute(new Runnable() {
             @Override
             public void run() {
                 while (s) {
                     try {
                         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-                            int position = mediaPlayer.getCurrentPosition() / 1000;
+                            int position = mediaPlayer.getCurrentPosition();
                             playerInfo.setPosition(position);
                             new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(OPERATE, OP_UPDATE_PROGRESS).extra(POSITION, position).send(mContext);
-                        }
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
                         }
                     } catch (IllegalArgumentException e) {
                         e.printStackTrace();
@@ -214,5 +197,82 @@ public class MusicPlayReceiver extends BroadcastReceiver {
                     .send(mContext);
         }
     }
+
+    private class LoadLyricTask extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            Song song = playerInfo.getPlayingSong();
+            String lyric = MusicAPIHolder.getAPI(song.getMusicType()).getLyric(song.getSongid());
+            return lyric;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            playerInfo.setLyric(s);
+            new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(OPERATE, OP_UPDATE_LYRIC).send(mContext);
+        }
+    }
+
+    private class LoadPlyerSongTask extends AsyncTask<String, Integer, String>{
+
+        private Context context;
+
+        public LoadPlyerSongTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                publishProgress(STATUS_LOADING);
+                mediaPlayer.setDataSource(context, Uri.parse(strings[0]));
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+                publishProgress(STATUS_PLAYING);
+            } catch (IOException e) {
+                e.printStackTrace();
+                playerInfo.setStatus(STATUS_PAUSE);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            playerInfo.setStatus(values[0]);
+            switch (values[0]) {
+                case STATUS_LOADING:
+                    break;
+                case STATUS_PLAYING:
+                    playerInfo.getPlayingSong().setDuration(mediaPlayer.getDuration() / 1000);
+                    startUpdateProgress();
+                    break;
+                case STATUS_PAUSE:
+                    break;
+            }
+            new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(UPDATE_STATUS, true).send(mContext);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+        }
+    }
+
+    private class LoadImgTask extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            Bitmap img = getURLimage(strings[0]);
+            playerInfo.setSongImg(img);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            new IntentBuilder().action(ReceiverAction.MUSICPLAY_UI).extra(OPERATE, OP_UPDATE_UI_IMG).send(mContext);
+        }
+
+    }
+
 
 }

@@ -36,8 +36,9 @@ public class PlayerInfo {
     public static final int OP_UPDATE_UI_NOIMG = 6;             //更新ui
     public static final int OP_UPDATE_UI_IMG = 7;               //更新ui
     public static final int OP_SEND_UPDATE_UI = 8;              //发送更新UI信息
-    public static final int OP_SEEKTO = 9;                      //
-    public static final int OP_UPDATE_PROGRESS = 10;
+    public static final int OP_SEEKTO = 9;                      //滑动到
+    public static final int OP_UPDATE_PROGRESS = 10;            //更新进度
+    public static final int OP_UPDATE_LYRIC = 11;               //更新歌词
 
     //播放状态
     public static final int STATUS_NOTINIT = -1;
@@ -62,8 +63,9 @@ public class PlayerInfo {
     private Bitmap songImg;
     private int playingSongIndex = -1;
     private int status = STATUS_NOTINIT;
-    private int position = 0;
+    private int position = 0; //当前播放位置 ms
     private Song playingSong;
+    private String lyric = null;
     private boolean isMyFavor = false;
     private MusicToolDataBase musicToolDataBase = MusicToolDataBase.getInstance(MainApp.getInstance());
 
@@ -85,6 +87,7 @@ public class PlayerInfo {
         Object o = musicToolDataBase.selectTableByPrimaryKey(MyFavorSong.class, "'" + playingSong.getMusicType() + "'", "'" + playingSong.getSongid() + "'"); //查找是否是我的喜欢
         setMyFavor(o == null ? false : true);
         setPosition(0);
+        setLyric(null);
     }
 
     public List<Song> getPlay_list() {
@@ -154,6 +157,14 @@ public class PlayerInfo {
 
     public synchronized void setMyFavor(boolean myFavor) {
         isMyFavor = myFavor;
+    }
+
+    public String getLyric() {
+        return lyric;
+    }
+
+    public synchronized void setLyric(String lyric) {
+        this.lyric = lyric;
     }
 
     //获取图片

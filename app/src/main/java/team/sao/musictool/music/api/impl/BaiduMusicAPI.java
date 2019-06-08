@@ -30,12 +30,12 @@ public class BaiduMusicAPI implements MusicAPI {
 //        for (SongList s: musicAPI.searchSongList("花", 0, 20)) {
 //            System.out.println(s);
 //        }
-        for (Song s: musicAPI.getSongsFromSongList("566322464")) {
-            System.out.println(s);
-        }
-//        for (Song s : musicAPI.searchSong("花粥", 0, 20)) {
+//        for (Song s: musicAPI.getSongsFromSongList("566322464")) {
 //            System.out.println(s);
 //        }
+        for (Song s : musicAPI.searchSong("花粥", 0, 20)) {
+            System.out.println(s);
+        }
     }
 
     @Override
@@ -157,6 +157,22 @@ public class BaiduMusicAPI implements MusicAPI {
                 .execute()
                 .body())
                 ;
+    }
+
+    @Override
+    public String getLyric(String songid) {
+        String lyric = null;
+        try {
+            lyric = Jsoup.connect(LYRIC_URL(MUSIC_TYPE, songid))
+                    .header("Content-type", "application/x-www-form-urlencoded")
+                    .method(Connection.Method.GET)
+                    .ignoreContentType(true)
+                    .execute()
+                    .body();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lyric;
     }
 
     @Override

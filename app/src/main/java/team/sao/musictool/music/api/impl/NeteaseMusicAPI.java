@@ -28,12 +28,13 @@ public class NeteaseMusicAPI implements MusicAPI {
 
     public static void main(String[] args) throws IOException {
         NeteaseMusicAPI musicAPI = new NeteaseMusicAPI();
-        for (SongList s: musicAPI.getHotSongList(SONGLIST_ORDERTYPE_HOT, 0, 20)) {
-            System.out.println(s);
-        }
+//        for (SongList s: musicAPI.getHotSongList(SONGLIST_ORDERTYPE_HOT, 0, 20)) {
+//            System.out.println(s);
+//        }
 //        for (Song s: musicAPI.getSongsFromSongList("2324451155")) {
 //            System.out.println(s);
 //        }
+        System.out.println(musicAPI.getLyric("1357999894"));
 
     }
 
@@ -200,6 +201,22 @@ public class NeteaseMusicAPI implements MusicAPI {
                 .execute()
                 .body())
                 ;
+    }
+
+    @Override
+    public String getLyric(String songid) {
+        String lyric = null;
+        try {
+            lyric = Jsoup.connect(LYRIC_URL(MUSIC_TYPE, songid))
+                    .header("Content-type", "application/x-www-form-urlencoded")
+                    .method(Connection.Method.GET)
+                    .ignoreContentType(true)
+                    .execute()
+                    .body();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lyric;
     }
 
     @Override

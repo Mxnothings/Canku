@@ -1,13 +1,13 @@
 package team.sao.musictool.activity;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,18 +15,24 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import me.wcy.lrcview.LrcView;
 import team.sao.musictool.MainApp;
 import team.sao.musictool.R;
+import team.sao.musictool.adapter.MusicPlayPagerAdapter;
 import team.sao.musictool.annotation.ViewID;
 import team.sao.musictool.config.PlayerInfo;
 import team.sao.musictool.config.ReceiverAction;
 import team.sao.musictool.dao.MusicToolDataBase;
 import team.sao.musictool.entity.MyFavorSong;
+import team.sao.musictool.music.MusicAPIHolder;
 import team.sao.musictool.music.entity.Song;
 import team.sao.musictool.receiver.MusicPlayReceiver;
 import team.sao.musictool.util.FastBlurUtil;
 import team.sao.musictool.util.IntentBuilder;
 import team.sao.musictool.util.StatusBarUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static team.sao.musictool.annotation.AnnotationProcesser.inject;
 import static team.sao.musictool.config.PlayerInfo.*;
@@ -44,22 +50,20 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
 
     @ViewID(R.id.background_blur)
     private ImageView background_blur;
-    @ViewID(R.id.activity_play_music_logo)
+    @ViewID(R.id.activity_music_play_logo)
     private ImageView musicLogo;
     @ViewID(R.id.ic_back)
     private ImageView back;
     @ViewID(R.id.songname)
     private TextView songname;
+    @ViewID(R.id.singer)
+    private TextView singer;
     @ViewID(R.id.crttime)
     private TextView crttime;
     @ViewID(R.id.total_time)
     private TextView totalTime;
     @ViewID(R.id.seek_progress)
     private SeekBar seekProgress;
-    @ViewID(R.id.singer)
-    private TextView singer;
-    @ViewID(R.id.album_img)
-    private ImageView aimg;
     @ViewID(R.id.ic_like)
     private ImageView like;
     @ViewID(R.id.ic_download)
@@ -72,6 +76,15 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
     private ImageView play_pause;
     @ViewID(R.id.ic_nextsong)
     private ImageView nextsong;
+
+    @ViewID(R.id.activity_music_play_pager)
+    private ViewPager pager;
+    private List<View> pagerViews;
+    private MusicPlayPagerAdapter pagerAdapter;
+    private View view_lyric;
+    private View view_albumimg;
+    private LrcView lrc;
+    private ImageView aimg;
 
     private PlayerInfo playerInfo = PlayerInfo.getInstance();
     private MusicPlayActivityReceiver receiver;
@@ -97,6 +110,17 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
     }
 
     private void initDataAndView() {
+        //初始化歌词和专辑封面 以及 pager
+        pagerViews = new ArrayList<>();
+        view_lyric = View.inflate(this, R.layout.view_music_play_lyric, null);
+        lrc = view_lyric.findViewById(R.id.lyc_view);
+        view_albumimg = View.inflate(this, R.layout.view_music_play_albumimg, null);
+        aimg = view_albumimg.findViewById(R.id.album_img);
+        pagerViews.add(view_albumimg);
+        pagerViews.add(view_lyric);
+        pager.setAdapter(pagerAdapter = new MusicPlayPagerAdapter(pagerViews));
+
+        //初始化媒体信息
         Song song = playerInfo.getPlayingSong();
         Bitmap img = playerInfo.getSongImg();
         if (song != null) {
@@ -187,7 +211,7 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
                     break;
                 case R.id.ic_like: //喜欢
                     if (playerInfo.getPlayingSong() != null) {
-                        String msg ;
+                        String msg;
                         if (playerInfo.isMyFavor()) {
                             int flag = musicToolDataBase.deleteByPrimaryKey(MyFavorSong.class, "'" + playerInfo.getPlayingSong().getMusicType() + "'", "'" + playerInfo.getPlayingSong().getSongid() + "'");
                             if (flag > 0) {
@@ -255,7 +279,7 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
             if (opt != -1) {
                 switch (opt) {
                     case OP_UPDATE_UI: //更新所有ui
-                        Song song = playerInfo.getPlayingSong();
+                        final Song song = playerInfo.getPlayingSong();
                         if (song != null) {
                             seekProgress.setMax(song.getDuration());
                             songname.setText(song.getName());
@@ -266,7 +290,7 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
                                 aimg.setImageBitmap(playerInfo.getSongImg());
                                 background_blur.setImageBitmap(FastBlurUtil.toBlur(playerInfo.getSongImg(), 10));
                             }
-                            int position = playerInfo.getPosition();
+                            int position = playerInfo.getPosition() / 1000;
                             seekProgress.setProgress(position);
                             crttime.setText(formatTime(position));
                             switch (playerInfo.getPlayingSong().getMusicType()) {
@@ -286,6 +310,8 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
                                     musicLogo.setImageResource(R.drawable.baidu_music_logo);
                                     break;
                             }
+                            lrc.loadLrc(playerInfo.getLyric());
+                            lrc.updateTime(playerInfo.getPosition());
                         }
                         break;
                     case OP_UPDATE_UI_IMG: //更新img的ui
@@ -322,15 +348,22 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
                                     musicLogo.setImageResource(R.drawable.baidu_music_logo);
                                     break;
                             }
+                            lrc.loadLrc(playerInfo.getLyric());
+                            lrc.updateTime(playerInfo.getPosition());
                         }
                         break;
                     case OP_UPDATE_PROGRESS:
                         if (!isSeeking) {
                             int position = intent.getIntExtra(POSITION, 0);
-                            crttime.setText(formatTime(position));
-                            seekProgress.setProgress(position);
+                            crttime.setText(formatTime(position / 1000));
+                            seekProgress.setProgress(position / 1000);
+                            lrc.updateTime(position);
                             break;
                         }
+                    case OP_UPDATE_LYRIC:
+                        lrc.loadLrc(playerInfo.getLyric());
+                        lrc.updateTime(playerInfo.getPosition());
+                        break;
                 }
             }
         }

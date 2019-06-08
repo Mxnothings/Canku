@@ -212,12 +212,13 @@ public class AutoDataBase extends SQLiteOpenHelper {
             if (primaryKeys != null && val != null && primaryKeys.length == val.length) {
                 for (int i = 0; i < primaryKeys.length; i++) {
                     if (i == primaryKeys.length - 1) {
-                        sql.append(" " + primaryKeys[i] + "=" + val);
+                        sql.append(" " + primaryKeys[i] + "=" + val[i]);
                     } else {
-                        sql.append(" " + primaryKeys[i] + "=" + val + "and");
+                        sql.append(" " + primaryKeys[i] + "=" + val[i] + " and");
                     }
                 }
             }
+            Log.i("AutoDataBase:", "deleteByPrimaryKey: " + sql.toString());
             return delete(table.getTablename(), sql.toString(), null);
         }
         return 0;
