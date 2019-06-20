@@ -1,11 +1,13 @@
 package team.sao.musictool.activity;
 
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -27,10 +29,12 @@ import team.sao.musictool.entity.MyFavorSong;
 import team.sao.musictool.music.MusicAPIHolder;
 import team.sao.musictool.music.entity.Song;
 import team.sao.musictool.receiver.MusicPlayReceiver;
+import team.sao.musictool.util.DownloadTool;
 import team.sao.musictool.util.FastBlurUtil;
 import team.sao.musictool.util.IntentBuilder;
 import team.sao.musictool.util.StatusBarUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -140,6 +144,7 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
 
             }
         }
+
     }
 
     private void initAction() {
@@ -173,6 +178,14 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
                 Log.i("Seek", "onStopTrackingTouch: seekto" + seekBar.getProgress());
                 new IntentBuilder().action(ReceiverAction.MUSICPLAY_CENTER).extra(OPERATE, OP_SEEKTO).extra(POSITION, seekBar.getProgress() * 1000).send(MusicPlayActivity.this);
                 isSeeking = false;
+            }
+        });
+
+        lrc.setOnPlayClickListener(new LrcView.OnPlayClickListener() {
+            @Override
+            public boolean onPlayClick(long time) {
+                new IntentBuilder().action(ReceiverAction.MUSICPLAY_CENTER).extra(OPERATE, OP_SEEKTO).extra(POSITION, (int)time).send(MusicPlayActivity.this);
+                return true;
             }
         });
     }
@@ -233,6 +246,9 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
                         }
                         Toast.makeText(MainApp.getInstance(), msg, Toast.LENGTH_SHORT).show();
                     }
+                    break;
+                case R.id.ic_download: //下载
+                    DownloadTool.downloadSong(playerInfo.getPlayingSong());
                     break;
             }
             return true;
@@ -368,4 +384,6 @@ public class MusicPlayActivity extends Activity implements View.OnTouchListener 
             }
         }
     }
+
+
 }

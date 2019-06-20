@@ -21,14 +21,14 @@
             <TextView
                     android:textSize="14sp"
                     android:textColor="@color/color_netease_text_lighter"
-                    android:text="听你想听的歌,做你想做的事情"
+                    android:text="听你想听的歌"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
             />
         </LinearLayout>
-        <ImageView android:layout_width="50dp"
-                   android:layout_height="50dp"
-                   android:src="@drawable/app_logo"
+        <ImageView android:layout_width="60dp"
+                   android:layout_height="60dp"
+                   android:src="@drawable/ic_launcher"
                    android:layout_alignParentEnd="true" android:layout_marginEnd="36dp"
                    android:layout_alignParentBottom="true" android:layout_marginBottom="54dp"
                    android:layout_marginTop="46dp" android:layout_alignParentTop="true"/>

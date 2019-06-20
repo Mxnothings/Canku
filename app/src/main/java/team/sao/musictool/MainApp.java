@@ -10,7 +10,9 @@ import android.app.Application;
  **/
 public class MainApp extends Application {
 
-    public static MainApp app;
+    public static final String DOWNLOAD_PATH = "MusicTool";
+
+    private static MainApp app;
 
     public static MainApp getInstance() {
         return app;

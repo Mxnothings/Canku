@@ -4,12 +4,41 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
     <LinearLayout android:layout_width="match_parent"
+                  android:orientation="vertical"
                   android:layout_height="0dp"
+                  android:gravity="center"
                   android:background="@color/color_netease_red"
-                  android:layout_weight="7"/>
+                  android:layout_weight="1">
+        <ImageView android:layout_width="wrap_content"
+                   android:src="@drawable/welcom_title"
+                   android:layout_height="50dp"/>
+    </LinearLayout>
     <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="0dp"
-                  android:background="@color/color_netease_white"
-                  android:layout_weight="1"/>
+                  android:layout_height="90dp"
+                  android:gravity="center"
+                  android:background="@color/color_netease_white">
+        <ImageView android:layout_width="60dp"
+                   android:padding="10dp"
+                   android:src="@drawable/qqmusic_logo"
+                   android:layout_height="60dp"/>
+        <ImageView android:layout_width="60dp"
+                   android:padding="10dp"
+                   android:src="@drawable/netease_cloud_music_logo"
+                   android:layout_height="60dp"/>
+        <ImageView android:layout_width="60dp"
+                   android:padding="10dp"
+                   android:src="@drawable/kugou_music_logo"
+                   android:layout_height="60dp"/>
+        <ImageView android:layout_width="60dp"
+                   android:padding="10dp"
+                   android:src="@drawable/kuwo_music_logo"
+                   android:layout_height="60dp"/>
+        <ImageView android:layout_width="60dp"
+                   android:padding="10dp"
+                   android:src="@drawable/baidu_music_logo"
+                   android:layout_height="60dp"/>
+
+
+    </LinearLayout>
 
 </LinearLayout>
