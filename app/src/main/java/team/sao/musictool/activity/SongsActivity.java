@@ -19,6 +19,7 @@ import team.sao.musictool.annotation.ViewID;
 import team.sao.musictool.config.PlayerInfo;
 import team.sao.musictool.config.ReceiverAction;
 import team.sao.musictool.dao.MusicToolDataBase;
+import team.sao.musictool.dao.autodatabase.AutoDataBase;
 import team.sao.musictool.entity.*;
 import team.sao.musictool.fragment.PlayBarFragment;
 import team.sao.musictool.music.entity.Song;
@@ -46,6 +47,7 @@ public class SongsActivity extends FragmentActivity {
     private PlayBarFragment playBar;
     private List<Song> songs;
     private SongAdapter songAdapter;
+    private Song selectedSong;
     private PlayerInfo playerInfo = PlayerInfo.getInstance();
 
     @ViewID(R.id.activity_songs_icon_back)
@@ -152,6 +154,14 @@ public class SongsActivity extends FragmentActivity {
             }
         });
 
+        songslist.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedSong = (Song) songAdapter.getItem(position);
+                return false;
+            }
+        });
+
         songslist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -177,7 +187,13 @@ public class SongsActivity extends FragmentActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getItemId() == 0) {
-
+            if (musicToolDataBase.deleteByPrimaryKey(entityClass, "'" + selectedSong.getMusicType() + "'", "'" + selectedSong.getSongid() + "'") > 0) {
+                songs.remove(selectedSong);
+                songAdapter.notifyDataSetChanged();
+                Toast.makeText(MainApp.getInstance(), "删除成功", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(MainApp.getInstance(), "删除失败", Toast.LENGTH_SHORT).show();
+            }
         }
         return super.onContextItemSelected(item);
     }
