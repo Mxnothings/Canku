@@ -48,8 +48,9 @@ public class AnnotationProcesser {
         }
     }
 
+
     /**
-     * 获取到superEnd为父类的所有域
+     * 获取到父域所有类
      * @param clazz
      * @param superEnd
      * @return
